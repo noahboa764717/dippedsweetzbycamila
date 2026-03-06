@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dipped Sweetz by Camila</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#FFF6F8;
+color:#333;
+scroll-behavior:smooth;
+}
+
+/* NAVBAR */
+
+nav{
+position:fixed;
+top:0;
+width:100%;
+background:#F58CA8;
+padding:15px;
+display:flex;
+justify-content:center;
+gap:40px;
+z-index:999;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+font-weight:500;
+}
+
+/* HERO */
+
+.hero{
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+background:linear-gradient(#FAD6DE,#FFF6F8);
+animation:fadeIn 1.5s;
+}
+
+.hero h1{
+font-size:48px;
+color:#E84B6A;
+}
+
+.hero p{
+margin-top:10px;
+font-size:18px;
+}
+
+.btn{
+margin-top:25px;
+background:#E84B6A;
+color:white;
+padding:12px 25px;
+border-radius:30px;
+text-decoration:none;
+transition:.3s;
+}
+
+.btn:hover{
+transform:scale(1.1);
+}
+
+/* SECTIONS */
+
+.section{
+padding:90px 20px;
+text-align:center;
+}
+
+.section h2{
+margin-bottom:30px;
+color:#E84B6A;
+}
+
+/* GALLERY */
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+max-width:1000px;
+margin:auto;
+}
+
+.gallery img{
+width:100%;
+border-radius:12px;
+transition:.4s;
+}
+
+.gallery img:hover{
+transform:scale(1.05);
+}
+
+/* INSTAGRAM */
+
+.instagram iframe{
+width:100%;
+max-width:540px;
+height:650px;
+border:none;
+}
+
+/* CONTACT */
+
+.contact p{
+margin:10px 0;
+font-size:18px;
+}
+
+footer{
+background:#5A3A2E;
+color:white;
+padding:20px;
+text-align:center;
+margin-top:40px;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(30px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.fade{
+opacity:0;
+transform:translateY(40px);
+transition:1s;
+}
+
+.fade.show{
+opacity:1;
+transform:translateY(0);
+}
+
+</style>
+</head>
+
+<body>
+
+<nav>
+<a href="#home">Home</a>
+<a href="#gallery">Gallery</a>
+<a href="#instagram">Instagram</a>
+<a href="#contact">Contact</a>
+</nav>
+
+<!-- HERO -->
+
+<section id="home" class="hero">
+
+<h1>Dipped Sweetz by Camila 🍓</h1>
+
+<p>Sweet treats made with love</p>
+
+<a class="btn" href="https://instagram.com/dippedsweetz_by_camila" target="_blank">
+Order on Instagram
+</a>
+
+</section>
+
+<!-- GALLERY -->
+
+<section id="gallery" class="section fade">
+
+<h2>Our Treats</h2>
+
+<div class="gallery">
+
+<img src="https://images.unsplash.com/photo-1542826438-8b6c8f5bdf10">
+<img src="https://images.unsplash.com/photo-1614707267537-b85aaf00c4b7">
+<img src="https://images.unsplash.com/photo-1586985289906-406988974504">
+<img src="https://images.unsplash.com/photo-1519671482749-fd09be7ccebf">
+
+</div>
+
+</section>
+
+<!-- INSTAGRAM -->
+
+<section id="instagram" class="section fade">
+
+<h2>Latest on Instagram</h2>
+
+<div class="instagram">
+
+<iframe src="https://snapwidget.com/embed/1023085"></iframe>
+
+</div>
+
+</section>
+
+<!-- CONTACT -->
+
+<section id="contact" class="section contact fade">
+
+<h2>Contact</h2>
+
+<p>📍 Georgia</p>
+
+<p>
+Instagram:  
+<a href="https://instagram.com/dippedsweetz_by_camila">
+@dippedsweetz_by_camila
+</a>
+</p>
+
+<p>Email: orders@dippedsweetzbycamila.com</p>
+
+</section>
+
+<footer>
+
+© 2026 Dipped Sweetz by Camila
+
+</footer>
+
+<script>
+
+/* Scroll animation */
+
+const observer = new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("show")
+}
+})
+})
+
+document.querySelectorAll('.fade').forEach(el=>{
+observer.observe(el)
+})
+
+</script>
+
+</body>
+</html>
