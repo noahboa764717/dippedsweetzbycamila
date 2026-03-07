@@ -18,7 +18,7 @@ flex-direction:column;
 
 nav{
 background:#F58CA8;
-padding:15px;
+padding:18px;
 position:sticky;
 top:0;
 z-index:100;
@@ -29,7 +29,7 @@ color:white;
 margin:15px;
 text-decoration:none;
 font-weight:500;
-font-size:16px;
+font-size:17px;
 transition:0.2s;
 }
 
@@ -55,7 +55,7 @@ margin-bottom:10px;
 }
 
 .hero p{
-font-size:18px;
+font-size:20px;
 max-width:600px;
 }
 
@@ -63,9 +63,33 @@ max-width:600px;
 
 .page-content{
 flex:1;
-padding:60px 20px;
+padding:70px 20px;
 max-width:1100px;
 margin:auto;
+}
+
+/* PAGE HEADINGS */
+
+.page-content h1{
+font-size:38px;
+margin-bottom:10px;
+}
+
+.page-content h2{
+font-size:28px;
+}
+
+.page-content h3{
+font-size:22px;
+}
+
+.page-content p{
+font-size:18px;
+line-height:1.6;
+}
+
+.page-content li{
+font-size:18px;
 }
 
 /* BUTTON */
@@ -73,12 +97,13 @@ margin:auto;
 .order-btn{
 background:#E84B6A;
 color:white;
-padding:14px 28px;
+padding:16px 34px;
 border-radius:30px;
 text-decoration:none;
 margin-top:25px;
 display:inline-block;
 font-weight:500;
+font-size:18px;
 transition:0.3s;
 }
 
@@ -126,12 +151,21 @@ transition:0.3s;
 transform:translateY(-8px);
 }
 
+.menu-card h3{
+font-size:22px;
+margin-bottom:8px;
+}
+
+.menu-card p{
+font-size:16px;
+}
+
 /* ORDER LIST */
 
 .order-list{
 list-style:none;
 padding:0;
-margin:20px auto;
+margin:25px auto;
 max-width:400px;
 font-size:18px;
 }
@@ -193,6 +227,7 @@ padding:30px;
 background:#5A3A2E;
 color:white;
 margin-top:auto;
+font-size:15px;
 }
 
 /* MOBILE */
@@ -201,6 +236,18 @@ margin-top:auto;
 
 .hero h1{
 font-size:36px;
+}
+
+.page-content h1{
+font-size:32px;
+}
+
+.page-content p{
+font-size:17px;
+}
+
+.page-content li{
+font-size:17px;
 }
 
 nav a{
@@ -217,7 +264,7 @@ grid-template-columns:1fr;
 }
 
 .page-content{
-padding:40px 15px;
+padding:50px 18px;
 }
 
 }
