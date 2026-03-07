@@ -3,13 +3,18 @@ margin:0;
 font-family:'Poppins',sans-serif;
 background:#FFF6F8;
 text-align:center;
+color:#333;
+overflow-x:hidden;
 }
+
+/* NAVBAR */
 
 nav{
 background:#F58CA8;
 padding:15px;
 position:sticky;
 top:0;
+z-index:100;
 }
 
 nav a{
@@ -17,7 +22,15 @@ color:white;
 margin:15px;
 text-decoration:none;
 font-weight:500;
+font-size:16px;
+transition:0.2s;
 }
+
+nav a:hover{
+opacity:0.8;
+}
+
+/* HERO SECTION */
 
 .hero{
 height:90vh;
@@ -25,12 +38,21 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+padding:20px;
 }
 
 .hero h1{
 font-size:48px;
 color:#E84B6A;
+margin-bottom:10px;
 }
+
+.hero p{
+font-size:18px;
+max-width:600px;
+}
+
+/* ORDER BUTTON */
 
 .order-btn{
 background:#E84B6A;
@@ -38,45 +60,78 @@ color:white;
 padding:14px 28px;
 border-radius:30px;
 text-decoration:none;
-margin-top:20px;
+margin-top:25px;
 display:inline-block;
-transition:.3s;
+font-weight:500;
+transition:0.3s;
 }
 
 .order-btn:hover{
-transform:scale(1.1);
+transform:scale(1.08);
 }
+
+/* FOLLOW BUTTON */
+
+.follow-btn{
+margin-top:40px;
+}
+
+/* GALLERY */
 
 .gallery{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:20px;
 padding:40px;
+max-width:1100px;
+margin:auto;
 }
 
 .gallery img{
 width:100%;
 border-radius:12px;
-transition:.4s;
+transition:0.4s;
 }
 
 .gallery img:hover{
-transform:translateY(-10px);
+transform:translateY(-10px) scale(1.02);
 }
+
+/* MENU */
 
 .menu-grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:20px;
 padding:40px;
+max-width:1100px;
+margin:auto;
 }
 
 .menu-card{
 background:white;
 padding:30px;
 border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,.1);
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+transition:0.3s;
 }
+
+.menu-card:hover{
+transform:translateY(-8px);
+}
+
+/* INSTAGRAM SECTION */
+
+.instagram-posts{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:20px;
+max-width:1000px;
+margin:auto;
+padding:20px;
+}
+
+/* SCROLL ANIMATION */
 
 .fade{
 opacity:0;
@@ -89,13 +144,15 @@ opacity:1;
 transform:translateY(0);
 }
 
+/* STRAWBERRY BACKGROUND */
+
 .strawberry-bg{
 position:fixed;
 width:100%;
 height:100%;
-background-image:url("strawberries.png");
+background-image:url("strawberry.png");
 background-size:80px;
-opacity:.08;
+opacity:0.08;
 animation:floatbg 40s linear infinite;
 z-index:-1;
 }
@@ -112,9 +169,49 @@ background-position:0 -2000px;
 
 }
 
+/* ORDER LIST */
+
+.order-list{
+list-style:none;
+padding:0;
+margin:20px auto;
+max-width:400px;
+font-size:18px;
+}
+
+.order-list li{
+padding:6px 0;
+}
+
+/* FOOTER */
+
 footer{
 padding:30px;
 background:#5A3A2E;
 color:white;
-margin-top:40px;
+margin-top:60px;
+}
+
+/* MOBILE */
+
+@media (max-width:700px){
+
+.hero h1{
+font-size:36px;
+}
+
+nav a{
+display:inline-block;
+margin:10px;
+font-size:14px;
+}
+
+.gallery{
+padding:20px;
+}
+
+.menu-grid{
+padding:20px;
+}
+
 }
