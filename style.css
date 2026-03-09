@@ -198,7 +198,7 @@ opacity:1;
 transform:translateY(0);
 }
 
-/* STRAWBERRY BACKGROUND */
+/* FALLING STRAWBERRIES */
 
 .background-strawberry{
 position:fixed;
@@ -210,7 +210,7 @@ z-index:-1;
 animation:fall 20s linear infinite;
 }
 
-/*spread across page */
+/* spread them across screen */
 
 .straw1{left:5%; animation-delay:0s;}
 .straw2{left:25%; animation-delay:4s;}
@@ -219,6 +219,7 @@ animation:fall 20s linear infinite;
 .straw5{left:85%; animation-delay:16s;}
 
 @keyframes fall{
+
 0%{
 transform:translateY(-120px);
 }
@@ -226,6 +227,7 @@ transform:translateY(-120px);
 100%{
 transform:translateY(110vh);
 }
+
 }
 
 /* FOOTER */
