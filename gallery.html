@@ -2,13 +2,17 @@
 <html lang="en">
 
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Gallery | Dipped Sweetz by Camila</title>
 
-<link rel="stylesheet" href="style.css">
+<meta name="description" content="Photos of chocolate strawberries, dessert boxes, and sweet creations.">
+
 <link rel="icon" type="image/png" href="favicon.png">
+
+<link rel="stylesheet" href="style.css">
 
 </head>
 
@@ -17,17 +21,22 @@
 <div class="strawberry-bg"></div>
 
 <nav>
+
 <a href="index.html">Home</a>
 <a href="menu.html">Menu</a>
 <a href="gallery.html">Gallery</a>
 <a href="order.html">Order</a>
 <a href="contact.html">Contact</a>
+
 </nav>
+
 
 <div class="page-content">
 
 <h1>Gallery</h1>
+
 <p>Some of our favorite treats and creations 🍓</p>
+
 
 <div class="gallery">
 
@@ -42,12 +51,13 @@
 
 </div>
 
+
 <footer>
+
 © 2026 Dipped Sweetz by Camila
+
 </footer>
 
-
-<!-- LIGHTBOX -->
 
 <div id="lightbox">
 
@@ -68,37 +78,52 @@
 <script>
 
 const images = [
+
 "strawberry1.jpg",
 "strawberry2.jpg",
 "box1.jpg",
 "bouquet1.jpg",
 "dessertbox1.jpg",
 "strawberry3.jpg"
+
 ]
 
 let currentIndex = 0
 
 function openLightbox(index){
+
 currentIndex = index
+
 document.getElementById("lightbox").style.display="flex"
+
 document.getElementById("lightbox-img").src = images[index]
+
 }
 
 function closeLightbox(){
+
 document.getElementById("lightbox").style.display="none"
+
 }
 
 function nextImage(){
+
 currentIndex = (currentIndex + 1) % images.length
+
 document.getElementById("lightbox-img").src = images[currentIndex]
+
 }
 
 function prevImage(){
+
 currentIndex = (currentIndex - 1 + images.length) % images.length
+
 document.getElementById("lightbox-img").src = images[currentIndex]
+
 }
 
 </script>
+
 
 </body>
 </html>
