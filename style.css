@@ -68,28 +68,16 @@ max-width:1100px;
 margin:auto;
 }
 
-/* PAGE HEADINGS */
+/* HEADINGS */
 
 .page-content h1{
 font-size:38px;
 margin-bottom:10px;
 }
 
-.page-content h2{
-font-size:28px;
-}
-
-.page-content h3{
-font-size:22px;
-}
-
 .page-content p{
 font-size:18px;
 line-height:1.6;
-}
-
-.page-content li{
-font-size:18px;
 }
 
 /* BUTTON */
@@ -116,7 +104,7 @@ transform:scale(1.08);
 .about{
 max-width:800px;
 margin:auto;
-padding:40px 20px;
+padding:50px 20px;
 }
 
 /* GALLERY */
@@ -159,15 +147,6 @@ transition:0.3s;
 transform:translateY(-8px);
 }
 
-.menu-card h3{
-font-size:22px;
-margin-bottom:8px;
-}
-
-.menu-card p{
-font-size:16px;
-}
-
 /* ORDER LIST */
 
 .order-list{
@@ -186,17 +165,24 @@ padding:6px 0;
 
 .instagram{
 padding-top:40px;
-padding-bottom:140px;
+padding-bottom:160px;
 }
+
+/* Instagram grid */
 
 .instagram-posts{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
-gap:20px;
-max-width:1000px;
+gap:25px;
+max-width:1100px;
 margin:auto;
 padding:20px;
-margin-bottom:40px;
+}
+
+/* Instagram button spacing */
+
+.instagram .order-btn{
+margin-top:40px;
 }
 
 /* SCROLL ANIMATION */
@@ -219,7 +205,7 @@ position:fixed;
 width:100%;
 height:100%;
 background-image:url("strawberry.png");
-background-size:100px;
+background-size:110px;
 opacity:0.08;
 animation:floatbg 40s linear infinite;
 z-index:-1;
@@ -260,10 +246,6 @@ font-size:32px;
 }
 
 .page-content p{
-font-size:17px;
-}
-
-.page-content li{
 font-size:17px;
 }
 
