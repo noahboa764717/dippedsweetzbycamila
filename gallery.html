@@ -25,98 +25,25 @@
 <a href="contact.html">Contact</a>
 </nav>
 
-
 <div class="page-content">
 
 <h1>Gallery</h1>
 <p>Some of our favorite treats and creations 🍓</p>
 
-
-<div class="gallery">
-
-<img src="strawberry1.png" onclick="openLightbox(0)">
-<img src="strawberry2.png" onclick="openLightbox(1)">
-<img src="strawberry3.png" onclick="openLightbox(2)">
-<img src="box1.png" onclick="openLightbox(3)">
-<img src="dessertbox1.png" onclick="openLightbox(4)">
-<img src="IMG_1889.jpeg" onclick="openLightbox(5)">
-<img src="IMG_1888.jpeg" onclick="openLightbox(6)">
-  
-</div>
+<div id="gallery" class="gallery"></div>
 
 </div>
-
 
 <footer>
 © 2026 Dipped Sweetz by Camila
 </footer>
 
-
 <div id="lightbox">
-
 <span class="close" onclick="closeLightbox()">×</span>
-
 <img id="lightbox-img">
-
-<div class="lightbox-controls">
-
-<button onclick="prevImage()">‹</button>
-<button onclick="nextImage()">›</button>
-
 </div>
 
-</div>
-
-
-<script>
-
-const images = [
-
-"strawberry1.png",
-"strawberry2.png",
-"strawberry3.png",
-"box1.png",
-"bouquet1.png",
-"dessertbox1.png",
-"IMG_1889.jpeg"
-
-]
-
-let currentIndex = 0
-
-function openLightbox(index){
-
-currentIndex = index
-
-document.getElementById("lightbox").style.display="flex"
-
-document.getElementById("lightbox-img").src = images[index]
-
-}
-
-function closeLightbox(){
-
-document.getElementById("lightbox").style.display="none"
-
-}
-
-function nextImage(){
-
-currentIndex = (currentIndex + 1) % images.length
-
-document.getElementById("lightbox-img").src = images[currentIndex]
-
-}
-
-function prevImage(){
-
-currentIndex = (currentIndex - 1 + images.length) % images.length
-
-document.getElementById("lightbox-img").src = images[currentIndex]
-
-}
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
