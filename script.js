@@ -1,4 +1,4 @@
-const gallery = document.getElementById("gallery");
+const gallery = document.getElementById("galleryPreview");
 
 if(gallery){
 
@@ -8,7 +8,7 @@ fetch("https://api.github.com/repos/noahboa764717/dippedsweetzbycamila/contents/
 
 .then(data => {
 
-data.forEach(file => {
+data.slice(0,4).forEach(file => {
 
 if(file.name.match(/\.(jpg|jpeg|png|webp)$/)){
 
