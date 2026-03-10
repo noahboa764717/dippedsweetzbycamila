@@ -2,35 +2,24 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dipped Sweetz by Camila</title>
 
-<link rel="stylesheet" href="style.css">
 <link rel="icon" href="favicon.png">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="strawberry-bg"></div>
-
-<nav class="navbar">
-
-<ul class="nav-links">
-
-<li><a href="index.html" class="active">Home</a></li>
+<nav>
+<ul>
+<li><a class="active" href="index.html">Home</a></li>
 <li><a href="menu.html">Menu</a></li>
 <li><a href="gallery.html">Gallery</a></li>
 <li><a href="order.html">Order</a></li>
 <li><a href="contact.html">Contact</a></li>
-
 </ul>
-
 </nav>
 
 <section class="hero">
@@ -38,136 +27,88 @@
 <h1>Dipped Sweetz by Camila 🍓</h1>
 <p>Sweet treats made with love</p>
 
-<a class="order-btn" href="order.html">Place an Order</a>
+<a class="button" href="order.html">Place an Order</a>
 
 </section>
 
-<section class="section">
+<section>
 
 <h2>Popular Treats</h2>
 
-<div class="menu-grid">
+<div class="card-container">
 
-<div class="menu-card">
-<img src="box1.png">
+<div class="card">
+<img src="images/bestseller.png">
 <h3>Chocolate Strawberries</h3>
 <p>Our best seller 🍓</p>
 </div>
 
-<div class="menu-card">
-<img src="dessertbox1.png">
+<div class="card">
+<img src="images/dessertbox.png">
 <h3>Dessert Boxes</h3>
 <p>Perfect gift boxes</p>
 </div>
 
-<div class="menu-card">
-<img src="bouquet1.png">
-<h3>Strawberry Bouquets</h3>
-<p>Beautiful edible bouquets</p>
+<div class="card">
+<img src="images/bouquet.png">
+<h3>Beautiful Bouquets</h3>
 </div>
 
 </div>
 
 </section>
 
-<section class="section">
+<section>
 
 <h2>Customer Favorites</h2>
 
-<div class="favorites-grid">
+<div id="galleryPreview" class="gallery-grid"></div>
 
-<img src="gallery/IMG_1889.jpeg">
-<img src="gallery/IMG_1888.jpeg">
-<img src="gallery/IMG_1887.jpeg">
-<img src="gallery/IMG_1886.jpeg">
-
-</div>
-
-<a class="order-btn" href="gallery.html">View Full Gallery</a>
+<a class="button" href="gallery.html">View Full Gallery</a>
 
 </section>
 
-<section class="section">
-
-<h2>What Customers Say</h2>
-
-<p>⭐⭐⭐⭐⭐</p>
-<p>"Best chocolate strawberries ever!"</p>
-
-<p>⭐⭐⭐⭐⭐</p>
-<p>"Perfect gift boxes and amazing presentation."</p>
-
-<p>⭐⭐⭐⭐⭐</p>
-<p>"Ordered for a birthday and everyone loved them."</p>
-
-</section>
-
-<section class="section">
-
-<h2>Order Information</h2>
-
-<ul class="order-info">
-
-<li>48 hour notice preferred</li>
-<li>Large orders may require 3–4 days</li>
-<li>Pickup available in Georgia</li>
-<li>Custom designs available</li>
-
-</ul>
-
-</section>
-
-<section class="section">
-
-<h2>Perfect For</h2>
-
-<p>🎂 Birthdays</p>
-<p>💍 Anniversaries</p>
-<p>🎓 Graduations</p>
-<p>❤️ Valentine’s Day</p>
-
-</section>
-
-<section class="section">
+<section>
 
 <h2>Featured Box</h2>
 
-<img class="featured-img" src="box1.png">
+<div class="feature">
+
+<img src="images/signaturebox.jpg">
 
 <h3>Signature Strawberry Box</h3>
 
 <p>A mix of our most popular dipped strawberries.</p>
 
-<a class="order-btn" href="order.html">Order Now</a>
+<a class="button" href="order.html">Order Now</a>
+
+</div>
 
 </section>
 
-<section class="section">
+<section>
 
 <h2>Custom Orders</h2>
 
-<img class="featured-img" src="bouquet1.png">
-
 <p>You can customize colors, letters, and designs to match your event.</p>
 
-<ul class="order-info">
-
+<ul>
 <li>Custom chocolate colors</li>
 <li>Names or letters</li>
 <li>Themed dessert boxes</li>
-
 </ul>
 
-<a class="order-btn" href="order.html">Request Custom Order</a>
+<a class="button" href="order.html">Request Custom Order</a>
 
 </section>
 
 <footer>
 
-© 2026 Dipped Sweetz by Camila
+<p>© 2026 Dipped Sweetz by Camila</p>
 
 </footer>
 
-</body>
+<script src="script.js"></script>
 
+</body>
 </html>
