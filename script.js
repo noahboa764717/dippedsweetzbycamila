@@ -1,66 +1,27 @@
-const username = "noahboa764717"
-const repo = "dippedsweetzbycamila"
-const folder = "gallery"
+const gallery = document.getElementById("gallery");
 
-const gallery = document.getElementById("gallery")
+if(gallery){
 
-const apiURL = `https://api.github.com/repos/${username}/${repo}/contents/${folder}`
+fetch("https://api.github.com/repos/noahboa764717/dippedsweetzbycamila/contents/gallery")
 
-let images = []
-let currentIndex = 0
-
-fetch(apiURL)
 .then(res => res.json())
+
 .then(data => {
 
-data.forEach((file,index)=>{
+data.forEach(file => {
 
-if(file.type === "file"){
+if(file.name.match(/\.(jpg|jpeg|png|webp)$/)){
 
-const img = document.createElement("img")
+const img = document.createElement("img");
 
-img.src = file.download_url
+img.src = file.download_url;
 
-img.onclick = () => openLightbox(index)
-
-gallery.appendChild(img)
-
-images.push(file.download_url)
+gallery.appendChild(img);
 
 }
 
-})
+});
 
-})
-
-function openLightbox(index){
-
-currentIndex = index
-
-document.getElementById("lightbox").style.display="flex"
-
-document.getElementById("lightbox-img").src = images[index]
-
-}
-
-function closeLightbox(){
-
-document.getElementById("lightbox").style.display="none"
-
-}
-
-function nextImage(){
-
-currentIndex = (currentIndex + 1) % images.length
-
-document.getElementById("lightbox-img").src = images[currentIndex]
-
-}
-
-function prevImage(){
-
-currentIndex = (currentIndex - 1 + images.length) % images.length
-
-document.getElementById("lightbox-img").src = images[currentIndex]
+});
 
 }
