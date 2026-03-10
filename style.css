@@ -1,19 +1,14 @@
-html, body{
+html,body{
 height:100%;
-}
-
-body{
 margin:0;
 font-family:'Poppins',sans-serif;
 background:#FFF6F8;
-text-align:center;
 color:#333;
 overflow-x:hidden;
-
 display:flex;
 flex-direction:column;
+text-align:center;
 }
-
 
 /* NAVBAR */
 
@@ -23,6 +18,7 @@ padding:18px;
 position:sticky;
 top:0;
 z-index:100;
+box-shadow:0 4px 10px rgba(0,0,0,0.12);
 }
 
 nav a{
@@ -31,143 +27,12 @@ margin:15px;
 text-decoration:none;
 font-weight:500;
 font-size:17px;
-transition:0.2s;
+padding-bottom:4px;
 }
 
-nav a:hover{
-opacity:0.8;
+nav a.active{
+border-bottom:3px solid white;
 }
-
-
-/* HERO */
-
-.hero{
-height:90vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-padding:20px;
-}
-
-.hero h1{
-font-size:48px;
-color:#E84B6A;
-margin-bottom:10px;
-}
-
-.hero p{
-font-size:20px;
-max-width:600px;
-}
-
-
-/* PAGE CONTENT */
-
-.page-content{
-flex:1;
-padding:70px 20px;
-max-width:1100px;
-margin:auto;
-}
-
-
-/* BUTTON */
-
-.order-btn{
-background:#E84B6A;
-color:white;
-padding:16px 34px;
-border-radius:30px;
-text-decoration:none;
-margin-top:25px;
-display:inline-block;
-font-weight:500;
-font-size:18px;
-transition:0.3s;
-}
-
-.order-btn:hover{
-transform:scale(1.08);
-}
-
-
-/* GALLERY GRID */
-
-.gallery{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-padding:30px;
-max-width:1100px;
-margin:auto;
-}
-
-.gallery img{
-width:100%;
-border-radius:12px;
-cursor:pointer;
-transition:0.4s;
-box-shadow:0 8px 20px rgba(0,0,0,0.15);
-}
-
-.gallery img:hover{
-transform:scale(1.05);
-}
-
-
-/* LIGHTBOX */
-
-#lightbox{
-display:none;
-position:fixed;
-z-index:1000;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.85);
-
-justify-content:center;
-align-items:center;
-flex-direction:column;
-}
-
-#lightbox img{
-max-width:90%;
-max-height:80%;
-border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.5);
-}
-
-.close{
-position:absolute;
-top:30px;
-right:40px;
-color:white;
-font-size:40px;
-cursor:pointer;
-}
-
-.lightbox-controls{
-margin-top:20px;
-}
-
-.lightbox-controls button{
-font-size:30px;
-background:white;
-border:none;
-padding:10px 20px;
-margin:10px;
-border-radius:10px;
-cursor:pointer;
-transition:0.2s;
-}
-
-.lightbox-controls button:hover{
-background:#f0f0f0;
-}
-
 
 /* STRAWBERRY BACKGROUND */
 
@@ -183,17 +48,128 @@ z-index:-1;
 }
 
 @keyframes floatbg{
-
-0%{
-background-position:0 0;
+0%{background-position:0 0;}
+100%{background-position:0 2000px;}
 }
 
-100%{
-background-position:0 2000px;
+/* PAGE CONTENT */
+
+.page-content{
+flex:1;
+padding:80px 20px;
+max-width:1100px;
+margin:auto;
 }
 
+/* HERO */
+
+.hero{
+height:90vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 }
 
+.hero h1{
+font-size:48px;
+color:#E84B6A;
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:20px;
+}
+
+/* BUTTON */
+
+.order-btn{
+background:#E84B6A;
+color:white;
+padding:16px 36px;
+border-radius:30px;
+text-decoration:none;
+display:inline-block;
+margin-top:25px;
+font-size:18px;
+transition:.3s;
+}
+
+.order-btn:hover{
+transform:scale(1.08);
+}
+
+/* MENU GRID */
+
+.menu-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:25px;
+margin-top:40px;
+}
+
+.menu-card{
+background:white;
+padding:30px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,0.12);
+transition:.35s;
+}
+
+.menu-card:hover{
+transform:translateY(-8px);
+box-shadow:0 18px 30px rgba(0,0,0,0.18);
+}
+
+/* ORDER PAGE */
+
+.order-container{
+max-width:650px;
+margin:auto;
+background:white;
+padding:40px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}
+
+.order-list{
+text-align:left;
+max-width:350px;
+margin:25px auto;
+}
+
+/* CONTACT PAGE */
+
+.contact-container{
+max-width:600px;
+margin:auto;
+background:white;
+padding:40px;
+border-radius:14px;
+box-shadow:0 10px 25px rgba(0,0,0,0.12);
+}
+
+.contact-container a{
+color:#E84B6A;
+text-decoration:none;
+font-weight:500;
+}
+
+/* INSTAGRAM */
+
+.instagram-section{
+padding-top:60px;
+padding-bottom:160px;
+}
+
+.instagram-posts{
+display:flex;
+justify-content:center;
+}
+
+.instagram-btn{
+margin-top:35px;
+}
 
 /* FOOTER */
 
@@ -202,29 +178,18 @@ padding:30px;
 background:#5A3A2E;
 color:white;
 margin-top:auto;
-font-size:15px;
 }
-
 
 /* MOBILE */
 
-@media (max-width:700px){
+@media(max-width:700px){
 
 .hero h1{
 font-size:36px;
 }
 
-nav a{
-margin:8px;
-font-size:14px;
-}
-
-.gallery{
+.menu-grid{
 grid-template-columns:1fr;
-}
-
-.page-content{
-padding:50px 18px;
 }
 
 }
