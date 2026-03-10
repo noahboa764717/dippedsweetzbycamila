@@ -26,9 +26,9 @@ box-shadow:0 4px 10px rgba(0,0,0,0.12);
 
 display:flex;
 justify-content:center;
-flex-wrap:wrap;
-row-gap:8px;
-column-gap:28px;
+gap:24px;
+flex-wrap:nowrap;
+overflow-x:auto;
 }
 
 nav a{
@@ -37,6 +37,7 @@ text-decoration:none;
 font-weight:500;
 font-size:17px;
 padding-bottom:4px;
+white-space:nowrap;
 }
 
 nav a.active{
@@ -247,7 +248,7 @@ color:white;
 margin-top:auto;
 }
 
-/* MOBILE FIXES */
+/* MOBILE */
 
 @media(max-width:700px){
 
@@ -256,8 +257,7 @@ padding:60px 15px;
 }
 
 nav{
-column-gap:18px;
-row-gap:6px;
+gap:18px;
 }
 
 nav a{
