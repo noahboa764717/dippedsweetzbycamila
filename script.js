@@ -1,27 +1,47 @@
-const gallery = document.getElementById("galleryPreview");
+/* FALLING STRAWBERRIES */
 
-if(gallery){
+for(let i=0;i<12;i++){
 
-fetch("https://api.github.com/repos/noahboa764717/dippedsweetzbycamila/contents/gallery")
+const s=document.createElement("img")
 
-.then(res => res.json())
+s.src="strawberry.png"
 
-.then(data => {
+s.className="strawberry"
 
-data.slice(0,4).forEach(file => {
+s.style.left=Math.random()*100+"vw"
 
-if(file.name.match(/\.(jpg|jpeg|png|webp)$/)){
+s.style.animationDuration=(6+Math.random()*5)+"s"
 
-const img = document.createElement("img");
-
-img.src = file.download_url;
-
-gallery.appendChild(img);
+document.body.appendChild(s)
 
 }
 
-});
 
-});
+/* GALLERY AUTO LOAD */
+
+const gallery=document.querySelector(".gallery-grid")
+
+if(gallery){
+
+const images=[
+"gallery/1.jpg",
+"gallery/2.jpg",
+"gallery/3.jpg",
+"gallery/4.jpg",
+"gallery/5.jpg",
+"gallery/6.jpg",
+"gallery/7.jpg",
+"gallery/8.jpg"
+]
+
+images.forEach(src=>{
+
+const img=document.createElement("img")
+
+img.src=src
+
+gallery.appendChild(img)
+
+})
 
 }
