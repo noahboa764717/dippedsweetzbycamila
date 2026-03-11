@@ -7,32 +7,43 @@ font-family:'Poppins',sans-serif;
 
 body{
 background:#f6eef1;
-background-image:url("strawberry.png");
-background-size:80px;
-background-repeat:repeat;
-
-animation:fallBackground 40s linear infinite;
-
 min-height:100vh;
 display:flex;
 flex-direction:column;
-color:#222;
 overflow-x:hidden;
+position:relative;
 }
 
-@keyframes fallBackground{
+/* ---------- BACKGROUND STRAWBERRIES ---------- */
+
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:200%;
+background-image:url("strawberry.png");
+background-size:70px;
+background-repeat:repeat;
+opacity:.25;
+animation:fall 45s linear infinite;
+z-index:-1;
+}
+
+@keyframes fall{
 
 0%{
-background-position:0 0;
+transform:translateY(-50%);
 }
 
 100%{
-background-position:0 800px;
+transform:translateY(0%);
 }
 
 }
 
-/* NAV */
+/* ---------- NAVBAR ---------- */
 
 nav{
 background:#d67a8f;
@@ -40,14 +51,16 @@ padding:18px;
 position:sticky;
 top:0;
 z-index:1000;
+width:100%;
 box-shadow:0 4px 10px rgba(0,0,0,.15);
 }
 
 nav ul{
 display:flex;
 justify-content:center;
-gap:28px;
+gap:30px;
 list-style:none;
+flex-wrap:wrap;
 }
 
 nav a{
@@ -61,11 +74,11 @@ border-bottom:3px solid white;
 padding-bottom:4px;
 }
 
-/* HERO */
+/* ---------- HERO ---------- */
 
 .hero{
 text-align:center;
-padding:80px 20px;
+padding:90px 20px 60px;
 }
 
 .hero h1{
@@ -76,10 +89,10 @@ margin-bottom:10px;
 
 .hero p{
 font-size:20px;
-margin-bottom:25px;
+margin-bottom:20px;
 }
 
-/* BUTTON */
+/* ---------- BUTTON ---------- */
 
 .button{
 background:#d4576f;
@@ -87,7 +100,6 @@ color:white;
 padding:14px 34px;
 border-radius:40px;
 text-decoration:none;
-font-size:17px;
 display:inline-block;
 margin-top:15px;
 transition:.2s;
@@ -97,36 +109,32 @@ transition:.2s;
 transform:scale(1.05);
 }
 
-/* SECTION */
+/* ---------- SECTIONS ---------- */
 
 .section{
 max-width:900px;
-margin:60px auto;
+margin:70px auto;
 padding:0 20px;
+text-align:center;
 }
 
 .section h2{
-font-size:34px;
+font-size:32px;
 margin-bottom:20px;
-text-align:center;
 }
 
-.section p{
-text-align:center;
-margin-bottom:15px;
-}
-
-/* CARD */
+/* ---------- CARDS ---------- */
 
 .card{
 background:white;
 padding:35px;
 border-radius:18px;
 box-shadow:0 10px 25px rgba(0,0,0,.1);
-margin-top:25px;
+margin-top:20px;
+text-align:center;
 }
 
-/* GALLERY GRID */
+/* ---------- GALLERY ---------- */
 
 .gallery-grid{
 max-width:1000px;
@@ -139,30 +147,35 @@ padding:20px;
 
 .gallery-grid img{
 width:100%;
-border-radius:14px;
+border-radius:15px;
 box-shadow:0 6px 14px rgba(0,0,0,.1);
 }
 
-/* FOOTER */
+/* ---------- FOOTER ---------- */
 
 footer{
 background:#6e4a3a;
 color:white;
 text-align:center;
-padding:20px;
+padding:18px;
 margin-top:auto;
+width:100%;
 }
 
-/* MOBILE */
+/* ---------- MOBILE ---------- */
 
 @media(max-width:600px){
 
 .hero h1{
-font-size:32px;
+font-size:30px;
 }
 
 .section h2{
-font-size:26px;
+font-size:24px;
+}
+
+nav ul{
+gap:18px;
 }
 
 }
