@@ -24,14 +24,13 @@ const gallery=document.querySelector(".gallery-grid")
 if(gallery){
 
 const images=[
-"gallery/1.jpg",
-"gallery/2.jpg",
-"gallery/3.jpg",
-"gallery/4.jpg",
-"gallery/5.jpg",
-"gallery/6.jpg",
-"gallery/7.jpg",
-"gallery/8.jpg"
+"gallery/strawberry1.png",
+"gallery/strawberry2.png",
+"gallery/strawberry3.png",
+"gallery/dessertbox1.png",
+"gallery/box1.png",
+"gallery/IMG_1888.jpeg",
+"gallery/IMG_1889.jpeg",
 ]
 
 images.forEach(src=>{
