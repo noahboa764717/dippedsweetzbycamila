@@ -6,10 +6,13 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
-background:#f8f2f4;
+background:#f6eef1;
 background-image:url("strawberry.png");
+background-size:80px;
 background-repeat:repeat;
-background-size:120px;
+
+animation:fallBackground 40s linear infinite;
+
 min-height:100vh;
 display:flex;
 flex-direction:column;
@@ -17,10 +20,22 @@ color:#222;
 overflow-x:hidden;
 }
 
-/* NAVBAR */
+@keyframes fallBackground{
+
+0%{
+background-position:0 0;
+}
+
+100%{
+background-position:0 800px;
+}
+
+}
+
+/* NAV */
 
 nav{
-background:#d97c92;
+background:#d67a8f;
 padding:18px;
 position:sticky;
 top:0;
@@ -31,7 +46,7 @@ box-shadow:0 4px 10px rgba(0,0,0,.15);
 nav ul{
 display:flex;
 justify-content:center;
-gap:30px;
+gap:28px;
 list-style:none;
 }
 
@@ -43,18 +58,18 @@ font-size:18px;
 
 nav a.active{
 border-bottom:3px solid white;
-padding-bottom:3px;
+padding-bottom:4px;
 }
 
 /* HERO */
 
 .hero{
 text-align:center;
-padding:100px 20px;
+padding:80px 20px;
 }
 
 .hero h1{
-font-size:46px;
+font-size:42px;
 color:#d4576f;
 margin-bottom:10px;
 }
@@ -82,36 +97,36 @@ transition:.2s;
 transform:scale(1.05);
 }
 
-/* PAGE HEADER */
+/* SECTION */
 
-.page-header{
+.section{
+max-width:900px;
+margin:60px auto;
+padding:0 20px;
+}
+
+.section h2{
+font-size:34px;
+margin-bottom:20px;
 text-align:center;
-padding:60px 20px 30px;
 }
 
-.page-header h1{
-font-size:40px;
-margin-bottom:10px;
+.section p{
+text-align:center;
+margin-bottom:15px;
 }
 
-.page-header p{
-font-size:18px;
-opacity:.8;
-}
+/* CARD */
 
-/* CONTENT CARD */
-
-.content-card{
+.card{
 background:white;
-max-width:700px;
-margin:30px auto;
-padding:40px;
+padding:35px;
 border-radius:18px;
-box-shadow:0 10px 25px rgba(0,0,0,.08);
-line-height:1.6;
+box-shadow:0 10px 25px rgba(0,0,0,.1);
+margin-top:25px;
 }
 
-/* GALLERY */
+/* GALLERY GRID */
 
 .gallery-grid{
 max-width:1000px;
@@ -124,7 +139,7 @@ padding:20px;
 
 .gallery-grid img{
 width:100%;
-border-radius:16px;
+border-radius:14px;
 box-shadow:0 6px 14px rgba(0,0,0,.1);
 }
 
@@ -134,44 +149,20 @@ footer{
 background:#6e4a3a;
 color:white;
 text-align:center;
-padding:18px;
+padding:20px;
 margin-top:auto;
-}
-
-/* FALLING STRAWBERRIES */
-
-.strawberry{
-position:fixed;
-top:-40px;
-width:30px;
-animation:fall linear infinite;
-opacity:.6;
-z-index:0;
-pointer-events:none;
-}
-
-@keyframes fall{
-
-0%{
-transform:translateY(-100px) rotate(0deg)
-}
-
-100%{
-transform:translateY(120vh) rotate(360deg)
-}
-
 }
 
 /* MOBILE */
 
 @media(max-width:600px){
 
-nav ul{
-gap:18px;
-}
-
 .hero h1{
 font-size:32px;
+}
+
+.section h2{
+font-size:26px;
 }
 
 }
