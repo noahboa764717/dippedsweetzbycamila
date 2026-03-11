@@ -1,78 +1,168 @@
-<!DOCTYPE html>
-<html>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
 
-<head>
+body{
+background:#f6eef1;
+background-image:url("strawberry.png");
+background-size:80px;
+background-repeat:repeat;
 
-<title>Contact | Dipped Sweetz</title>
+animation:fallBackground 40s linear infinite;
 
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="style.css">
+min-height:100vh;
+display:flex;
+flex-direction:column;
+color:#222;
+overflow-x:hidden;
+}
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+@keyframes fallBackground{
 
-</head>
+0%{
+background-position:0 0;
+}
 
-<body>
+100%{
+background-position:0 800px;
+}
 
-<nav>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="menu.html">Menu</a></li>
-<li><a href="gallery.html">Gallery</a></li>
-<li><a href="order.html">Order</a></li>
-<li><a class="active" href="contact.html">Contact</a></li>
-</ul>
-</nav>
+}
 
-<div class="page-header">
+/* NAV */
 
-<h1>Contact</h1>
+nav{
+background:#d67a8f;
+padding:18px;
+position:sticky;
+top:0;
+z-index:1000;
+box-shadow:0 4px 10px rgba(0,0,0,.15);
+}
 
-</div>
+nav ul{
+display:flex;
+justify-content:center;
+gap:28px;
+list-style:none;
+}
 
-<div class="content-card">
+nav a{
+color:white;
+text-decoration:none;
+font-size:18px;
+}
 
-<p>📍 Jasper, Georgia</p>
+nav a.active{
+border-bottom:3px solid white;
+padding-bottom:4px;
+}
 
-<br>
+/* HERO */
 
-<p>Email:</p>
+.hero{
+text-align:center;
+padding:80px 20px;
+}
 
-<a href="mailto:orders@dippedsweetzbycamila.com">
+.hero h1{
+font-size:42px;
+color:#d4576f;
+margin-bottom:10px;
+}
 
-orders@dippedsweetzbycamila.com
+.hero p{
+font-size:20px;
+margin-bottom:25px;
+}
 
-</a>
+/* BUTTON */
 
-<br><br>
+.button{
+background:#d4576f;
+color:white;
+padding:14px 34px;
+border-radius:40px;
+text-decoration:none;
+font-size:17px;
+display:inline-block;
+margin-top:15px;
+transition:.2s;
+}
 
-<p>Instagram:</p>
+.button:hover{
+transform:scale(1.05);
+}
 
-<a href="https://instagram.com/dippedsweetz_by_camila">
+/* SECTION */
 
-@dippedsweetz_by_camila
+.section{
+max-width:900px;
+margin:60px auto;
+padding:0 20px;
+}
 
-</a>
+.section h2{
+font-size:34px;
+margin-bottom:20px;
+text-align:center;
+}
 
-<br><br>
+.section p{
+text-align:center;
+margin-bottom:15px;
+}
 
-<p>TikTok:</p>
+/* CARD */
 
-<a href="https://tiktok.com/@dippedsweetz_by_camila">
+.card{
+background:white;
+padding:35px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.1);
+margin-top:25px;
+}
 
-@dippedsweetz_by_camila
+/* GALLERY GRID */
 
-</a>
+.gallery-grid{
+max-width:1000px;
+margin:40px auto;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+padding:20px;
+}
 
-</div>
+.gallery-grid img{
+width:100%;
+border-radius:14px;
+box-shadow:0 6px 14px rgba(0,0,0,.1);
+}
 
-<footer>
+/* FOOTER */
 
-© 2026 Dipped Sweetz by Camila
+footer{
+background:#6e4a3a;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:auto;
+}
 
-</footer>
+/* MOBILE */
 
-<script src="script.js"></script>
+@media(max-width:600px){
 
-</body>
-</html>
+.hero h1{
+font-size:32px;
+}
+
+.section h2{
+font-size:26px;
+}
+
+}
