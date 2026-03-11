@@ -1,101 +1,67 @@
-/* RESET */
-
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
+font-family:'Poppins',sans-serif;
 }
 
-/* PAGE LAYOUT */
-
 body{
+background:#f8f2f4;
+background-image:url("strawberry.png");
+background-repeat:repeat;
+background-size:120px;
 min-height:100vh;
 display:flex;
 flex-direction:column;
-background:#f7f2f4;
-position:relative;
+color:#222;
 overflow-x:hidden;
-}
-
-/* BACKGROUND PATTERN */
-
-body::before{
-content:"";
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-
-background-image:url("strawberry.png");
-background-repeat:repeat;
-background-size:90px;
-
-opacity:0.18;
-
-z-index:-1;
-}
-
-/* MAIN CONTENT */
-
-main{
-flex:1;
 }
 
 /* NAVBAR */
 
 nav{
 background:#d97c92;
+padding:18px;
 position:sticky;
 top:0;
 z-index:1000;
-box-shadow:0 4px 10px rgba(0,0,0,0.15);
+box-shadow:0 4px 10px rgba(0,0,0,.15);
 }
 
 nav ul{
 display:flex;
 justify-content:center;
-align-items:center;
-gap:28px;
+gap:30px;
 list-style:none;
-padding:14px 10px;
 }
 
 nav a{
 color:white;
 text-decoration:none;
-font-size:17px;
-position:relative;
+font-size:18px;
 }
 
-nav a.active::after{
-content:"";
-position:absolute;
-left:0;
-bottom:-6px;
-width:100%;
-height:3px;
-background:white;
-border-radius:3px;
+nav a.active{
+border-bottom:3px solid white;
+padding-bottom:3px;
 }
 
 /* HERO */
 
 .hero{
 text-align:center;
-padding:90px 20px;
+padding:100px 20px;
 }
 
 .hero h1{
 font-size:46px;
 color:#d4576f;
-margin-bottom:12px;
+margin-bottom:10px;
 }
 
 .hero p{
 font-size:20px;
-margin-bottom:30px;
+margin-bottom:25px;
 }
 
 /* BUTTON */
@@ -103,91 +69,63 @@ margin-bottom:30px;
 .button{
 background:#d4576f;
 color:white;
-padding:16px 40px;
+padding:14px 34px;
 border-radius:40px;
 text-decoration:none;
+font-size:17px;
 display:inline-block;
-font-size:18px;
+margin-top:15px;
 transition:.2s;
 }
 
 .button:hover{
-opacity:.85;
+transform:scale(1.05);
 }
 
-/* SECTIONS */
+/* PAGE HEADER */
 
-section{
-padding:60px 20px;
+.page-header{
 text-align:center;
+padding:60px 20px 30px;
 }
 
-section h2{
-font-size:34px;
-margin-bottom:30px;
-}
-
-/* CARDS */
-
-.card-container{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:30px;
-max-width:1000px;
-margin:auto;
-}
-
-.card{
-background:white;
-padding:20px;
-border-radius:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.08);
-}
-
-.card img{
-width:100%;
-border-radius:16px;
+.page-header h1{
+font-size:40px;
 margin-bottom:10px;
+}
+
+.page-header p{
+font-size:18px;
+opacity:.8;
+}
+
+/* CONTENT CARD */
+
+.content-card{
+background:white;
+max-width:700px;
+margin:30px auto;
+padding:40px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+line-height:1.6;
 }
 
 /* GALLERY */
 
 .gallery-grid{
+max-width:1000px;
+margin:40px auto;
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:20px;
-max-width:1000px;
-margin:auto;
+padding:20px;
 }
 
 .gallery-grid img{
 width:100%;
 border-radius:16px;
-}
-
-/* FEATURE BOX */
-
-.feature{
-max-width:500px;
-margin:auto;
-background:white;
-padding:30px;
-border-radius:20px;
-box-shadow:0 10px 20px rgba(0,0,0,0.08);
-}
-
-.feature img{
-width:100%;
-border-radius:16px;
-margin-bottom:20px;
-}
-
-/* LISTS */
-
-ul{
-text-align:left;
-display:inline-block;
-margin-top:10px;
+box-shadow:0 6px 14px rgba(0,0,0,.1);
 }
 
 /* FOOTER */
@@ -195,9 +133,33 @@ margin-top:10px;
 footer{
 background:#6e4a3a;
 color:white;
-padding:20px;
 text-align:center;
+padding:18px;
 margin-top:auto;
+}
+
+/* FALLING STRAWBERRIES */
+
+.strawberry{
+position:fixed;
+top:-40px;
+width:30px;
+animation:fall linear infinite;
+opacity:.6;
+z-index:0;
+pointer-events:none;
+}
+
+@keyframes fall{
+
+0%{
+transform:translateY(-100px) rotate(0deg)
+}
+
+100%{
+transform:translateY(120vh) rotate(360deg)
+}
+
 }
 
 /* MOBILE */
@@ -205,23 +167,11 @@ margin-top:auto;
 @media(max-width:600px){
 
 nav ul{
-gap:16px;
-}
-
-nav a{
-font-size:15px;
+gap:18px;
 }
 
 .hero h1{
 font-size:32px;
-}
-
-.hero{
-padding:60px 20px;
-}
-
-section{
-padding:50px 20px;
 }
 
 }
