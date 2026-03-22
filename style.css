@@ -31,7 +31,7 @@ width:100%;
 height:100%;
 
 background-image:url("strawberry.png");
-background-size:55px; /* 🔥 smaller strawberries */
+background-size:30px; /* 🔥 smaller strawberries */
 background-repeat:repeat;
 background-position:0 0; /* 🔥 ADD THIS */
 
