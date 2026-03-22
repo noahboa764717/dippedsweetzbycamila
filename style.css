@@ -17,6 +17,7 @@ background:#f6eef1;
 display:flex;
 flex-direction:column;
 position:relative;
+overflow-x:hidden;
 }
 
 /* ---------- BACKGROUND STRAWBERRIES (FIXED) ---------- */
@@ -32,6 +33,7 @@ height:100%;
 background-image:url("strawberry.png");
 background-size:55px; /* 🔥 smaller strawberries */
 background-repeat:repeat;
+background-position:0 0; /* 🔥 ADD THIS */
 
 opacity:.12; /* 🔥 more transparent */
 
@@ -47,7 +49,7 @@ pointer-events:none;
 background-position:0 0;
 }
 100%{
-background-position:0 1000px;
+background-position:0 800px;
 }
 }
 
