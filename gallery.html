@@ -8,6 +8,29 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    .gallery-loading {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-soft);
+      font-size: 15px;
+      grid-column: 1 / -1;
+    }
+    .gallery-loading .spin {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 12px;
+      animation: galspin 1.2s linear infinite;
+    }
+    @keyframes galspin { to { transform: rotate(360deg); } }
+    .gallery-empty {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-soft);
+      font-size: 15px;
+      grid-column: 1 / -1;
+    }
+  </style>
 </head>
 <body>
 
@@ -26,7 +49,6 @@
   <p>Some of our favorite treats and creations 🍓</p>
 </div>
 
-<!-- FILTER BUTTONS -->
 <div class="gallery-filters">
   <button class="filter-btn active" data-filter="all">All</button>
   <button class="filter-btn" data-filter="cakepops">🍭 Cake Pops</button>
@@ -35,14 +57,14 @@
   <button class="filter-btn" data-filter="bouquets">💐 Bouquets</button>
 </div>
 
-<!-- GALLERY GRID (populated by JS) -->
-<div class="gallery-grid"></div>
+<div class="gallery-grid" id="gallery-grid">
+  <div class="gallery-loading"><span class="spin">🍓</span>Loading gallery...</div>
+</div>
 
-<!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
   <span class="lightbox-close" onclick="closeLightbox()">✕</span>
   <div class="lightbox-inner">
-    <img src="" alt="">
+    <img src="" alt="" id="lightbox-img">
     <div class="lightbox-caption" id="lightbox-caption"></div>
   </div>
 </div>
@@ -58,6 +80,149 @@
   </div>
 </footer>
 
-<script src="script.js"></script>
+<script src="https://apis.google.com/js/api.js"></script>
+<script>
+/* ── CONFIG ── */
+const CLIENT_ID    = '420017082677-ca78o0nkcppdh0li75m7t1nbu16vm873.apps.googleusercontent.com';
+const META_FILE    = 'ds_gallery_meta.json';
+const CACHE_KEY    = 'ds_gallery_cache';
+const FOLDER_KEY   = 'ds_drive_folder_id';
+const DISCOVERY    = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+const SCOPE        = 'https://www.googleapis.com/auth/drive.readonly';
+
+const DEFAULT_IMAGES = [
+  { src:'gallery/1stcatering.png', label:'Cake Pops',         caption:'Fresh cake pops made for a catering order 🍭',        cat:'cakepops'     },
+  { src:'gallery/strawberry1.png', label:'Dipped Strawberry', caption:'Fresh strawberries dipped in premium chocolate 🍫',   cat:'strawberries' },
+  { src:'gallery/strawberry2.png', label:'Dipped Strawberry', caption:'Custom colored chocolate strawberries 🍓',            cat:'strawberries' },
+  { src:'gallery/strawberry3.png', label:'Dipped Strawberry', caption:'White chocolate drizzle strawberries ✨',             cat:'strawberries' },
+  { src:'gallery/dessertbox1.png', label:'Dessert Box',       caption:'Our signature dessert box — perfect for gifting 🎁',  cat:'boxes'        },
+  { src:'gallery/box1.png',        label:'Treat Box',         caption:'Custom treat box for any occasion 🎉',                cat:'boxes'        },
+  { src:'gallery/IMG_1888.jpeg',   label:'Custom Creation',   caption:'Handcrafted with love 💕',                            cat:'strawberries' },
+  { src:'gallery/IMG_1889.jpeg',   label:'Custom Creation',   caption:'Every order made fresh to order 🍓',                  cat:'strawberries' },
+];
+
+let allImages     = [];
+let currentFilter = 'all';
+
+/* ── INIT ── */
+window.addEventListener('load', () => {
+  // Show cached immediately so page feels instant
+  const cached = getCache();
+  if (cached && cached.length) {
+    allImages = cached;
+    renderGallery('all');
+  }
+
+  gapi.load('client', async () => {
+    try {
+      await gapi.client.init({ clientId: CLIENT_ID, scope: SCOPE, discoveryDocs: [DISCOVERY] });
+      await tryLoadFromDrive();
+    } catch {
+      if (!allImages.length) fallbackToDefaults();
+    }
+  });
+});
+
+async function tryLoadFromDrive() {
+  const folderId = localStorage.getItem(FOLDER_KEY);
+  if (!folderId) { if (!allImages.length) fallbackToDefaults(); return; }
+
+  try {
+    const listRes = await gapi.client.drive.files.list({
+      q: `name='${META_FILE}' and '${folderId}' in parents and trashed=false`,
+      fields: 'files(id)',
+      spaces: 'drive',
+    });
+
+    if (!listRes.result.files.length) { if (!allImages.length) fallbackToDefaults(); return; }
+
+    const metaRes = await gapi.client.drive.files.get({
+      fileId: listRes.result.files[0].id,
+      alt: 'media',
+    });
+
+    const meta = typeof metaRes.body === 'string' ? JSON.parse(metaRes.body) : metaRes.result;
+    allImages = meta.images || [];
+    setCache(allImages);
+    renderGallery(currentFilter);
+  } catch {
+    if (!allImages.length) fallbackToDefaults();
+  }
+}
+
+function fallbackToDefaults() {
+  allImages = DEFAULT_IMAGES;
+  renderGallery('all');
+}
+
+/* ── RENDER ── */
+function renderGallery(filter) {
+  currentFilter = filter;
+  const grid = document.getElementById('gallery-grid');
+  grid.innerHTML = '';
+
+  const list = filter === 'all' ? allImages : allImages.filter(i => i.cat === filter);
+
+  if (!list.length) {
+    grid.innerHTML = '<div class="gallery-empty">No photos in this category yet 🍓</div>';
+    return;
+  }
+
+  list.forEach(({ src, label, caption, cat }, idx) => {
+    const item = document.createElement('div');
+    item.className = 'gallery-item fade-up';
+    item.dataset.cat = cat;
+
+    const img = document.createElement('img');
+    img.src = src; img.alt = label; img.loading = 'lazy';
+
+    const ov = document.createElement('div');
+    ov.className = 'gallery-item-overlay';
+    ov.innerHTML = `<span>${label}</span>`;
+
+    item.appendChild(img);
+    item.appendChild(ov);
+    grid.appendChild(item);
+    item.addEventListener('click', () => openLightbox(src, label, caption || label));
+    setTimeout(() => item.classList.add('visible'), idx * 55);
+  });
+}
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderGallery(btn.dataset.filter);
+  });
+});
+
+/* ── LIGHTBOX ── */
+const lightbox = document.getElementById('lightbox');
+
+function openLightbox(src, alt, caption) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-img').alt = alt;
+  document.getElementById('lightbox-caption').textContent = caption || '';
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+}
+lightbox.addEventListener('click', e => {
+  if (e.target === lightbox || e.target.classList.contains('lightbox-close')) closeLightbox();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+/* ── CACHE ── */
+function setCache(imgs) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(imgs)); } catch {} }
+function getCache()     { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } }
+
+/* ── SCROLL OBSERVER ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
+}, { threshold: 0.12 });
+</script>
 </body>
 </html>
