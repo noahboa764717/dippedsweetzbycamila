@@ -1,48 +1,59 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-<title>Gallery | Dipped Sweetz</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-  
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="stylesheet" href="style.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8">
+  <title>Gallery | Dipped Sweetz by Camila</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Gallery of handcrafted chocolate-dipped strawberries, dessert boxes, and edible bouquets by Camila.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
 <nav>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="menu.html">Menu</a></li>
-<li><a class="active" href="gallery.html">Gallery</a></li>
-<li><a href="order.html">Order</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="menu.html">Menu</a></li>
+    <li><a href="gallery.html">Gallery</a></li>
+    <li><a href="order.html">Order</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
 </nav>
 
 <div class="page-header">
-
-<h1>Gallery</h1>
-
-<p>Some of our favorite treats and creations 🍓</p>
-
+  <h1>Gallery</h1>
+  <p>Some of our favorite treats and creations 🍓</p>
 </div>
 
+<!-- FILTER BUTTONS -->
+<div class="gallery-filters">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="strawberries">Strawberries</button>
+  <button class="filter-btn" data-filter="boxes">Dessert Boxes</button>
+  <button class="filter-btn" data-filter="bouquets">Bouquets</button>
+</div>
+
+<!-- GALLERY GRID (populated by JS) -->
 <div class="gallery-grid"></div>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <img src="" alt="">
+</div>
+
 <footer>
-
-© 2026 Dipped Sweetz by Camila
-
+  <div class="footer-inner">
+    <span>© 2026 Dipped Sweetz by Camila · Jasper, Georgia</span>
+    <div class="footer-links">
+      <a href="https://instagram.com/dippedsweetz_by_camila" target="_blank">📸 Instagram</a>
+      <a href="https://tiktok.com/@dippedsweetz_by_camila" target="_blank">🎵 TikTok</a>
+      <a href="contact.html">Contact</a>
+    </div>
+  </div>
 </footer>
 
 <script src="script.js"></script>
-
 </body>
 </html>
