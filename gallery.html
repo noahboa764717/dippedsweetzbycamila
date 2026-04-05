@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Gallery | Dipped Sweetz by Camila</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Gallery of handcrafted chocolate-dipped strawberries, dessert boxes, and edible bouquets by Camila.">
+  <meta name="description" content="Gallery of handcrafted cake pops, chocolate-dipped strawberries, dessert boxes, and flower bouquets by Camila.">
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -29,9 +29,10 @@
 <!-- FILTER BUTTONS -->
 <div class="gallery-filters">
   <button class="filter-btn active" data-filter="all">All</button>
-  <button class="filter-btn" data-filter="strawberries">Strawberries</button>
-  <button class="filter-btn" data-filter="boxes">Dessert Boxes</button>
-  <button class="filter-btn" data-filter="bouquets">Bouquets</button>
+  <button class="filter-btn" data-filter="cakepops">🍭 Cake Pops</button>
+  <button class="filter-btn" data-filter="strawberries">🍓 Strawberries</button>
+  <button class="filter-btn" data-filter="boxes">🎁 Dessert Boxes</button>
+  <button class="filter-btn" data-filter="bouquets">💐 Bouquets</button>
 </div>
 
 <!-- GALLERY GRID (populated by JS) -->
@@ -40,7 +41,10 @@
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox">
   <span class="lightbox-close" onclick="closeLightbox()">✕</span>
-  <img src="" alt="">
+  <div class="lightbox-inner">
+    <img src="" alt="">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+  </div>
 </div>
 
 <footer>

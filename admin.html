@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin — Dipped Sweetz</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rose:      #d4576f;
+      --rose-dark: #b8405b;
+      --blush:     #f6eef1;
+      --chocolate: #6e4a3a;
+      --text:      #2d1a14;
+      --text-soft: #7a5a52;
+      --white:     #ffffff;
+      --bg:        #faf6f8;
+      --border:    rgba(110,74,58,.12);
+      --shadow:    0 8px 32px rgba(110,74,58,.12);
+      --radius:    14px;
+      --green:     #2e7d52;
+      --green-bg:  #eaf5ee;
+      --red:       #c0392b;
+      --red-bg:    #fdecea;
+    }
+
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ===== LOGIN SCREEN ===== */
+    #login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f6eef1, #fde8ee);
+      padding: 20px;
+    }
+
+    .login-card {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 44px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 20px 60px rgba(110,74,58,.18);
+      text-align: center;
+    }
+
+    .login-logo {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .login-card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--rose);
+      margin-bottom: 6px;
+    }
+
+    .login-card p {
+      color: var(--text-soft);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: var(--bg);
+      transition: border-color .2s;
+      outline: none;
+    }
+
+    .field input:focus { border-color: var(--rose); }
+
+    .login-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--rose);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background .2s, transform .15s;
+    }
+
+    .login-btn:hover { background: var(--rose-dark); transform: translateY(-1px); }
+
+    .login-error {
+      background: var(--red-bg);
+      color: var(--red);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      margin-top: 14px;
+      display: none;
+    }
+
+    /* ===== ADMIN PANEL ===== */
+    #admin-panel { display: none; }
+
+    .admin-header {
+      background: var(--rose);
+      color: white;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 4px 16px rgba(180,60,80,.25);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .admin-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .admin-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .admin-header span { font-size: 20px; }
+
+    .header-btns { display: flex; gap: 10px; align-items: center; }
+
+    .btn-header {
+      background: rgba(255,255,255,.18);
+      color: white;
+      border: 1px solid rgba(255,255,255,.3);
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s;
+    }
+
+    .btn-header:hover { background: rgba(255,255,255,.28); }
+
+    .admin-layout {
+      display: flex;
+      min-height: calc(100vh - 60px);
+    }
+
+    /* Sidebar */
+    .admin-sidebar {
+      width: 220px;
+      background: white;
+      border-right: 1px solid var(--border);
+      padding: 24px 0;
+      flex-shrink: 0;
+    }
+
+    .sidebar-section {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-soft);
+      padding: 0 20px 8px;
+      margin-top: 20px;
+    }
+
+    .sidebar-section:first-child { margin-top: 0; }
+
+    .sidebar-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 11px 20px;
+      background: none;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-soft);
+      cursor: pointer;
+      text-align: left;
+      transition: background .15s, color .15s;
+      border-left: 3px solid transparent;
+    }
+
+    .sidebar-btn:hover { background: var(--blush); color: var(--text); }
+    .sidebar-btn.active { background: #fde8ee; color: var(--rose); border-left-color: var(--rose); font-weight: 600; }
+
+    /* Main content */
+    .admin-main {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .panel-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .panel-sub {
+      color: var(--text-soft);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    /* Cards */
+    .admin-card {
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .admin-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Form fields */
+    .form-row { margin-bottom: 16px; }
+
+    .form-row label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+      letter-spacing: .03em;
+    }
+
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .form-row input:focus,
+    .form-row select:focus,
+    .form-row textarea:focus { border-color: var(--rose); }
+
+    .form-row textarea { resize: vertical; min-height: 80px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 22px;
+      border-radius: 8px;
+      border: none;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .btn-primary { background: var(--rose); color: white; }
+    .btn-primary:hover { background: var(--rose-dark); transform: translateY(-1px); }
+
+    .btn-danger { background: var(--red-bg); color: var(--red); }
+    .btn-danger:hover { background: #f5d5d0; }
+
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--green);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,.18);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all .3s;
+      z-index: 9999;
+      pointer-events: none;
+    }
+
+    #toast.show { opacity: 1; transform: translateY(0); }
+
+    /* Gallery admin grid */
+    .admin-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .admin-gallery-item {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      aspect-ratio: 1;
+      background: var(--blush);
+      box-shadow: 0 2px 10px rgba(110,74,58,.08);
+    }
+
+    .admin-gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .admin-gallery-item .item-actions {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .item-actions button {
+      background: rgba(0,0,0,.65);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: background .2s;
+    }
+
+    .item-actions button:hover { background: rgba(0,0,0,.85); }
+    .item-actions .del-btn { background: rgba(192,57,43,.8); }
+    .item-actions .del-btn:hover { background: rgba(192,57,43,1); }
+
+    .admin-gallery-item .item-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.7), transparent);
+      color: white;
+      font-size: 11px;
+      padding: 20px 8px 6px;
+      line-height: 1.3;
+    }
+
+    .admin-gallery-item .item-cat-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(212,87,111,.85);
+      color: white;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    /* Upload drop zone */
+    .drop-zone {
+      border: 2px dashed var(--rose);
+      border-radius: var(--radius);
+      padding: 36px;
+      text-align: center;
+      cursor: pointer;
+      transition: background .2s;
+      background: #fdf5f7;
+      margin-bottom: 20px;
+    }
+
+    .drop-zone:hover, .drop-zone.drag-over { background: #fde8ee; }
+
+    .drop-zone p { color: var(--text-soft); font-size: 14px; margin-top: 8px; }
+    .drop-zone .dz-icon { font-size: 40px; }
+
+    /* Content editor */
+    .content-block {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 14px;
+      background: var(--bg);
+    }
+
+    .content-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .content-block-header strong { font-size: 14px; color: var(--text); }
+
+    /* Dashboard stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .stat-card .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      color: var(--rose);
+      line-height: 1;
+    }
+
+    .stat-card .stat-label {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    /* Edit caption modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: white;
+      border-radius: 16px;
+      padding: 32px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.2);
+    }
+
+    .modal-box h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .modal-btns { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+
+    @media (max-width: 640px) {
+      .admin-sidebar { display: none; }
+      .admin-main { padding: 20px 16px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .admin-header { padding: 0 16px; }
+      .admin-header h1 { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== LOGIN SCREEN ===== -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">🍓</div>
+    <h1>Admin Login</h1>
+    <p>Dipped Sweetz by Camila</p>
+
+    <div class="field">
+      <label>Username</label>
+      <input type="text" id="username" placeholder="Enter username" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+    </div>
+    <button class="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="login-error" id="login-error">Incorrect username or password.</div>
+  </div>
+</div>
+
+<!-- ===== ADMIN PANEL ===== -->
+<div id="admin-panel">
+
+  <header class="admin-header">
+    <div class="admin-header-left">
+      <span>🍓</span>
+      <h1>Dipped Sweetz Admin</h1>
+    </div>
+    <div class="header-btns">
+      <a class="btn-header" href="index.html" target="_blank">View Site ↗</a>
+      <button class="btn-header" onclick="doLogout()">Log Out</button>
+    </div>
+  </header>
+
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-section">Overview</div>
+      <button class="sidebar-btn active" onclick="showPanel('dashboard', this)">📊 Dashboard</button>
+
+      <div class="sidebar-section">Content</div>
+      <button class="sidebar-btn" onclick="showPanel('gallery-mgr', this)">🖼️ Gallery</button>
+      <button class="sidebar-btn" onclick="showPanel('content-editor', this)">✏️ Page Content</button>
+
+      <div class="sidebar-section">Site Info</div>
+      <button class="sidebar-btn" onclick="showPanel('site-settings', this)">⚙️ Settings</button>
+    </aside>
+
+    <!-- Main -->
+    <main class="admin-main">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <h2 class="panel-title">Dashboard</h2>
+        <p class="panel-sub">Welcome back! Here's a quick overview of your site.</p>
+
+        <div class="stats-grid" id="stats-grid">
+          <!-- populated by JS -->
+        </div>
+
+        <div class="admin-card">
+          <h3>🔗 Quick Links</h3>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <a href="index.html" target="_blank" class="btn btn-primary btn-sm">🏠 Homepage</a>
+            <a href="menu.html" target="_blank" class="btn btn-primary btn-sm">🍭 Menu</a>
+            <a href="gallery.html" target="_blank" class="btn btn-primary btn-sm">🖼️ Gallery</a>
+            <a href="order.html" target="_blank" class="btn btn-primary btn-sm">📦 Order</a>
+            <a href="contact.html" target="_blank" class="btn btn-primary btn-sm">📬 Contact</a>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h3>📌 How This Works</h3>
+          <p style="font-size:14px;color:var(--text-soft);line-height:1.7;">
+            Photos you upload here are saved in your browser and appear live on the gallery page — no code editing needed.<br><br>
+            <strong>Important:</strong> Photos are stored in <em>this browser on this device</em>. To share changes across devices, use the Export/Import feature in Gallery settings, or commit actual image files to your GitHub repo for permanent storage.
+          </p>
+        </div>
+      </div>
+
+      <!-- GALLERY MANAGER -->
+      <div class="panel" id="panel-gallery-mgr">
+        <h2 class="panel-title">Gallery Manager</h2>
+        <p class="panel-sub">Upload new photos, edit captions, and organize by category.</p>
+
+        <!-- Upload -->
+        <div class="admin-card">
+          <h3>📤 Upload New Photo</h3>
+
+          <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+            <div class="dz-icon">📷</div>
+            <strong>Click to choose a photo</strong>
+            <p>JPG, PNG, WEBP supported</p>
+          </div>
+          <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFileSelect(this)">
+
+          <div id="upload-preview" style="display:none;">
+            <img id="preview-img" style="max-height:180px;border-radius:10px;margin-bottom:16px;display:block;">
+            <div class="form-grid">
+              <div class="form-row">
+                <label>Photo Label (shown on hover)</label>
+                <input type="text" id="upload-label" placeholder="e.g. Custom Cake Pop">
+              </div>
+              <div class="form-row">
+                <label>Category</label>
+                <select id="upload-cat">
+                  <option value="cakepops">🍭 Cake Pops</option>
+                  <option value="strawberries">🍓 Strawberries</option>
+                  <option value="boxes">🎁 Dessert Boxes</option>
+                  <option value="bouquets">💐 Bouquets</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <label>Caption (shown in lightbox when clicked)</label>
+              <textarea id="upload-caption" placeholder="e.g. Custom pink cake pops for a baby shower 🎀"></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="saveUploadedPhoto()">✅ Add to Gallery</button>
+          </div>
+        </div>
+
+        <!-- Current gallery -->
+        <div class="admin-card">
+          <h3>🗂️ Manage Photos</h3>
+          <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+            <button class="btn btn-sm" style="background:var(--blush);color:var(--text);" onclick="filterAdminGallery('all')">All</button>
+            <button class="btn btn-sm" style="background:var(--blush);color:var(--text);" onclick="filterAdminGallery('cakepops')">🍭 Cake Pops</button>
+            <button class="btn btn-sm" style="background:var(--blush);color:var(--text);" onclick="filterAdminGallery('strawberries')">🍓 Strawberries</button>
+            <button class="btn btn-sm" style="background:var(--blush);color:var(--text);" onclick="filterAdminGallery('boxes')">🎁 Boxes</button>
+            <button class="btn btn-sm" style="background:var(--blush);color:var(--text);" onclick="filterAdminGallery('bouquets')">💐 Bouquets</button>
+          </div>
+          <div class="admin-gallery-grid" id="admin-gallery-grid"></div>
+          <p id="no-uploads-msg" style="color:var(--text-soft);font-size:14px;text-align:center;padding:20px;display:none;">
+            No uploaded photos yet. Use the uploader above to add your first photo!
+          </p>
+        </div>
+      </div>
+
+      <!-- CONTENT EDITOR -->
+      <div class="panel" id="panel-content-editor">
+        <h2 class="panel-title">Page Content</h2>
+        <p class="panel-sub">Edit text that appears across your site. Changes save instantly and show on your live pages.</p>
+
+        <div class="admin-card">
+          <h3>🏠 Homepage</h3>
+          <div class="content-block">
+            <div class="content-block-header"><strong>Hero Tagline</strong></div>
+            <div class="form-row">
+              <textarea id="hero-tagline" rows="2"></textarea>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveContent('hero-tagline')">Save</button>
+          </div>
+          <div class="content-block">
+            <div class="content-block-header"><strong>Hero Badge Text</strong></div>
+            <div class="form-row">
+              <input type="text" id="hero-badge">
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveContent('hero-badge')">Save</button>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h3>📬 Contact Page</h3>
+          <div class="content-block">
+            <div class="content-block-header"><strong>Location</strong></div>
+            <div class="form-row">
+              <input type="text" id="contact-location">
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveContent('contact-location')">Save</button>
+          </div>
+          <div class="content-block">
+            <div class="content-block-header"><strong>Response Time Note</strong></div>
+            <div class="form-row">
+              <textarea id="contact-response-note" rows="3"></textarea>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveContent('contact-response-note')">Save</button>
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h3>📦 Order Page</h3>
+          <div class="content-block">
+            <div class="content-block-header"><strong>Order Instructions Note</strong></div>
+            <div class="form-row">
+              <textarea id="order-note" rows="3"></textarea>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="saveContent('order-note')">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SITE SETTINGS -->
+      <div class="panel" id="panel-site-settings">
+        <h2 class="panel-title">Settings</h2>
+        <p class="panel-sub">Manage your site data and exports.</p>
+
+        <div class="admin-card">
+          <h3>🔑 Change Password</h3>
+          <div class="form-grid">
+            <div class="form-row">
+              <label>New Password</label>
+              <input type="password" id="new-password" placeholder="Enter new password">
+            </div>
+            <div class="form-row">
+              <label>Confirm Password</label>
+              <input type="password" id="confirm-password" placeholder="Confirm new password">
+            </div>
+          </div>
+          <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+        </div>
+
+        <div class="admin-card">
+          <h3>💾 Export / Import Gallery Data</h3>
+          <p style="font-size:14px;color:var(--text-soft);margin-bottom:16px;line-height:1.6;">Export your uploaded photos to a file so you can import them on another device or back them up.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;">
+            <button class="btn btn-primary" onclick="exportData()">⬇️ Export Gallery Data</button>
+            <button class="btn" style="background:var(--blush);color:var(--text);" onclick="document.getElementById('import-file').click()">⬆️ Import Gallery Data</button>
+            <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)">
+          </div>
+        </div>
+
+        <div class="admin-card">
+          <h3 style="color:var(--red);">⚠️ Danger Zone</h3>
+          <p style="font-size:14px;color:var(--text-soft);margin-bottom:16px;">This will permanently delete all uploaded photos and saved content. This cannot be undone.</p>
+          <button class="btn btn-danger" onclick="clearAllData()">🗑️ Clear All Data</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Edit Caption Modal -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal-box">
+    <h3>✏️ Edit Photo</h3>
+    <input type="hidden" id="edit-idx">
+    <div class="form-row">
+      <label>Label</label>
+      <input type="text" id="edit-label">
+    </div>
+    <div class="form-row">
+      <label>Category</label>
+      <select id="edit-cat">
+        <option value="cakepops">🍭 Cake Pops</option>
+        <option value="strawberries">🍓 Strawberries</option>
+        <option value="boxes">🎁 Dessert Boxes</option>
+        <option value="bouquets">💐 Bouquets</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Caption</label>
+      <textarea id="edit-caption" rows="3"></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn" style="background:var(--blush);color:var(--text);" onclick="closeEditModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+  /* ===== AUTH ===== */
+  const CREDS_KEY = 'ds_admin_creds';
+
+  function getCreds() {
+    try {
+      const c = localStorage.getItem(CREDS_KEY);
+      return c ? JSON.parse(c) : { username: 'admin', password: 'Noah1767' };
+    } catch { return { username: 'admin', password: 'Noah1767' }; }
+  }
+
+  function doLogin() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value;
+    const creds = getCreds();
+    if (u === creds.username && p === creds.password) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('admin-panel').style.display = 'block';
+      initAdmin();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+    }
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && document.getElementById('login-screen').style.display !== 'none') doLogin();
+  });
+
+  function doLogout() {
+    document.getElementById('admin-panel').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'flex';
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('login-error').style.display = 'none';
+  }
+
+  function changePassword() {
+    const np = document.getElementById('new-password').value;
+    const cp = document.getElementById('confirm-password').value;
+    if (!np) return toast('Please enter a new password.', true);
+    if (np !== cp) return toast('Passwords do not match.', true);
+    const creds = getCreds();
+    creds.password = np;
+    localStorage.setItem(CREDS_KEY, JSON.stringify(creds));
+    document.getElementById('new-password').value = '';
+    document.getElementById('confirm-password').value = '';
+    toast('Password updated!');
+  }
+
+  /* ===== PANEL NAV ===== */
+  function showPanel(id, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + id).classList.add('active');
+    btn.classList.add('active');
+    if (id === 'gallery-mgr') renderAdminGallery('all');
+    if (id === 'dashboard') renderStats();
+    if (id === 'content-editor') loadContentFields();
+  }
+
+  /* ===== GALLERY DATA ===== */
+  const GALLERY_KEY = 'ds_gallery_images';
+
+  function getAdminImages() {
+    try { return JSON.parse(localStorage.getItem(GALLERY_KEY)) || []; }
+    catch { return []; }
+  }
+
+  function saveAdminImages(imgs) {
+    localStorage.setItem(GALLERY_KEY, JSON.stringify(imgs));
+  }
+
+  /* ===== UPLOAD ===== */
+  let pendingDataUrl = null;
+
+  function handleFileSelect(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      pendingDataUrl = e.target.result;
+      document.getElementById('preview-img').src = pendingDataUrl;
+      document.getElementById('upload-preview').style.display = 'block';
+      document.getElementById('upload-label').value = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  const dz = document.getElementById('drop-zone');
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault();
+    dz.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      const input = document.getElementById('file-input');
+      input.files = dt.files;
+      handleFileSelect(input);
+    }
+  });
+
+  function saveUploadedPhoto() {
+    if (!pendingDataUrl) return toast('Please select a photo first.', true);
+    const label = document.getElementById('upload-label').value.trim() || 'New Photo';
+    const cat   = document.getElementById('upload-cat').value;
+    const cap   = document.getElementById('upload-caption').value.trim();
+
+    const imgs = getAdminImages();
+    imgs.push({ src: pendingDataUrl, label, caption: cap, cat });
+    saveAdminImages(imgs);
+
+    pendingDataUrl = null;
+    document.getElementById('upload-preview').style.display = 'none';
+    document.getElementById('file-input').value = '';
+    document.getElementById('upload-label').value = '';
+    document.getElementById('upload-caption').value = '';
+
+    toast('Photo added to gallery! ✅');
+    renderAdminGallery('all');
+    renderStats();
+  }
+
+  /* ===== RENDER ADMIN GALLERY ===== */
+  let currentAdminFilter = 'all';
+
+  function filterAdminGallery(f) { currentAdminFilter = f; renderAdminGallery(f); }
+
+  function renderAdminGallery(filter) {
+    currentAdminFilter = filter;
+    const grid = document.getElementById('admin-gallery-grid');
+    const noMsg = document.getElementById('no-uploads-msg');
+    const imgs = getAdminImages();
+    const filtered = filter === 'all' ? imgs : imgs.filter(i => i.cat === filter);
+
+    grid.innerHTML = '';
+    if (filtered.length === 0) { noMsg.style.display = 'block'; return; }
+    noMsg.style.display = 'none';
+
+    const catLabels = { cakepops:'Cake Pops', strawberries:'Strawberries', boxes:'Boxes', bouquets:'Bouquets' };
+
+    filtered.forEach((img, filteredIdx) => {
+      // find real index in full array
+      const realIdx = imgs.findIndex(i => i === img || (i.src === img.src && i.label === img.label));
+      const item = document.createElement('div');
+      item.className = 'admin-gallery-item';
+      item.innerHTML = `
+        <img src="${img.src}" alt="${img.label}">
+        <span class="item-cat-badge">${catLabels[img.cat] || img.cat}</span>
+        <div class="item-caption">${img.label}</div>
+        <div class="item-actions">
+          <button onclick="openEditModal(${realIdx})">✏️</button>
+          <button class="del-btn" onclick="deletePhoto(${realIdx})">🗑️</button>
+        </div>
+      `;
+      grid.appendChild(item);
+    });
+  }
+
+  function deletePhoto(idx) {
+    if (!confirm('Delete this photo from the gallery?')) return;
+    const imgs = getAdminImages();
+    imgs.splice(idx, 1);
+    saveAdminImages(imgs);
+    renderAdminGallery(currentAdminFilter);
+    renderStats();
+    toast('Photo deleted.');
+  }
+
+  /* ===== EDIT MODAL ===== */
+  function openEditModal(idx) {
+    const imgs = getAdminImages();
+    const img = imgs[idx];
+    document.getElementById('edit-idx').value = idx;
+    document.getElementById('edit-label').value = img.label;
+    document.getElementById('edit-cat').value = img.cat;
+    document.getElementById('edit-caption').value = img.caption || '';
+    document.getElementById('edit-modal').classList.add('open');
+  }
+
+  function closeEditModal() {
+    document.getElementById('edit-modal').classList.remove('open');
+  }
+
+  function saveEdit() {
+    const idx    = parseInt(document.getElementById('edit-idx').value);
+    const imgs   = getAdminImages();
+    imgs[idx].label   = document.getElementById('edit-label').value.trim();
+    imgs[idx].cat     = document.getElementById('edit-cat').value;
+    imgs[idx].caption = document.getElementById('edit-caption').value.trim();
+    saveAdminImages(imgs);
+    closeEditModal();
+    renderAdminGallery(currentAdminFilter);
+    toast('Photo updated! ✅');
+  }
+
+  /* ===== CONTENT EDITOR ===== */
+  const CONTENT_KEY = 'ds_site_content';
+
+  const contentDefaults = {
+    'hero-tagline':         'Cake pops, chocolate-dipped strawberries, dessert boxes, and real flower bouquets — made with love for every occasion.',
+    'hero-badge':           '🍓 Handmade in Jasper, Georgia',
+    'contact-location':     'Jasper, Georgia',
+    'contact-response-note':'We typically respond within 24 hours. For urgent orders, Instagram DMs are the fastest way to reach us. Please allow 48–72 hours minimum notice for all orders.',
+    'order-note':           'Please allow at least 48–72 hours notice for standard orders. Custom or large orders may require more lead time.',
+  };
+
+  function getContent() {
+    try { return { ...contentDefaults, ...(JSON.parse(localStorage.getItem(CONTENT_KEY)) || {}) }; }
+    catch { return { ...contentDefaults }; }
+  }
+
+  function loadContentFields() {
+    const c = getContent();
+    Object.keys(contentDefaults).forEach(k => {
+      const el = document.getElementById(k);
+      if (el) el.value = c[k] || '';
+    });
+  }
+
+  function saveContent(key) {
+    const el = document.getElementById(key);
+    if (!el) return;
+    const stored = getContent();
+    stored[key] = el.value;
+    localStorage.setItem(CONTENT_KEY, JSON.stringify(stored));
+    toast('Saved! ✅');
+  }
+
+  /* ===== STATS ===== */
+  function renderStats() {
+    const imgs = getAdminImages();
+    const cats = { cakepops:0, strawberries:0, boxes:0, bouquets:0 };
+    imgs.forEach(i => { if (cats[i.cat] !== undefined) cats[i.cat]++; });
+
+    const grid = document.getElementById('stats-grid');
+    grid.innerHTML = `
+      <div class="stat-card"><div class="stat-num">${imgs.length}</div><div class="stat-label">Uploaded Photos</div></div>
+      <div class="stat-card"><div class="stat-num">${cats.cakepops}</div><div class="stat-label">Cake Pop Photos</div></div>
+      <div class="stat-card"><div class="stat-num">${cats.strawberries}</div><div class="stat-label">Strawberry Photos</div></div>
+      <div class="stat-card"><div class="stat-num">${cats.boxes}</div><div class="stat-label">Box Photos</div></div>
+      <div class="stat-card"><div class="stat-num">${cats.bouquets}</div><div class="stat-label">Bouquet Photos</div></div>
+    `;
+  }
+
+  /* ===== EXPORT / IMPORT ===== */
+  function exportData() {
+    const data = { gallery: getAdminImages(), content: getContent() };
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'dippedsweetz-data.json';
+    a.click();
+    toast('Exported! ✅');
+  }
+
+  function importData(input) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data.gallery) saveAdminImages(data.gallery);
+        if (data.content) localStorage.setItem(CONTENT_KEY, JSON.stringify(data.content));
+        toast('Data imported! ✅');
+        renderStats();
+        renderAdminGallery('all');
+      } catch { toast('Invalid file.', true); }
+    };
+    reader.readAsText(file);
+    input.value = '';
+  }
+
+  function clearAllData() {
+    if (!confirm('This will delete ALL uploaded photos and saved content. Are you sure?')) return;
+    localStorage.removeItem(GALLERY_KEY);
+    localStorage.removeItem(CONTENT_KEY);
+    renderStats();
+    renderAdminGallery('all');
+    loadContentFields();
+    toast('All data cleared.');
+  }
+
+  /* ===== TOAST ===== */
+  let toastTimer;
+  function toast(msg, isError = false) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.background = isError ? '#c0392b' : '#2e7d52';
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  /* ===== INIT ===== */
+  function initAdmin() {
+    renderStats();
+    renderAdminGallery('all');
+    loadContentFields();
+  }
+</script>
+
+</body>
+</html>

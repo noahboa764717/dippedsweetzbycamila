@@ -8,24 +8,44 @@
   }
 })();
 
-/* ---------- GALLERY AUTO LOAD ---------- */
+/* ---------- DEFAULT GALLERY IMAGES ---------- */
+const defaultImages = [
+  { src: 'gallery/strawberry1.png',  label: 'Dipped Strawberry',   caption: 'Fresh strawberries dipped in premium chocolate 🍫',  cat: 'strawberries' },
+  { src: 'gallery/strawberry2.png',  label: 'Dipped Strawberry',   caption: 'Custom colored chocolate strawberries 🍓',             cat: 'strawberries' },
+  { src: 'gallery/strawberry3.png',  label: 'Dipped Strawberry',   caption: 'White chocolate drizzle strawberries ✨',              cat: 'strawberries' },
+  { src: 'gallery/dessertbox1.png',  label: 'Dessert Box',         caption: 'Our signature dessert box — perfect for gifting 🎁',  cat: 'boxes' },
+  { src: 'gallery/box1.png',         label: 'Treat Box',           caption: 'Custom treat box for any occasion 🎉',                cat: 'boxes' },
+  { src: 'gallery/IMG_1888.jpeg',    label: 'Custom Creation',     caption: 'Handcrafted with love 💕',                            cat: 'strawberries' },
+  { src: 'gallery/IMG_1889.jpeg',    label: 'Custom Creation',     caption: 'Every order made fresh to order 🍓',                  cat: 'strawberries' },
+];
+
+/* ---------- GALLERY ---------- */
 const gallery = document.querySelector('.gallery-grid');
 
 if (gallery) {
-  const images = [
-    { src: 'gallery/strawberry1.png',  label: 'Dipped Strawberry',   cat: 'strawberries' },
-    { src: 'gallery/strawberry2.png',  label: 'Dipped Strawberry',   cat: 'strawberries' },
-    { src: 'gallery/strawberry3.png',  label: 'Dipped Strawberry',   cat: 'strawberries' },
-    { src: 'gallery/dessertbox1.png',  label: 'Dessert Box',         cat: 'boxes' },
-    { src: 'gallery/box1.png',         label: 'Treat Box',           cat: 'boxes' },
-    { src: 'gallery/IMG_1888.jpeg',    label: 'Custom Creation',     cat: 'strawberries' },
-    { src: 'gallery/IMG_1889.jpeg',    label: 'Custom Creation',     cat: 'strawberries' },
-  ];
+
+  function getAdminImages() {
+    try {
+      const stored = localStorage.getItem('ds_gallery_images');
+      return stored ? JSON.parse(stored) : [];
+    } catch { return []; }
+  }
+
+  function getAllImages() {
+    return [...defaultImages, ...getAdminImages()];
+  }
 
   function buildGallery(filter) {
     gallery.innerHTML = '';
-    const filtered = filter === 'all' ? images : images.filter(i => i.cat === filter);
-    filtered.forEach(({ src, label, cat }) => {
+    const all = getAllImages();
+    const filtered = filter === 'all' ? all : all.filter(i => i.cat === filter);
+
+    if (filtered.length === 0) {
+      gallery.innerHTML = '<p style="text-align:center;color:var(--text-soft);padding:40px;grid-column:1/-1;">No photos in this category yet.</p>';
+      return;
+    }
+
+    filtered.forEach(({ src, label, caption, cat }, idx) => {
       const item = document.createElement('div');
       item.className = 'gallery-item fade-up';
       item.dataset.cat = cat;
@@ -43,11 +63,9 @@ if (gallery) {
       item.appendChild(overlay);
       gallery.appendChild(item);
 
-      img.addEventListener('click', () => openLightbox(src, label));
+      item.addEventListener('click', () => openLightbox(src, label, caption || label));
 
-      requestAnimationFrame(() => {
-        setTimeout(() => item.classList.add('visible'), 50);
-      });
+      setTimeout(() => item.classList.add('visible'), idx * 60);
     });
   }
 
@@ -63,14 +81,16 @@ if (gallery) {
   });
 }
 
-/* ---------- LIGHTBOX ---------- */
+/* ---------- LIGHTBOX WITH CAPTION ---------- */
 const lightbox = document.getElementById('lightbox');
 
-function openLightbox(src, alt) {
+function openLightbox(src, alt, caption) {
   if (!lightbox) return;
   const img = lightbox.querySelector('img');
+  const cap = document.getElementById('lightbox-caption');
   img.src = src;
   img.alt = alt || '';
+  if (cap) cap.textContent = caption || '';
   lightbox.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
