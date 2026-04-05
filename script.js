@@ -10,6 +10,7 @@
 
 /* ---------- DEFAULT GALLERY IMAGES ---------- */
 const defaultImages = [
+  { src: 'gallery/1stcatering.png',  label: 'Cake Pops',            caption: 'Fresh cake pops made for a catering order 🍭',        cat: 'cakepops' },
   { src: 'gallery/strawberry1.png',  label: 'Dipped Strawberry',   caption: 'Fresh strawberries dipped in premium chocolate 🍫',  cat: 'strawberries' },
   { src: 'gallery/strawberry2.png',  label: 'Dipped Strawberry',   caption: 'Custom colored chocolate strawberries 🍓',             cat: 'strawberries' },
   { src: 'gallery/strawberry3.png',  label: 'Dipped Strawberry',   caption: 'White chocolate drizzle strawberries ✨',              cat: 'strawberries' },
