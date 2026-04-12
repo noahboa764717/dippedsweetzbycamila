@@ -10,14 +10,14 @@
 
 /* ---------- DEFAULT GALLERY IMAGES ---------- */
 const defaultImages = [
-  { src: 'gallery/11stcatering.png',  label: 'Cake Pops',            caption: 'Fresh cake pops made for a catering order 🍭',        cat: 'cakepops' },
-  { src: 'gallery/1strawberry1.png',  label: 'Dipped Strawberry',   caption: 'Fresh strawberries dipped in premium chocolate 🍫',  cat: 'strawberries' },
-  { src: 'gallery/1strawberry2.png',  label: 'Dipped Strawberry',   caption: 'Custom colored chocolate strawberries 🍓',             cat: 'strawberries' },
-  { src: 'gallery/1strawberry3.png',  label: 'Dipped Strawberry',   caption: 'White chocolate drizzle strawberries ✨',              cat: 'strawberries' },
-  { src: 'gallery/1dessertbox1.png',  label: 'Dessert Box',         caption: 'Our signature dessert box — perfect for gifting 🎁',  cat: 'boxes' },
-  { src: 'gallery/1box1.png',         label: 'Treat Box',           caption: 'Custom treat box for any occasion 🎉',                cat: 'boxes' },
-  { src: 'gallery/1IMG_1888.jpeg',    label: 'Custom Creation',     caption: 'Handcrafted with love 💕',                            cat: 'strawberries' },
-  { src: 'gallery/1IMG_1889.jpeg',    label: 'Custom Creation',     caption: 'Every order made fresh to order 🍓',                  cat: 'strawberries' },
+  { src: 'gallery/1stcatering.png',  label: 'Cake Pops',            caption: 'Fresh cake pops made for a catering order 🍭',        cat: 'cakepops' },
+  { src: 'gallery/strawberry1.png',  label: 'Dipped Strawberry',   caption: 'Fresh strawberries dipped in premium chocolate 🍫',  cat: 'strawberries' },
+  { src: 'gallery/strawberry2.png',  label: 'Dipped Strawberry',   caption: 'Custom colored chocolate strawberries 🍓',             cat: 'strawberries' },
+  { src: 'gallery/strawberry3.png',  label: 'Dipped Strawberry',   caption: 'White chocolate drizzle strawberries ✨',              cat: 'strawberries' },
+  { src: 'gallery/dessertbox1.png',  label: 'Dessert Box',         caption: 'Our signature dessert box — perfect for gifting 🎁',  cat: 'boxes' },
+  { src: 'gallery/box1.png',         label: 'Treat Box',           caption: 'Custom treat box for any occasion 🎉',                cat: 'boxes' },
+  { src: 'gallery/IMG_1888.jpeg',    label: 'Custom Creation',     caption: 'Handcrafted with love 💕',                            cat: 'strawberries' },
+  { src: 'gallery/IMG_1889.jpeg',    label: 'Custom Creation',     caption: 'Every order made fresh to order 🍓',                  cat: 'strawberries' },
 ];
 
 /* ---------- GALLERY ---------- */
