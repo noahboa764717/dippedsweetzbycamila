@@ -147,7 +147,7 @@ async function tryLoadFromDrive() {
     });
 
     const meta = typeof metaRes.body === 'string' ? JSON.parse(metaRes.body) : metaRes.result;
-    allImages = meta.images || [];
+    allImages = fixUrls(meta.images || []);
     setCache(allImages);
     renderGallery(currentFilter);
   } catch {
@@ -221,8 +221,20 @@ lightbox.addEventListener('click', e => {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
 /* ── CACHE ── */
+function fixUrls(imgs) {
+  return imgs.map(img => {
+    const match = img.src && img.src.match(/drive\.google\.com\/uc\?export=view&id=([^&]+)/);
+    if (match) img.src = `https://lh3.googleusercontent.com/d/${match[1]}=s1200`;
+    return img;
+  });
+}
 function setCache(imgs) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(imgs)); } catch {} }
-function getCache()     { try { return JSON.parse(localStorage.getItem(CACHE_KEY)); } catch { return null; } }
+function getCache()     {
+  try {
+    const raw = JSON.parse(localStorage.getItem(CACHE_KEY));
+    return raw ? fixUrls(raw) : null;
+  } catch { return null; }
+}
 
 /* ── SCROLL OBSERVER ── */
 const observer = new IntersectionObserver(entries => {

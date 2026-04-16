@@ -531,6 +531,14 @@ async function loadMetaFromDrive() {
     const data = await gapi.client.drive.files.get({ fileId: metaFileId, alt: 'media' });
     const parsed = typeof data.body === 'string' ? JSON.parse(data.body) : data.result;
     metaImages = parsed.images || [];
+
+    // Fix any images saved with the old broken URL format
+    const wasFixed = fixBrokenDriveUrls(metaImages);
+    if (wasFixed) {
+      await saveMetaToDrive(); // re-save with corrected URLs
+      toast('Fixed image URLs — your gallery will now load correctly! ✅');
+    }
+
     localStorage.setItem(CACHE_KEY, JSON.stringify(metaImages));
   } catch { metaImages = []; }
 }
@@ -574,6 +582,23 @@ async function saveMetaToDrive() {
   }
   // Update cache
   localStorage.setItem(CACHE_KEY, JSON.stringify(metaImages));
+}
+
+/* ══════════════════════════════════════════
+   MIGRATE OLD BROKEN URLS
+   Fixes any images saved with the old drive.google.com/uc format
+══════════════════════════════════════════ */
+function fixBrokenDriveUrls(images) {
+  let changed = false;
+  images.forEach(img => {
+    // Match old format: https://drive.google.com/uc?export=view&id=FILE_ID
+    const match = img.src && img.src.match(/drive\.google\.com\/uc\?export=view&id=([^&]+)/);
+    if (match) {
+      img.src = `https://lh3.googleusercontent.com/d/${match[1]}=s1200`;
+      changed = true;
+    }
+  });
+  return changed;
 }
 
 /* ══════════════════════════════════════════
@@ -648,8 +673,9 @@ async function uploadPhoto() {
       resource: { role: 'reader', type: 'anyone' },
     });
 
-    // Build direct image URL
-    const imgUrl = `https://drive.google.com/uc?export=view&id=${fileData.id}`;
+    // Build image URL — use thumbnail format which is CORS-friendly
+    // sz=s1200 gives full quality up to 1200px
+    const imgUrl = `https://lh3.googleusercontent.com/d/${fileData.id}=s1200`;
 
     progressBar.style.width = '85%';
 
