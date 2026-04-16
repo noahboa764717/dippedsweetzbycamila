@@ -269,14 +269,22 @@
                 <label>Label (shown on hover)</label>
                 <input type="text" id="upload-label" placeholder="e.g. Custom Cake Pop">
               </div>
-              <div class="form-row">
-                <label>Category</label>
-                <select id="upload-cat">
-                  <option value="cakepops">🍭 Cake Pops</option>
-                  <option value="strawberries">🍓 Strawberries</option>
-                  <option value="boxes">🎁 Dessert Boxes</option>
-                  <option value="bouquets">💐 Bouquets</option>
-                </select>
+            <div class="form-row">
+                <label>Categories (select all that apply)</label>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;padding:8px 0;">
+                  <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:400;color:var(--text);cursor:pointer;">
+                    <input type="checkbox" name="upload-cat" value="cakepops"> 🍭 Cake Pops
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:400;color:var(--text);cursor:pointer;">
+                    <input type="checkbox" name="upload-cat" value="strawberries"> 🍓 Strawberries
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:400;color:var(--text);cursor:pointer;">
+                    <input type="checkbox" name="upload-cat" value="boxes"> 🎁 Dessert Boxes
+                  </label>
+                  <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:400;color:var(--text);cursor:pointer;">
+                    <input type="checkbox" name="upload-cat" value="bouquets"> 💐 Bouquets
+                  </label>
+                </div>
               </div>
             </div>
             <div class="form-row">
@@ -360,13 +368,21 @@
     <input type="hidden" id="edit-idx">
     <div class="form-row"><label>Label</label><input type="text" id="edit-label"></div>
     <div class="form-row">
-      <label>Category</label>
-      <select id="edit-cat">
-        <option value="cakepops">🍭 Cake Pops</option>
-        <option value="strawberries">🍓 Strawberries</option>
-        <option value="boxes">🎁 Dessert Boxes</option>
-        <option value="bouquets">💐 Bouquets</option>
-      </select>
+      <label>Categories (select all that apply)</label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;padding:8px 0;">
+        <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:400;color:var(--text);cursor:pointer;">
+          <input type="checkbox" name="edit-cat" value="cakepops"> 🍭 Cake Pops
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:400;color:var(--text);cursor:pointer;">
+          <input type="checkbox" name="edit-cat" value="strawberries"> 🍓 Strawberries
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:400;color:var(--text);cursor:pointer;">
+          <input type="checkbox" name="edit-cat" value="boxes"> 🎁 Dessert Boxes
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;font-size:14px;font-weight:400;color:var(--text);cursor:pointer;">
+          <input type="checkbox" name="edit-cat" value="bouquets"> 💐 Bouquets
+        </label>
+      </div>
     </div>
     <div class="form-row"><label>Caption</label><textarea id="edit-caption" rows="3"></textarea></div>
     <div class="modal-btns">
@@ -636,8 +652,10 @@ async function uploadPhoto() {
   if (!driveReady) return toast('Connect Google Drive first.', true);
 
   const label   = document.getElementById('upload-label').value.trim() || 'New Photo';
-  const cat     = document.getElementById('upload-cat').value;
+  const cat     = [...document.querySelectorAll('input[name="upload-cat"]:checked')].map(c => c.value);
   const caption = document.getElementById('upload-caption').value.trim();
+
+  if (!cat.length) return toast('Select at least one category.', true);
 
   const btn = document.getElementById('upload-btn');
   btn.disabled = true; btn.textContent = 'Uploading...';
@@ -724,19 +742,22 @@ function renderAdminGallery(filter) {
   const catMap = { cakepops:'Cake Pops', strawberries:'Strawberries', boxes:'Boxes', bouquets:'Bouquets' };
 
   const all      = metaImages;
-  const filtered = filter === 'all' ? all : all.filter(i => i.cat === filter);
+  const getCats  = img => Array.isArray(img.cat) ? img.cat : (img.cat ? [img.cat] : []);
+  const filtered = filter === 'all' ? all : all.filter(i => getCats(i).includes(filter));
 
   grid.innerHTML = '';
   if (!filtered.length) { noMsg.style.display = 'block'; return; }
   noMsg.style.display = 'none';
 
   filtered.forEach((img) => {
-    const realIdx = metaImages.indexOf(img);
+    const imgCats  = Array.isArray(img.cat) ? img.cat : (img.cat ? [img.cat] : []);
+    const badgeTxt = imgCats.map(c => catMap[c] || c).join(', ') || 'Uncategorized';
+    const realIdx  = metaImages.indexOf(img);
     const item = document.createElement('div');
     item.className = 'admin-gallery-item';
     item.innerHTML = `
       <img src="${img.src}" alt="${img.label}" loading="lazy">
-      <span class="item-cat">${catMap[img.cat] || img.cat}</span>
+      <span class="item-cat">${badgeTxt}</span>
       <div class="item-caption">${img.label}</div>
       <div class="item-actions">
         <button onclick="openEdit(${realIdx})">✏️</button>
@@ -766,19 +787,25 @@ async function deletePhoto(idx) {
 ══════════════════════════════════════════ */
 function openEdit(idx) {
   const img = metaImages[idx];
+  const cats = Array.isArray(img.cat) ? img.cat : (img.cat ? [img.cat] : []);
   document.getElementById('edit-idx').value     = idx;
   document.getElementById('edit-label').value   = img.label;
-  document.getElementById('edit-cat').value     = img.cat;
   document.getElementById('edit-caption').value = img.caption || '';
+  // Reset then tick correct checkboxes
+  document.querySelectorAll('input[name="edit-cat"]').forEach(cb => {
+    cb.checked = cats.includes(cb.value);
+  });
   document.getElementById('edit-modal').classList.add('open');
 }
 
 function closeEdit() { document.getElementById('edit-modal').classList.remove('open'); }
 
 async function saveEdit() {
-  const idx = parseInt(document.getElementById('edit-idx').value);
+  const idx  = parseInt(document.getElementById('edit-idx').value);
+  const cats = [...document.querySelectorAll('input[name="edit-cat"]:checked')].map(c => c.value);
+  if (!cats.length) return toast('Select at least one category.', true);
   metaImages[idx].label   = document.getElementById('edit-label').value.trim();
-  metaImages[idx].cat     = document.getElementById('edit-cat').value;
+  metaImages[idx].cat     = cats;
   metaImages[idx].caption = document.getElementById('edit-caption').value.trim();
   await saveMetaToDrive();
   closeEdit();

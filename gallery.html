@@ -10,25 +10,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     .gallery-loading {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-soft);
-      font-size: 15px;
-      grid-column: 1 / -1;
+      text-align: center; padding: 60px 20px;
+      color: var(--text-soft); font-size: 15px; grid-column: 1 / -1;
     }
     .gallery-loading .spin {
-      font-size: 36px;
-      display: block;
-      margin-bottom: 12px;
+      font-size: 36px; display: block; margin-bottom: 12px;
       animation: galspin 1.2s linear infinite;
     }
     @keyframes galspin { to { transform: rotate(360deg); } }
     .gallery-empty {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-soft);
-      font-size: 15px;
-      grid-column: 1 / -1;
+      text-align: center; padding: 60px 20px;
+      color: var(--text-soft); font-size: 15px; grid-column: 1 / -1;
     }
   </style>
 </head>
@@ -57,7 +49,8 @@
   <button class="filter-btn" data-filter="bouquets">💐 Bouquets</button>
 </div>
 
-<div class="gallery-grid" id="gallery-grid">
+<!-- data-drive tells script.js to leave this grid alone -->
+<div class="gallery-grid" id="gallery-grid" data-drive="1">
   <div class="gallery-loading"><span class="spin">🍓</span>Loading gallery...</div>
 </div>
 
@@ -68,6 +61,11 @@
     <div class="lightbox-caption" id="lightbox-caption"></div>
   </div>
 </div>
+
+<a class="float-order" href="https://bakesy.shop/b/dipped-sweetz-by-camila" target="_blank">
+  <span class="float-icon">🛍️</span>
+  <span class="float-label">Order Now</span>
+</a>
 
 <footer>
   <div class="footer-inner">
@@ -80,84 +78,55 @@
   </div>
 </footer>
 
-<a class="float-order" href="https://bakesy.shop/b/dipped-sweetz-by-camila" target="_blank">
-  <span class="float-icon">🛍️</span>
-  <span class="float-label">Order Now</span>
-</a>
-
 <script src="https://apis.google.com/js/api.js"></script>
+<script src="script.js"></script>
 <script>
 /* ── CONFIG ── */
-const CLIENT_ID    = '420017082677-ca78o0nkcppdh0li75m7t1nbu16vm873.apps.googleusercontent.com';
-const META_FILE    = 'ds_gallery_meta.json';
-const CACHE_KEY    = 'ds_gallery_cache';
-const FOLDER_KEY   = 'ds_drive_folder_id';
-const DISCOVERY    = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
-const SCOPE        = 'https://www.googleapis.com/auth/drive.readonly';
+const CLIENT_ID  = '420017082677-ca78o0nkcppdh0li75m7t1nbu16vm873.apps.googleusercontent.com';
+const META_FILE  = 'ds_gallery_meta.json';
+const CACHE_KEY  = 'ds_gallery_cache';
+const FOLDER_KEY = 'ds_drive_folder_id';
+const DISCOVERY  = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+const SCOPE      = 'https://www.googleapis.com/auth/drive.readonly';
 
-const DEFAULT_IMAGES = [
-  { src:'gallery/1stcatering.png', label:'Cake Pops',         caption:'Fresh cake pops made for a catering order 🍭',        cat:'cakepops'     },
-  { src:'gallery/strawberry1.png', label:'Dipped Strawberry', caption:'Fresh strawberries dipped in premium chocolate 🍫',   cat:'strawberries' },
-  { src:'gallery/strawberry2.png', label:'Dipped Strawberry', caption:'Custom colored chocolate strawberries 🍓',            cat:'strawberries' },
-  { src:'gallery/strawberry3.png', label:'Dipped Strawberry', caption:'White chocolate drizzle strawberries ✨',             cat:'strawberries' },
-  { src:'gallery/dessertbox1.png', label:'Dessert Box',       caption:'Our signature dessert box — perfect for gifting 🎁',  cat:'boxes'        },
-  { src:'gallery/box1.png',        label:'Treat Box',         caption:'Custom treat box for any occasion 🎉',                cat:'boxes'        },
-  { src:'gallery/IMG_1888.jpeg',   label:'Custom Creation',   caption:'Handcrafted with love 💕',                            cat:'strawberries' },
-  { src:'gallery/IMG_1889.jpeg',   label:'Custom Creation',   caption:'Every order made fresh to order 🍓',                  cat:'strawberries' },
+/* GitHub-hosted default images — always shown, cat is an array */
+const GITHUB_IMAGES = [
+  { src:'gallery/1stcatering.png', label:'Cake Pops',         caption:'Fresh cake pops made for a catering order 🍭',        cat:['cakepops'] },
+  { src:'gallery/strawberry1.png', label:'Dipped Strawberry', caption:'Fresh strawberries dipped in premium chocolate 🍫',   cat:['strawberries'] },
+  { src:'gallery/strawberry2.png', label:'Dipped Strawberry', caption:'Custom colored chocolate strawberries 🍓',            cat:['strawberries'] },
+  { src:'gallery/strawberry3.png', label:'Dipped Strawberry', caption:'White chocolate drizzle strawberries ✨',             cat:['strawberries'] },
+  { src:'gallery/dessertbox1.png', label:'Dessert Box',        caption:'Our signature dessert box — perfect for gifting 🎁', cat:['boxes'] },
+  { src:'gallery/box1.png',        label:'Treat Box',          caption:'Custom treat box for any occasion 🎉',               cat:['boxes'] },
+  { src:'gallery/IMG_1888.jpeg',   label:'Custom Creation',    caption:'Handcrafted with love 💕',                           cat:['strawberries'] },
+  { src:'gallery/IMG_1889.jpeg',   label:'Custom Creation',    caption:'Every order made fresh to order 🍓',                 cat:['strawberries'] },
 ];
 
-let allImages     = [];
+let driveImages   = []; // images from Drive meta
 let currentFilter = 'all';
 
-/* ── INIT ── */
-window.addEventListener('load', () => {
-  // Show cached immediately so page feels instant
-  const cached = getCache();
-  if (cached && cached.length) {
-    allImages = cached;
-    renderGallery('all');
-  }
+/* ── HELPERS ── */
 
-  gapi.load('client', async () => {
-    try {
-      await gapi.client.init({ clientId: CLIENT_ID, scope: SCOPE, discoveryDocs: [DISCOVERY] });
-      await tryLoadFromDrive();
-    } catch {
-      if (!allImages.length) fallbackToDefaults();
-    }
-  });
-});
-
-async function tryLoadFromDrive() {
-  const folderId = localStorage.getItem(FOLDER_KEY);
-  if (!folderId) { if (!allImages.length) fallbackToDefaults(); return; }
-
-  try {
-    const listRes = await gapi.client.drive.files.list({
-      q: `name='${META_FILE}' and '${folderId}' in parents and trashed=false`,
-      fields: 'files(id)',
-      spaces: 'drive',
-    });
-
-    if (!listRes.result.files.length) { if (!allImages.length) fallbackToDefaults(); return; }
-
-    const metaRes = await gapi.client.drive.files.get({
-      fileId: listRes.result.files[0].id,
-      alt: 'media',
-    });
-
-    const meta = typeof metaRes.body === 'string' ? JSON.parse(metaRes.body) : metaRes.result;
-    allImages = fixUrls(meta.images || []);
-    setCache(allImages);
-    renderGallery(currentFilter);
-  } catch {
-    if (!allImages.length) fallbackToDefaults();
-  }
+// Normalise cat: always returns an array regardless of how it was stored
+function getCats(img) {
+  if (Array.isArray(img.cat)) return img.cat;
+  if (typeof img.cat === 'string' && img.cat) return [img.cat];
+  return [];
 }
 
-function fallbackToDefaults() {
-  allImages = DEFAULT_IMAGES;
-  renderGallery('all');
+// Fix old broken drive.google.com/uc URLs
+function fixUrl(src) {
+  if (!src) return src;
+  const m = src.match(/drive\.google\.com\/uc\?export=view&id=([^&]+)/);
+  return m ? `https://lh3.googleusercontent.com/d/${m[1]}=s1200` : src;
+}
+
+function fixImages(imgs) {
+  return imgs.map(img => ({ ...img, src: fixUrl(img.src), cat: getCats(img) }));
+}
+
+// Merge GitHub defaults with Drive-uploaded images (Drive comes after)
+function getAllImages() {
+  return [...GITHUB_IMAGES, ...driveImages];
 }
 
 /* ── RENDER ── */
@@ -166,17 +135,19 @@ function renderGallery(filter) {
   const grid = document.getElementById('gallery-grid');
   grid.innerHTML = '';
 
-  const list = filter === 'all' ? allImages : allImages.filter(i => i.cat === filter);
+  const all = getAllImages();
+  const list = filter === 'all'
+    ? all
+    : all.filter(img => getCats(img).includes(filter));
 
   if (!list.length) {
     grid.innerHTML = '<div class="gallery-empty">No photos in this category yet 🍓</div>';
     return;
   }
 
-  list.forEach(({ src, label, caption, cat }, idx) => {
+  list.forEach(({ src, label, caption }, idx) => {
     const item = document.createElement('div');
     item.className = 'gallery-item fade-up';
-    item.dataset.cat = cat;
 
     const img = document.createElement('img');
     img.src = src; img.alt = label; img.loading = 'lazy';
@@ -191,8 +162,12 @@ function renderGallery(filter) {
     item.addEventListener('click', () => openLightbox(src, label, caption || label));
     setTimeout(() => item.classList.add('visible'), idx * 55);
   });
+
+  // Observe new fade-up elements
+  document.querySelectorAll('#gallery-grid .fade-up:not(.visible)').forEach(el => observer.observe(el));
 }
 
+/* ── FILTER BUTTONS ── */
 document.querySelectorAll('.filter-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -201,45 +176,80 @@ document.querySelectorAll('.filter-btn').forEach(btn => {
   });
 });
 
-/* ── LIGHTBOX ── */
-const lightbox = document.getElementById('lightbox');
+/* ── DRIVE LOAD ── */
+window.addEventListener('load', () => {
+  // Immediately show GitHub images so gallery is never blank
+  renderGallery('all');
 
+  // Try to load cached Drive images for instant display
+  const cached = getCache();
+  if (cached && cached.length) {
+    driveImages = cached;
+    renderGallery(currentFilter);
+  }
+
+  // Then fetch fresh from Drive in background
+  gapi.load('client', async () => {
+    try {
+      await gapi.client.init({ clientId: CLIENT_ID, scope: SCOPE, discoveryDocs: [DISCOVERY] });
+      await tryLoadFromDrive();
+    } catch {
+      // Drive unavailable — GitHub images already showing, nothing to do
+    }
+  });
+});
+
+async function tryLoadFromDrive() {
+  const folderId = localStorage.getItem(FOLDER_KEY);
+  if (!folderId) return; // no Drive folder set up yet, GitHub images are sufficient
+
+  try {
+    const listRes = await gapi.client.drive.files.list({
+      q: `name='${META_FILE}' and '${folderId}' in parents and trashed=false`,
+      fields: 'files(id)',
+      spaces: 'drive',
+    });
+    if (!listRes.result.files.length) return;
+
+    const metaRes = await gapi.client.drive.files.get({
+      fileId: listRes.result.files[0].id,
+      alt: 'media',
+    });
+
+    const meta   = typeof metaRes.body === 'string' ? JSON.parse(metaRes.body) : metaRes.result;
+    driveImages  = fixImages(meta.images || []);
+    setCache(driveImages);
+    renderGallery(currentFilter);
+  } catch {
+    // Drive fetch failed — GitHub images still showing, no problem
+  }
+}
+
+/* ── LIGHTBOX ── */
 function openLightbox(src, alt, caption) {
   document.getElementById('lightbox-img').src = src;
   document.getElementById('lightbox-img').alt = alt;
   document.getElementById('lightbox-caption').textContent = caption || '';
-  lightbox.classList.add('open');
+  document.getElementById('lightbox').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 function closeLightbox() {
-  lightbox.classList.remove('open');
+  document.getElementById('lightbox').classList.remove('open');
   document.body.style.overflow = '';
 }
-lightbox.addEventListener('click', e => {
-  if (e.target === lightbox || e.target.classList.contains('lightbox-close')) closeLightbox();
+document.getElementById('lightbox').addEventListener('click', e => {
+  if (e.target.id === 'lightbox' || e.target.classList.contains('lightbox-close')) closeLightbox();
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
 /* ── CACHE ── */
-function fixUrls(imgs) {
-  return imgs.map(img => {
-    const match = img.src && img.src.match(/drive\.google\.com\/uc\?export=view&id=([^&]+)/);
-    if (match) img.src = `https://lh3.googleusercontent.com/d/${match[1]}=s1200`;
-    return img;
-  });
-}
 function setCache(imgs) { try { localStorage.setItem(CACHE_KEY, JSON.stringify(imgs)); } catch {} }
-function getCache()     {
+function getCache() {
   try {
     const raw = JSON.parse(localStorage.getItem(CACHE_KEY));
-    return raw ? fixUrls(raw) : null;
+    return raw ? fixImages(raw) : null;
   } catch { return null; }
 }
-
-/* ── SCROLL OBSERVER ── */
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }});
-}, { threshold: 0.12 });
 </script>
 </body>
 </html>
