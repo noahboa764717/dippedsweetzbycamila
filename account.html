@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Account | Dipped Sweetz by Camila</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Sign in to your Dipped Sweetz account to view and pay your invoices.">
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── AUTH SCREENS ── */
+    .auth-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #f6eef1, #fde8ee);
+    }
+
+    .auth-card {
+      background: white;
+      border-radius: 24px;
+      padding: 48px 44px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 60px rgba(110,74,58,.18);
+    }
+
+    .auth-logo {
+      text-align: center;
+      font-size: 48px;
+      margin-bottom: 8px;
+    }
+
+    .auth-card h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      color: var(--rose);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .auth-card .auth-sub {
+      text-align: center;
+      color: var(--text-soft);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+
+    .auth-field {
+      margin-bottom: 16px;
+    }
+
+    .auth-field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .auth-field input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 2px solid rgba(110,74,58,.12);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      background: var(--bg, #faf6f8);
+      outline: none;
+      transition: border-color .2s;
+    }
+
+    .auth-field input:focus { border-color: var(--rose); }
+
+    .auth-btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--rose);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background .2s, transform .15s;
+    }
+
+    .auth-btn:hover { background: var(--rose-dark, #b8405b); transform: translateY(-1px); }
+    .auth-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+    .auth-switch {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--text-soft);
+    }
+
+    .auth-switch a {
+      color: var(--rose);
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .auth-switch a:hover { text-decoration: underline; }
+
+    .auth-error {
+      background: #fdecea;
+      color: #c0392b;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      margin-top: 14px;
+      display: none;
+    }
+
+    .auth-success {
+      background: #eaf5ee;
+      color: #2e7d52;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 14px;
+      margin-top: 14px;
+      display: none;
+    }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      font-size: 13px;
+      color: var(--rose);
+      text-decoration: none;
+      margin-top: -10px;
+      margin-bottom: 16px;
+      cursor: pointer;
+    }
+
+    .forgot-link:hover { text-decoration: underline; }
+
+    /* ── DASHBOARD ── */
+    #dashboard { display: none; }
+
+    .dash-header {
+      background: var(--rose);
+      color: white;
+      padding: 0 32px;
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(180,60,80,.25);
+    }
+
+    .dash-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dash-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+    }
+
+    .dash-header-btns {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .dash-btn {
+      background: rgba(255,255,255,.18);
+      color: white;
+      border: 1px solid rgba(255,255,255,.3);
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .2s;
+    }
+
+    .dash-btn:hover { background: rgba(255,255,255,.28); }
+
+    .dash-body {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .dash-welcome {
+      margin-bottom: 36px;
+    }
+
+    .dash-welcome h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .dash-welcome p {
+      color: var(--text-soft);
+      font-size: 15px;
+    }
+
+    /* Summary cards */
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .dash-stat {
+      background: white;
+      border-radius: 16px;
+      padding: 22px 20px;
+      box-shadow: 0 6px 24px rgba(110,74,58,.1);
+      text-align: center;
+    }
+
+    .dash-stat .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      color: var(--rose);
+      line-height: 1;
+    }
+
+    .dash-stat .stat-label {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    /* Section */
+    .dash-section {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(110,74,58,.1);
+      padding: 28px;
+      margin-bottom: 24px;
+    }
+
+    .dash-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Invoice list */
+    .invoice-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .invoice-row {
+      border: 1px solid rgba(110,74,58,.1);
+      border-radius: 12px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transition: box-shadow .2s;
+    }
+
+    .invoice-row:hover { box-shadow: 0 4px 16px rgba(110,74,58,.1); }
+
+    .invoice-row-left { flex: 1; min-width: 0; }
+
+    .invoice-num {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .invoice-desc {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .invoice-date {
+      font-size: 12px;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    .invoice-row-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .invoice-amount {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--chocolate, #6e4a3a);
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .badge.paid { background: #eaf5ee; color: #2e7d52; }
+    .badge.open { background: #fff3e0; color: #e65100; }
+    .badge.draft { background: #f0f0f0; color: #666; }
+    .badge.void { background: #f5f5f5; color: #999; }
+    .badge.uncollectible { background: #fdecea; color: #c0392b; }
+
+    /* Pay button */
+    .pay-btn {
+      background: var(--rose);
+      color: white;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+    }
+
+    .pay-btn:hover { background: var(--rose-dark, #b8405b); transform: translateY(-1px); }
+
+    .view-btn {
+      background: transparent;
+      color: var(--rose);
+      border: 2px solid var(--rose);
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+
+    .view-btn:hover { background: var(--rose); color: white; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-soft);
+    }
+
+    .empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state p { font-size: 15px; line-height: 1.6; }
+
+    /* Loading spinner */
+    .dash-loading {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-soft);
+      font-size: 15px;
+    }
+
+    .dash-loading .spin {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 10px;
+      animation: accspin 1.2s linear infinite;
+    }
+
+    @keyframes accspin { to { transform: rotate(360deg); } }
+
+    /* Items breakdown */
+    .invoice-items {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(110,74,58,.08);
+      display: none;
+    }
+
+    .invoice-items.open { display: block; }
+
+    .invoice-item-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-soft);
+      padding: 4px 0;
+    }
+
+    .toggle-items {
+      background: none;
+      border: none;
+      color: var(--rose);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      padding: 0;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .auth-card { padding: 36px 24px; }
+      .dash-header { padding: 0 16px; }
+      .dash-header h1 { font-size: 15px; }
+      .invoice-row { flex-direction: column; align-items: flex-start; }
+      .invoice-row-right { width: 100%; justify-content: space-between; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════
+     AUTH SCREENS
+═══════════════════════════════════════ -->
+<div id="auth-screens" class="auth-wrap">
+
+  <!-- LOADING -->
+  <div id="auth-loading" style="text-align:center;">
+    <div style="font-size:48px;margin-bottom:12px;">🍓</div>
+    <p style="color:var(--text-soft,#7a5a52);font-size:15px;">Loading...</p>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="login-card" class="auth-card" style="display:none;">
+    <div class="auth-logo">🍓</div>
+    <h1>Welcome Back</h1>
+    <p class="auth-sub">Sign in to view your orders & invoices</p>
+
+    <div class="auth-field">
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="your@email.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label>Password</label>
+      <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password">
+    </div>
+    <span class="forgot-link" onclick="showForgot()">Forgot password?</span>
+    <button class="auth-btn" id="login-btn" onclick="doLogin()">Sign In</button>
+    <div class="auth-error" id="login-error"></div>
+
+    <div class="auth-switch">
+      Don't have an account? <a onclick="showSignup()">Create one</a>
+    </div>
+  </div>
+
+  <!-- SIGN UP -->
+  <div id="signup-card" class="auth-card" style="display:none;">
+    <div class="auth-logo">🍓</div>
+    <h1>Create Account</h1>
+    <p class="auth-sub">Track your orders and pay invoices easily</p>
+
+    <div class="auth-field">
+      <label>Full Name</label>
+      <input type="text" id="signup-name" placeholder="Your full name" autocomplete="name">
+    </div>
+    <div class="auth-field">
+      <label>Email</label>
+      <input type="email" id="signup-email" placeholder="your@email.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label>Password</label>
+      <input type="password" id="signup-password" placeholder="Choose a password (min 8 chars)" autocomplete="new-password">
+    </div>
+    <button class="auth-btn" id="signup-btn" onclick="doSignup()">Create Account</button>
+    <div class="auth-error" id="signup-error"></div>
+    <div class="auth-success" id="signup-success"></div>
+
+    <div class="auth-switch">
+      Already have an account? <a onclick="showLogin()">Sign in</a>
+    </div>
+  </div>
+
+  <!-- FORGOT PASSWORD -->
+  <div id="forgot-card" class="auth-card" style="display:none;">
+    <div class="auth-logo">🔑</div>
+    <h1>Reset Password</h1>
+    <p class="auth-sub">We'll send you a reset link</p>
+
+    <div class="auth-field">
+      <label>Email</label>
+      <input type="email" id="forgot-email" placeholder="your@email.com">
+    </div>
+    <button class="auth-btn" id="forgot-btn" onclick="doForgot()">Send Reset Link</button>
+    <div class="auth-error" id="forgot-error"></div>
+    <div class="auth-success" id="forgot-success"></div>
+
+    <div class="auth-switch">
+      <a onclick="showLogin()">← Back to Sign In</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════
+     CUSTOMER DASHBOARD
+═══════════════════════════════════════ -->
+<div id="dashboard">
+
+  <header class="dash-header">
+    <div class="dash-header-left">
+      <span>🍓</span>
+      <h1>My Account</h1>
+    </div>
+    <div class="dash-header-btns">
+      <a class="dash-btn" href="index.html">← Back to Site</a>
+      <button class="dash-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </header>
+
+  <div class="dash-body">
+
+    <!-- Welcome -->
+    <div class="dash-welcome fade-up">
+      <h2>Hi, <span id="user-name">there</span>! 👋</h2>
+      <p>Here's everything from Dipped Sweetz — view and pay your invoices below.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="dash-stats fade-up" id="dash-stats">
+      <div class="dash-stat">
+        <div class="stat-num" id="stat-total">—</div>
+        <div class="stat-label">Total Invoices</div>
+      </div>
+      <div class="dash-stat">
+        <div class="stat-num" id="stat-unpaid">—</div>
+        <div class="stat-label">Unpaid</div>
+      </div>
+      <div class="dash-stat">
+        <div class="stat-num" id="stat-paid">—</div>
+        <div class="stat-label">Paid</div>
+      </div>
+      <div class="dash-stat">
+        <div class="stat-num" id="stat-spent">—</div>
+        <div class="stat-label">Total Spent</div>
+      </div>
+    </div>
+
+    <!-- Unpaid invoices -->
+    <div class="dash-section fade-up" id="unpaid-section" style="display:none;">
+      <h3>⚠️ Action Required</h3>
+      <div class="invoice-list" id="unpaid-list"></div>
+    </div>
+
+    <!-- All invoices -->
+    <div class="dash-section fade-up">
+      <h3>🧾 Invoice History</h3>
+      <div id="invoices-loading" class="dash-loading">
+        <span class="spin">🍓</span>
+        Loading your invoices...
+      </div>
+      <div class="invoice-list" id="all-invoices-list" style="display:none;"></div>
+      <div class="empty-state" id="no-invoices" style="display:none;">
+        <div class="empty-icon">🍓</div>
+        <p>No invoices yet! Once Camila sends you an invoice it'll appear here.</p>
+      </div>
+    </div>
+
+    <!-- Order CTA -->
+    <div class="dash-section fade-up" style="text-align:center;">
+      <h3 style="justify-content:center;">🛍️ Ready to Order?</h3>
+      <p style="color:var(--text-soft);font-size:15px;margin-bottom:20px;">
+        Browse our full menu and place your next order on Bakesy.
+      </p>
+      <a class="pay-btn" href="https://bakesy.shop/b/dipped-sweetz-by-camila" target="_blank"
+         style="font-size:15px;padding:13px 28px;">
+        Shop Now →
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Netlify Identity Widget -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script src="script.js"></script>
+<script>
+/* ══════════════════════════════════════════
+   NETLIFY IDENTITY SETUP
+══════════════════════════════════════════ */
+const netlifyIdentity = window.netlifyIdentity;
+let currentUser = null;
+
+// Init
+netlifyIdentity.init();
+
+window.addEventListener('load', () => {
+  currentUser = netlifyIdentity.currentUser();
+
+  if (currentUser) {
+    showDashboard(currentUser);
+  } else {
+    document.getElementById('auth-loading').style.display = 'none';
+    document.getElementById('login-card').style.display = 'block';
+  }
+});
+
+netlifyIdentity.on('login', user => {
+  currentUser = user;
+  netlifyIdentity.close();
+  showDashboard(user);
+});
+
+netlifyIdentity.on('logout', () => {
+  currentUser = null;
+  showAuth();
+});
+
+/* ══════════════════════════════════════════
+   AUTH UI
+══════════════════════════════════════════ */
+function showLogin() {
+  hide('signup-card'); hide('forgot-card');
+  show('login-card');
+}
+
+function showSignup() {
+  hide('login-card'); hide('forgot-card');
+  show('signup-card');
+}
+
+function showForgot() {
+  hide('login-card'); hide('signup-card');
+  show('forgot-card');
+}
+
+function showAuth() {
+  hide('dashboard');
+  show('auth-screens');
+  hide('signup-card'); hide('forgot-card');
+  show('login-card');
+  document.getElementById('auth-loading').style.display = 'none';
+}
+
+async function doLogin() {
+  const email    = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  const errEl    = document.getElementById('login-error');
+  const btn      = document.getElementById('login-btn');
+
+  errEl.style.display = 'none';
+  if (!email || !password) { showErr('login-error', 'Please enter your email and password.'); return; }
+
+  btn.disabled = true; btn.textContent = 'Signing in...';
+
+  try {
+    await netlifyIdentity.login(email, password);
+    // onLogin event handles the rest
+  } catch (err) {
+    showErr('login-error', 'Incorrect email or password. Please try again.');
+    btn.disabled = false; btn.textContent = 'Sign In';
+  }
+}
+
+async function doSignup() {
+  const name     = document.getElementById('signup-name').value.trim();
+  const email    = document.getElementById('signup-email').value.trim();
+  const password = document.getElementById('signup-password').value;
+  const btn      = document.getElementById('signup-btn');
+
+  document.getElementById('signup-error').style.display   = 'none';
+  document.getElementById('signup-success').style.display = 'none';
+
+  if (!email || !password) { showErr('signup-error', 'Please fill in all fields.'); return; }
+  if (password.length < 8) { showErr('signup-error', 'Password must be at least 8 characters.'); return; }
+
+  btn.disabled = true; btn.textContent = 'Creating account...';
+
+  try {
+    await netlifyIdentity.signup(email, password, { full_name: name });
+    document.getElementById('signup-success').textContent =
+      '✅ Account created! Check your email to confirm your address, then sign in.';
+    document.getElementById('signup-success').style.display = 'block';
+    btn.textContent = 'Account Created!';
+  } catch (err) {
+    showErr('signup-error', err.message || 'Could not create account. Try again.');
+    btn.disabled = false; btn.textContent = 'Create Account';
+  }
+}
+
+async function doForgot() {
+  const email = document.getElementById('forgot-email').value.trim();
+  const btn   = document.getElementById('forgot-btn');
+
+  document.getElementById('forgot-error').style.display   = 'none';
+  document.getElementById('forgot-success').style.display = 'none';
+
+  if (!email) { showErr('forgot-error', 'Please enter your email.'); return; }
+
+  btn.disabled = true; btn.textContent = 'Sending...';
+
+  try {
+    await netlifyIdentity.requestPasswordRecovery(email);
+    document.getElementById('forgot-success').textContent =
+      '✅ Reset link sent! Check your email.';
+    document.getElementById('forgot-success').style.display = 'block';
+    btn.textContent = 'Sent!';
+  } catch (err) {
+    showErr('forgot-error', 'Could not send reset email. Try again.');
+    btn.disabled = false; btn.textContent = 'Send Reset Link';
+  }
+}
+
+function doLogout() {
+  netlifyIdentity.logout();
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (document.getElementById('login-card').style.display !== 'none')   doLogin();
+  if (document.getElementById('signup-card').style.display !== 'none')  doSignup();
+  if (document.getElementById('forgot-card').style.display !== 'none')  doForgot();
+});
+
+/* ══════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════ */
+async function showDashboard(user) {
+  hide('auth-screens');
+  show('dashboard');
+
+  const name = user.user_metadata?.full_name || user.email.split('@')[0];
+  document.getElementById('user-name').textContent = name;
+
+  await loadInvoices(user);
+}
+
+async function loadInvoices(user) {
+  const token = user.token?.access_token;
+  if (!token) return;
+
+  try {
+    const res = await fetch('/.netlify/functions/get-customer-invoices', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    const data = await res.json();
+
+    document.getElementById('invoices-loading').style.display = 'none';
+
+    if (!data.invoices || !data.invoices.length) {
+      document.getElementById('no-invoices').style.display = 'block';
+      renderStats([], 0);
+      return;
+    }
+
+    renderStats(data.invoices, data.invoices.reduce((s, i) => s + (i.status === 'paid' ? i.amountPaid : 0), 0));
+    renderInvoices(data.invoices);
+
+  } catch (err) {
+    document.getElementById('invoices-loading').textContent = 'Could not load invoices. Please try again later.';
+  }
+}
+
+function renderStats(invoices, totalSpent) {
+  const unpaid = invoices.filter(i => i.status === 'open').length;
+  const paid   = invoices.filter(i => i.status === 'paid').length;
+
+  document.getElementById('stat-total').textContent  = invoices.length;
+  document.getElementById('stat-unpaid').textContent = unpaid;
+  document.getElementById('stat-paid').textContent   = paid;
+  document.getElementById('stat-spent').textContent  = `$${totalSpent.toFixed(0)}`;
+
+  // Red color for unpaid
+  if (unpaid > 0) document.getElementById('stat-unpaid').style.color = '#e65100';
+}
+
+function renderInvoices(invoices) {
+  const allList    = document.getElementById('all-invoices-list');
+  const unpaidList = document.getElementById('unpaid-list');
+  const unpaidSec  = document.getElementById('unpaid-section');
+
+  allList.innerHTML    = '';
+  unpaidList.innerHTML = '';
+
+  const unpaid = invoices.filter(i => i.status === 'open');
+
+  if (unpaid.length) {
+    unpaidSec.style.display = 'block';
+    unpaid.forEach(inv => unpaidList.appendChild(buildInvoiceRow(inv, true)));
+  }
+
+  invoices.forEach(inv => allList.appendChild(buildInvoiceRow(inv, false)));
+  allList.style.display = 'flex';
+}
+
+let toggleCount = 0;
+
+function buildInvoiceRow(inv, highlight) {
+  const row = document.createElement('div');
+  row.className = 'invoice-row';
+  if (highlight) row.style.border = '2px solid #e65100';
+
+  const date    = new Date(inv.created * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  const dueDate = inv.dueDate ? new Date(inv.dueDate * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : null;
+  const tid     = `items-${toggleCount++}`;
+
+  const itemsHtml = inv.lines && inv.lines.length
+    ? `<button class="toggle-items" onclick="toggleItems('${tid}')">▾ View items</button>
+       <div class="invoice-items" id="${tid}">
+         ${inv.lines.map(l => `
+           <div class="invoice-item-row">
+             <span>${l.description}${l.quantity > 1 ? ` × ${l.quantity}` : ''}</span>
+             <span>$${l.amount.toFixed(2)}</span>
+           </div>`).join('')}
+       </div>`
+    : '';
+
+  const actionBtn = inv.status === 'open' && inv.hostedUrl
+    ? `<a class="pay-btn" href="${inv.hostedUrl}" target="_blank">Pay Now</a>`
+    : inv.hostedUrl
+    ? `<a class="view-btn" href="${inv.hostedUrl}" target="_blank">View</a>`
+    : '';
+
+  const pdfBtn = inv.pdfUrl
+    ? `<a class="view-btn" href="${inv.pdfUrl}" target="_blank">PDF</a>`
+    : '';
+
+  row.innerHTML = `
+    <div class="invoice-row-left">
+      <div class="invoice-num">Invoice ${inv.number || inv.id.slice(-8)}</div>
+      ${inv.description ? `<div class="invoice-desc">${inv.description}</div>` : ''}
+      <div class="invoice-date">
+        Sent ${date}${dueDate ? ` · Due ${dueDate}` : ''}
+      </div>
+      ${itemsHtml}
+    </div>
+    <div class="invoice-row-right">
+      <span class="invoice-amount">$${inv.amountDue.toFixed(2)}</span>
+      <span class="badge ${inv.status}">${inv.status}</span>
+      ${actionBtn}
+      ${pdfBtn}
+    </div>`;
+
+  return row;
+}
+
+function toggleItems(id) {
+  const el  = document.getElementById(id);
+  const btn = el.previousElementSibling;
+  el.classList.toggle('open');
+  btn.textContent = el.classList.contains('open') ? '▴ Hide items' : '▾ View items';
+}
+
+/* ══════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════ */
+function show(id) { document.getElementById(id).style.display = 'block'; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+</script>
+
+</body>
+</html>

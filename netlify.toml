@@ -5,3 +5,17 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["stripe"]
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/account"
+  to = "/account.html"
+  status = 200
+
+[[redirects]]
+  from = "/.netlify/identity"
+  to = "/.netlify/identity"
+  status = 200
+  force = true
