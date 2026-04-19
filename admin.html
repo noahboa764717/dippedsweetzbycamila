@@ -18,38 +18,38 @@
     body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
     /* LOGIN — SPLIT SCREEN */
-    #login-screen{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;}
+    #login-screen{min-height:100vh;display:grid;grid-template-columns:2fr 3fr;}
 
     /* Left form side */
     .login-form-side{display:flex;flex-direction:column;justify-content:center;
-      padding:60px 56px;background:white;overflow-y:auto;}
-    .login-brand{display:flex;align-items:center;gap:10px;margin-bottom:48px;}
-    .login-brand-icon{font-size:32px;}
+      padding:60px 52px;background:white;overflow-y:auto;}
+    .login-brand{display:flex;align-items:center;gap:10px;margin-bottom:44px;}
+    .login-brand-icon{font-size:30px;}
     .login-brand-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--rose);font-weight:700;}
-    .login-card{width:100%;max-width:400px;}
-    .login-card h1{font-family:'Playfair Display',serif;font-size:32px;color:var(--text);
-      margin-bottom:8px;line-height:1.2;}
-    .login-card .login-sub{color:var(--text-soft);font-size:15px;margin-bottom:36px;line-height:1.5;}
+    .login-card{width:100%;}
+    .login-card h1{font-family:'Playfair Display',serif;font-size:36px;color:var(--text);
+      margin-bottom:10px;line-height:1.15;}
+    .login-card .login-sub{color:var(--text-soft);font-size:16px;margin-bottom:36px;line-height:1.6;}
 
     /* Right brand side */
     .login-brand-side{background:var(--chocolate);display:flex;flex-direction:column;
-      justify-content:center;align-items:flex-start;padding:60px 64px;
+      justify-content:center;align-items:flex-start;padding:80px 80px;
       position:relative;overflow:hidden;}
     .login-brand-side::before{content:'';position:absolute;inset:0;
       background-image:url('strawberry.png');background-size:40px;
       background-repeat:repeat;opacity:.06;animation:bgfall 30s linear infinite;}
     .login-brand-inner{position:relative;z-index:1;}
-    .login-brand-side .big-icon{font-size:72px;margin-bottom:28px;display:block;}
+    .login-brand-side .big-icon{font-size:80px;margin-bottom:32px;display:block;}
     .login-brand-side h2{font-family:'Playfair Display',serif;
-      font-size:clamp(28px,3vw,48px);color:white;line-height:1.2;margin-bottom:16px;}
+      font-size:clamp(36px,4.5vw,64px);color:white;line-height:1.1;margin-bottom:20px;}
     .login-brand-side h2 em{font-style:italic;opacity:.8;}
-    .login-brand-side p{color:rgba(255,255,255,.7);font-size:15px;
-      line-height:1.7;max-width:360px;margin-bottom:32px;}
-    .admin-features{display:flex;flex-direction:column;gap:14px;}
-    .admin-feature{display:flex;align-items:center;gap:12px;color:white;font-size:14px;font-weight:500;}
-    .admin-feature-icon{width:34px;height:34px;background:rgba(255,255,255,.15);
+    .login-brand-side p{color:rgba(255,255,255,.7);font-size:18px;
+      line-height:1.75;max-width:440px;margin-bottom:40px;}
+    .admin-features{display:flex;flex-direction:column;gap:16px;}
+    .admin-feature{display:flex;align-items:center;gap:14px;color:white;font-size:16px;font-weight:500;}
+    .admin-feature-icon{width:40px;height:40px;background:rgba(255,255,255,.15);
       border-radius:50%;display:flex;align-items:center;justify-content:center;
-      font-size:15px;flex-shrink:0;}
+      font-size:18px;flex-shrink:0;}
 
     .field{margin-bottom:16px;}
     .field label{display:block;font-size:12px;font-weight:700;color:var(--text-soft);margin-bottom:7px;
