@@ -158,6 +158,45 @@
       transition:all .3s;z-index:9999;pointer-events:none;}
     #toast.show{opacity:1;transform:translateY(0);}
 
+    /* INVOICE STYLES */
+    .invoice-line-items { width:100%; border-collapse:collapse; margin-bottom:16px; }
+    .invoice-line-items th {
+      text-align:left; font-size:12px; font-weight:600; letter-spacing:.06em;
+      text-transform:uppercase; color:var(--text-soft); padding:8px 10px;
+      border-bottom:2px solid var(--border);
+    }
+    .invoice-line-items td { padding:10px; vertical-align:middle; }
+    .invoice-line-items tr:not(:last-child) td { border-bottom:1px solid var(--border); }
+    .invoice-line-items input {
+      width:100%; padding:8px 10px; border:1.5px solid var(--border); border-radius:7px;
+      font-family:'DM Sans',sans-serif; font-size:14px; color:var(--text);
+      background:var(--bg); outline:none; transition:border-color .2s;
+    }
+    .invoice-line-items input:focus { border-color:var(--rose); }
+    .invoice-line-items input[type=number] { max-width:80px; }
+    .remove-line { background:none; border:none; color:var(--red); font-size:18px;
+      cursor:pointer; padding:4px; line-height:1; opacity:.7; transition:opacity .2s; }
+    .remove-line:hover { opacity:1; }
+    .invoice-total { text-align:right; font-size:18px; font-weight:700;
+      color:var(--chocolate); padding:12px 10px; }
+
+    .inv-status { display:inline-block; padding:3px 10px; border-radius:20px;
+      font-size:12px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+    .inv-status.paid    { background:var(--green-bg); color:var(--green); }
+    .inv-status.open    { background:#fff3e0; color:#e65100; }
+    .inv-status.draft   { background:#e8eaf6; color:#3949ab; }
+    .inv-status.void    { background:#f3e5f5; color:#7b1fa2; }
+    .inv-status.uncollectible { background:var(--red-bg); color:var(--red); }
+
+    .inv-table { width:100%; border-collapse:collapse; }
+    .inv-table th { text-align:left; font-size:12px; font-weight:600; letter-spacing:.06em;
+      text-transform:uppercase; color:var(--text-soft); padding:10px 12px;
+      border-bottom:2px solid var(--border); }
+    .inv-table td { padding:12px; font-size:14px; border-bottom:1px solid var(--border); }
+    .inv-table tr:last-child td { border-bottom:none; }
+    .inv-table tr:hover td { background:#fdf5f7; }
+    .inv-table .inv-actions { display:flex; gap:8px; }
+
     @media(max-width:640px){
       .admin-sidebar{display:none;} .admin-main{padding:20px 16px;}
       .form-grid{grid-template-columns:1fr;} .admin-header{padding:0 16px;}
@@ -205,6 +244,7 @@
       <button class="sidebar-btn active" onclick="showPanel('dashboard',this)">📊 Dashboard</button>
       <div class="sidebar-section">Content</div>
       <button class="sidebar-btn" onclick="showPanel('gallery',this)">🖼️ Gallery</button>
+      <button class="sidebar-btn" onclick="showPanel('invoices',this)">🧾 Invoices</button>
       <div class="sidebar-section">Site</div>
       <button class="sidebar-btn" onclick="showPanel('settings',this)">⚙️ Settings</button>
     </aside>
@@ -312,6 +352,111 @@
           <p id="no-photos-msg" style="color:var(--text-soft);font-size:14px;text-align:center;padding:20px;display:none;">
             No photos uploaded yet. Use the uploader above!
           </p>
+        </div>
+      </div>
+
+      <!-- INVOICES -->
+      <div class="panel" id="panel-invoices">
+        <h2 class="panel-title">Invoices</h2>
+        <p class="panel-sub">Create and send invoices via Stripe. Customers get an email with a secure pay link.</p>
+
+        <!-- Create Invoice -->
+        <div class="admin-card">
+          <h3>➕ Create New Invoice</h3>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Customer Name</label>
+              <input type="text" id="inv-name" placeholder="e.g. Sarah Johnson">
+            </div>
+            <div class="form-row">
+              <label>Customer Email</label>
+              <input type="email" id="inv-email" placeholder="customer@email.com">
+            </div>
+          </div>
+
+          <div class="form-row" style="margin-top:4px;">
+            <label>Line Items</label>
+            <table class="invoice-line-items" id="line-items-table">
+              <thead>
+                <tr>
+                  <th style="width:50%;">Description</th>
+                  <th style="width:15%;">Qty</th>
+                  <th style="width:20%;">Price ($)</th>
+                  <th style="width:10%;">Total</th>
+                  <th style="width:5%;"></th>
+                </tr>
+              </thead>
+              <tbody id="line-items-body">
+                <!-- populated by JS -->
+              </tbody>
+            </table>
+            <button class="btn btn-secondary btn-sm" onclick="addLineItem()" style="margin-top:8px;">
+              + Add Item
+            </button>
+            <div class="invoice-total" id="invoice-total">Total: $0.00</div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-row">
+              <label>Note / Message to Customer</label>
+              <textarea id="inv-note" placeholder="e.g. Thank you for your order! 🍓 Please pay within 7 days." rows="3"></textarea>
+            </div>
+            <div class="form-row">
+              <label>Days Until Due</label>
+              <select id="inv-due">
+                <option value="1">Due in 1 day</option>
+                <option value="3">Due in 3 days</option>
+                <option value="7" selected>Due in 7 days</option>
+                <option value="14">Due in 14 days</option>
+                <option value="30">Due in 30 days</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:8px;">
+            <button class="btn btn-primary" id="send-invoice-btn" onclick="sendInvoice()">
+              📧 Send Invoice via Stripe
+            </button>
+            <span id="invoice-sending-msg" style="font-size:14px;color:var(--text-soft);display:none;">
+              Sending invoice...
+            </span>
+          </div>
+
+          <div id="invoice-success" style="display:none;margin-top:16px;background:var(--green-bg);
+            color:var(--green);border-radius:10px;padding:16px 20px;font-size:14px;line-height:1.6;">
+          </div>
+          <div id="invoice-error" style="display:none;margin-top:16px;background:var(--red-bg);
+            color:var(--red);border-radius:10px;padding:16px 20px;font-size:14px;">
+          </div>
+        </div>
+
+        <!-- Invoice History -->
+        <div class="admin-card">
+          <h3 style="display:flex;justify-content:space-between;align-items:center;">
+            📋 Invoice History
+            <button class="btn btn-secondary btn-sm" onclick="loadInvoices()">↻ Refresh</button>
+          </h3>
+          <div id="invoices-loading" style="text-align:center;padding:30px;color:var(--text-soft);font-size:14px;">
+            Click Refresh to load invoices
+          </div>
+          <div id="invoices-table-wrap" style="display:none;overflow-x:auto;">
+            <table class="inv-table">
+              <thead>
+                <tr>
+                  <th>Invoice #</th>
+                  <th>Customer</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Sent</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="invoices-tbody"></tbody>
+            </table>
+          </div>
+          <p id="no-invoices-msg" style="display:none;text-align:center;padding:30px;
+            color:var(--text-soft);font-size:14px;">No invoices sent yet.</p>
         </div>
       </div>
 
@@ -854,6 +999,9 @@ function showPanel(id, btn) {
   if (btn) btn.classList.add('active');
   if (id === 'gallery') renderAdminGallery('all');
   if (id === 'dashboard') renderStats();
+  if (id === 'invoices' && document.getElementById('line-items-body').children.length === 0) {
+    addLineItem(); // start with one empty row
+  }
 }
 
 function renderStats() {
@@ -868,8 +1016,205 @@ function renderStats() {
 }
 
 /* ══════════════════════════════════════════
-   TOAST
+   INVOICES
 ══════════════════════════════════════════ */
+const STRIPE_PK = 'pk_live_51RNDmyJYml6qokLqRecX5TaMbZUuFiLtMh5WC4mZyRB1MELHEV4G3owrJ6uzaH1xGcoUJlDEngOY1RTCFKxndpCk00lcgvkET9';
+
+// Pre-populate with common products for quick entry
+const QUICK_ITEMS = [
+  { description: 'Cake Pops',                  price: 2.00 },
+  { description: 'Cake Pops — 3 Pack',         price: 5.00 },
+  { description: 'Chocolate Dipped Strawberry', price: 5.00 },
+  { description: 'Mini Dessert Box',            price: 20.00 },
+  { description: 'Signature Dessert Box',       price: 35.00 },
+  { description: 'Luxury Dessert Box',          price: 60.00 },
+  { description: 'Flower Bouquet',              price: 0.00 },
+  { description: 'Catering Order',              price: 0.00 },
+];
+
+let lineItemCount = 0;
+
+function addLineItem(desc = '', qty = 1, price = '') {
+  const tbody = document.getElementById('line-items-body');
+  const id = lineItemCount++;
+  const row = document.createElement('tr');
+  row.id = `line-${id}`;
+
+  // Build quick-pick datalist
+  const dlId = `dl-${id}`;
+  const options = QUICK_ITEMS.map(i => `<option value="${i.description}">`).join('');
+
+  row.innerHTML = `
+    <td>
+      <input type="text" list="${dlId}" placeholder="Item description"
+        value="${desc}" oninput="recalcTotal()" id="desc-${id}">
+      <datalist id="${dlId}">${options}</datalist>
+    </td>
+    <td><input type="number" min="1" value="${qty}" id="qty-${id}" oninput="recalcTotal(); autofillPrice(${id})"></td>
+    <td><input type="number" min="0" step="0.01" placeholder="0.00" value="${price}" id="price-${id}" oninput="recalcTotal()"></td>
+    <td id="line-total-${id}" style="font-weight:600;color:var(--chocolate);white-space:nowrap;">$0.00</td>
+    <td><button class="remove-line" onclick="removeLineItem(${id})">×</button></td>`;
+
+  tbody.appendChild(row);
+
+  // Auto-fill price if description matches a known item
+  document.getElementById(`desc-${id}`).addEventListener('change', () => autofillPrice(id));
+  recalcTotal();
+}
+
+function autofillPrice(id) {
+  const desc  = document.getElementById(`desc-${id}`)?.value.trim();
+  const match = QUICK_ITEMS.find(i => i.description.toLowerCase() === desc?.toLowerCase());
+  if (match && match.price > 0) {
+    const priceEl = document.getElementById(`price-${id}`);
+    if (!priceEl.value) priceEl.value = match.price.toFixed(2);
+    recalcTotal();
+  }
+}
+
+function removeLineItem(id) {
+  document.getElementById(`line-${id}`)?.remove();
+  recalcTotal();
+}
+
+function recalcTotal() {
+  let total = 0;
+  document.querySelectorAll('#line-items-body tr').forEach(row => {
+    const id     = row.id.replace('line-', '');
+    const qty    = parseFloat(document.getElementById(`qty-${id}`)?.value)   || 0;
+    const price  = parseFloat(document.getElementById(`price-${id}`)?.value) || 0;
+    const lineT  = qty * price;
+    const el     = document.getElementById(`line-total-${id}`);
+    if (el) el.textContent = `$${lineT.toFixed(2)}`;
+    total += lineT;
+  });
+  document.getElementById('invoice-total').textContent = `Total: $${total.toFixed(2)}`;
+}
+
+function getLineItems() {
+  const items = [];
+  document.querySelectorAll('#line-items-body tr').forEach(row => {
+    const id    = row.id.replace('line-', '');
+    const desc  = document.getElementById(`desc-${id}`)?.value.trim();
+    const qty   = parseInt(document.getElementById(`qty-${id}`)?.value) || 1;
+    const price = parseFloat(document.getElementById(`price-${id}`)?.value) || 0;
+    if (desc) items.push({ description: desc, quantity: qty, price });
+  });
+  return items;
+}
+
+async function sendInvoice() {
+  const name  = document.getElementById('inv-name').value.trim();
+  const email = document.getElementById('inv-email').value.trim();
+  const items = getLineItems();
+  const note  = document.getElementById('inv-note').value.trim();
+  const due   = parseInt(document.getElementById('inv-due').value);
+
+  const errEl  = document.getElementById('invoice-error');
+  const succEl = document.getElementById('invoice-success');
+  errEl.style.display  = 'none';
+  succEl.style.display = 'none';
+
+  if (!email) { errEl.textContent = 'Please enter the customer\'s email.'; errEl.style.display='block'; return; }
+  if (!items.length) { errEl.textContent = 'Add at least one line item.'; errEl.style.display='block'; return; }
+  if (items.some(i => i.price <= 0)) { errEl.textContent = 'All items need a price greater than $0.'; errEl.style.display='block'; return; }
+
+  const btn = document.getElementById('send-invoice-btn');
+  const msg = document.getElementById('invoice-sending-msg');
+  btn.disabled = true;
+  msg.style.display = 'inline';
+
+  try {
+    const res = await fetch('/.netlify/functions/create-invoice', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerName: name, customerEmail: email, items, note, dueDate: due }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || data.error) throw new Error(data.error || 'Unknown error');
+
+    // Success
+    succEl.innerHTML = `
+      ✅ <strong>Invoice sent to ${email}!</strong><br>
+      Invoice #${data.invoiceNumber} · Amount: <strong>$${data.amountDue.toFixed(2)}</strong><br>
+      <a href="${data.invoiceUrl}" target="_blank" style="color:var(--green);font-weight:600;">
+        View Invoice ↗
+      </a>`;
+    succEl.style.display = 'block';
+
+    // Clear form
+    document.getElementById('inv-name').value  = '';
+    document.getElementById('inv-email').value = '';
+    document.getElementById('inv-note').value  = '';
+    document.getElementById('line-items-body').innerHTML = '';
+    lineItemCount = 0;
+    recalcTotal();
+    addLineItem(); // start fresh with one empty row
+
+    toast('Invoice sent! ✅');
+    loadInvoices();
+
+  } catch (err) {
+    errEl.textContent = `Error: ${err.message}`;
+    errEl.style.display = 'block';
+    toast('Failed to send invoice.', true);
+  } finally {
+    btn.disabled = false;
+    msg.style.display = 'none';
+  }
+}
+
+async function loadInvoices() {
+  const loading = document.getElementById('invoices-loading');
+  const wrap    = document.getElementById('invoices-table-wrap');
+  const noMsg   = document.getElementById('no-invoices-msg');
+  const tbody   = document.getElementById('invoices-tbody');
+
+  loading.textContent = 'Loading invoices...';
+  loading.style.display = 'block';
+  wrap.style.display  = 'none';
+  noMsg.style.display = 'none';
+
+  try {
+    const res  = await fetch('/.netlify/functions/list-invoices');
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.error);
+
+    const invs = data.invoices;
+    loading.style.display = 'none';
+
+    if (!invs.length) { noMsg.style.display = 'block'; return; }
+
+    tbody.innerHTML = invs.map(inv => `
+      <tr>
+        <td style="font-weight:600;">${inv.number || inv.id.slice(-8)}</td>
+        <td>
+          <div style="font-weight:500;">${inv.customerName}</div>
+          <div style="font-size:12px;color:var(--text-soft);">${inv.customerEmail}</div>
+        </td>
+        <td style="font-weight:600;">$${inv.amountDue.toFixed(2)}</td>
+        <td><span class="inv-status ${inv.status}">${inv.status}</span></td>
+        <td style="font-size:13px;color:var(--text-soft);">
+          ${new Date(inv.created * 1000).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}
+        </td>
+        <td>
+          <div class="inv-actions">
+            ${inv.hostedUrl ? `<a href="${inv.hostedUrl}" target="_blank" class="btn btn-secondary btn-sm">View</a>` : ''}
+            ${inv.pdfUrl    ? `<a href="${inv.pdfUrl}"    target="_blank" class="btn btn-secondary btn-sm">PDF</a>`  : ''}
+          </div>
+        </td>
+      </tr>`).join('');
+
+    wrap.style.display = 'block';
+  } catch (err) {
+    loading.textContent = `Failed to load invoices: ${err.message}`;
+  }
+}
+
+
 let toastTimer;
 function toast(msg, err = false) {
   const t = document.getElementById('toast');
