@@ -10,6 +10,24 @@
   NODE_VERSION = "18"
 
 [[redirects]]
+  from = "/"
+  to = "/account.html"
+  status = 200
+  conditions = {Query = ["confirmation_token"]}
+
+[[redirects]]
+  from = "/"
+  to = "/account.html"
+  status = 200
+  conditions = {Query = ["recovery_token"]}
+
+[[redirects]]
+  from = "/"
+  to = "/account.html"
+  status = 200
+  conditions = {Query = ["invite_token"]}
+
+[[redirects]]
   from = "/account"
   to = "/account.html"
   status = 200

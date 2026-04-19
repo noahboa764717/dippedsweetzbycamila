@@ -657,6 +657,24 @@
         <a onclick="showLogin()">← Back to Sign In</a>
       </div>
     </div>
+
+    <!-- SET NEW PASSWORD (after clicking reset link) -->
+    <div id="reset-password-card" class="auth-card" style="display:none;">
+      <h1>Set new password</h1>
+      <p class="auth-sub">Choose a new password for your account.</p>
+
+      <div class="auth-field">
+        <label>New Password</label>
+        <input type="password" id="new-password-input" placeholder="Min. 8 characters" autocomplete="new-password">
+      </div>
+      <div class="auth-field">
+        <label>Confirm New Password</label>
+        <input type="password" id="confirm-password-input" placeholder="Repeat your password" autocomplete="new-password">
+      </div>
+      <button class="auth-btn" id="reset-btn" onclick="doResetPassword()">Set New Password</button>
+      <div class="auth-error" id="reset-error"></div>
+      <div class="auth-success" id="reset-success"></div>
+    </div>
   </div>
 
   <!-- RIGHT: BRAND SIDE -->
@@ -779,7 +797,38 @@ let currentUser = null;
 
 netlifyIdentity.init();
 
-window.addEventListener('load', () => {
+// Handle email confirmation and password recovery tokens from URL hash or query string
+window.addEventListener('load', async () => {
+  // Check both hash (#confirmation_token=) and query string (?confirmation_token=)
+  const hash        = new URLSearchParams(window.location.hash.substring(1));
+  const query       = new URLSearchParams(window.location.search);
+  const confirmToken  = hash.get('confirmation_token')  || query.get('confirmation_token');
+  const recoveryToken = hash.get('recovery_token')      || query.get('recovery_token');
+
+  if (confirmToken) {
+    document.getElementById('auth-loading').style.display = 'block';
+    document.getElementById('auth-loading').innerHTML =
+      '<p style="color:var(--text-soft,#7a5a52);font-size:15px;">✅ Confirming your email...</p>';
+    try {
+      const user = await netlifyIdentity.gotrue.confirm(confirmToken);
+      netlifyIdentity.store.user = user;
+      netlifyIdentity.emit('login', user);
+      window.history.replaceState({}, '', window.location.pathname);
+    } catch (err) {
+      document.getElementById('auth-loading').innerHTML =
+        '<p style="color:#c0392b;font-size:15px;">⚠️ Confirmation failed — the link may have expired. Please sign up again.</p>';
+    }
+    return;
+  }
+
+  if (recoveryToken) {
+    window.history.replaceState({}, '', window.location.pathname);
+    document.getElementById('auth-loading').style.display = 'none';
+    showResetPassword(recoveryToken);
+    return;
+  }
+
+  // Normal load
   currentUser = netlifyIdentity.currentUser();
   if (currentUser) {
     showDashboard(currentUser);
@@ -818,10 +867,48 @@ function showForgot() {
   show('forgot-card');
 }
 
+function showResetPassword(token) {
+  hide('login-card'); hide('signup-card'); hide('forgot-card');
+  show('reset-password-card');
+  // Store token for use when submitting
+  document.getElementById('reset-btn').dataset.token = token;
+}
+
+async function doResetPassword() {
+  const password  = document.getElementById('new-password-input').value;
+  const confirm   = document.getElementById('confirm-password-input').value;
+  const btn       = document.getElementById('reset-btn');
+  const token     = btn.dataset.token;
+
+  document.getElementById('reset-error').style.display   = 'none';
+  document.getElementById('reset-success').style.display = 'none';
+
+  if (!password)         { showErr('reset-error', 'Please enter a new password.'); return; }
+  if (password.length < 8) { showErr('reset-error', 'Password must be at least 8 characters.'); return; }
+  if (password !== confirm) { showErr('reset-error', 'Passwords do not match.'); return; }
+
+  btn.disabled = true; btn.textContent = 'Updating...';
+
+  try {
+    const user = await netlifyIdentity.gotrue.recover(token);
+    await user.update({ password });
+    document.getElementById('reset-success').textContent = '✅ Password updated! Signing you in...';
+    document.getElementById('reset-success').style.display = 'block';
+    // Auto sign in
+    setTimeout(() => {
+      netlifyIdentity.store.user = user;
+      netlifyIdentity.emit('login', user);
+    }, 1200);
+  } catch (err) {
+    showErr('reset-error', 'Could not reset password. The link may have expired — please request a new one.');
+    btn.disabled = false; btn.textContent = 'Set New Password';
+  }
+}
+
 function showAuth() {
   hide('dashboard');
   show('auth-screens');
-  hide('signup-card'); hide('forgot-card');
+  hide('signup-card'); hide('forgot-card'); hide('reset-password-card');
   show('login-card');
   document.getElementById('auth-loading').style.display = 'none';
 }
