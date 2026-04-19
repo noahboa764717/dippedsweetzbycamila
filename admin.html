@@ -232,8 +232,62 @@
     .inv-table .inv-actions { display:flex; gap:8px; }
 
     @media(max-width:640px){
-      .admin-sidebar{display:none;} .admin-main{padding:20px 16px;}
-      .form-grid{grid-template-columns:1fr;} .admin-header{padding:0 16px;}
+      .admin-main{padding:20px 16px;}
+      .form-grid{grid-template-columns:1fr;}
+      .admin-header{padding:0 16px;}
+
+      /* Sidebar slides in from left as a drawer */
+      .admin-sidebar {
+        position:fixed;
+        top:0; left:0;
+        height:100vh;
+        width:260px;
+        z-index:500;
+        transform:translateX(-100%);
+        transition:transform .28s cubic-bezier(.4,0,.2,1);
+        box-shadow:4px 0 24px rgba(0,0,0,.15);
+        padding-top:70px;
+      }
+      .admin-sidebar.open {
+        transform:translateX(0);
+      }
+
+      /* Overlay behind drawer */
+      .sidebar-overlay {
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.4);
+        z-index:499;
+      }
+      .sidebar-overlay.open { display:block; }
+
+      /* Hamburger button */
+      .hamburger {
+        display:flex;
+        flex-direction:column;
+        gap:5px;
+        cursor:pointer;
+        padding:8px;
+        border-radius:8px;
+        background:rgba(255,255,255,.15);
+        border:none;
+        margin-right:8px;
+      }
+      .hamburger span {
+        display:block;
+        width:22px;
+        height:2px;
+        background:white;
+        border-radius:2px;
+        transition:all .25s;
+      }
+    }
+
+    /* Hide hamburger on desktop */
+    @media(min-width:641px){
+      .hamburger { display:none; }
+      .sidebar-overlay { display:none !important; }
     }
   </style>
 </head>
@@ -299,6 +353,9 @@
 <div id="admin-panel">
   <header class="admin-header">
     <div class="header-left">
+      <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
       <span>🍓</span>
       <h1>Dipped Sweetz Admin</h1>
     </div>
@@ -309,8 +366,11 @@
     </div>
   </header>
 
+  <!-- Mobile sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
   <div class="admin-layout">
-    <aside class="admin-sidebar">
+    <aside class="admin-sidebar" id="admin-sidebar">
       <div class="sidebar-section">Overview</div>
       <button class="sidebar-btn active" onclick="showPanel('dashboard',this)">📊 Dashboard</button>
       <div class="sidebar-section">Content</div>
@@ -1071,8 +1131,10 @@ function showPanel(id, btn) {
   if (id === 'gallery') renderAdminGallery('all');
   if (id === 'dashboard') renderStats();
   if (id === 'invoices' && document.getElementById('line-items-body').children.length === 0) {
-    addLineItem(); // start with one empty row
+    addLineItem();
   }
+  // Close drawer on mobile after selecting a panel
+  if (window.innerWidth <= 640) closeSidebar();
 }
 
 function renderStats() {
@@ -1285,6 +1347,28 @@ async function loadInvoices() {
   }
 }
 
+
+/* ══════════════════════════════════════════
+   MOBILE SIDEBAR TOGGLE
+══════════════════════════════════════════ */
+function toggleSidebar() {
+  const sidebar  = document.getElementById('admin-sidebar');
+  const overlay  = document.getElementById('sidebar-overlay');
+  const isOpen   = sidebar.classList.contains('open');
+  isOpen ? closeSidebar() : openSidebar();
+}
+
+function openSidebar() {
+  document.getElementById('admin-sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSidebar() {
+  document.getElementById('admin-sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
 
 let toastTimer;
 function toast(msg, err = false) {

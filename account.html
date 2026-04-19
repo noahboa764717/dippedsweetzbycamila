@@ -777,12 +777,10 @@
 const netlifyIdentity = window.netlifyIdentity;
 let currentUser = null;
 
-// Init
 netlifyIdentity.init();
 
 window.addEventListener('load', () => {
   currentUser = netlifyIdentity.currentUser();
-
   if (currentUser) {
     showDashboard(currentUser);
   } else {
@@ -831,17 +829,18 @@ function showAuth() {
 async function doLogin() {
   const email    = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
-  const errEl    = document.getElementById('login-error');
   const btn      = document.getElementById('login-btn');
 
-  errEl.style.display = 'none';
+  document.getElementById('login-error').style.display = 'none';
   if (!email || !password) { showErr('login-error', 'Please enter your email and password.'); return; }
 
   btn.disabled = true; btn.textContent = 'Signing in...';
 
   try {
-    await netlifyIdentity.login(email, password);
-    // onLogin event handles the rest
+    // Use the GoTrue client directly under the hood
+    const user = await netlifyIdentity.gotrue.login(email, password, true);
+    netlifyIdentity.store.user = user;
+    netlifyIdentity.emit('login', user);
   } catch (err) {
     showErr('login-error', 'Incorrect email or password. Please try again.');
     btn.disabled = false; btn.textContent = 'Sign In';
@@ -857,20 +856,27 @@ async function doSignup() {
   document.getElementById('signup-error').style.display   = 'none';
   document.getElementById('signup-success').style.display = 'none';
 
-  if (!email || !password) { showErr('signup-error', 'Please fill in all fields.'); return; }
+  if (!name)             { showErr('signup-error', 'Please enter your name.'); return; }
+  if (!email)            { showErr('signup-error', 'Please enter your email.'); return; }
+  if (!password)         { showErr('signup-error', 'Please enter a password.'); return; }
   if (password.length < 8) { showErr('signup-error', 'Password must be at least 8 characters.'); return; }
 
   btn.disabled = true; btn.textContent = 'Creating account...';
 
   try {
-    await netlifyIdentity.signup(email, password, { full_name: name });
+    await netlifyIdentity.gotrue.signup(email, password, { full_name: name });
     document.getElementById('signup-success').textContent =
       '✅ Account created! Check your email to confirm your address, then sign in.';
     document.getElementById('signup-success').style.display = 'block';
-    btn.textContent = 'Account Created!';
+    btn.textContent = 'Check your email!';
   } catch (err) {
-    showErr('signup-error', err.message || 'Could not create account. Try again.');
-    btn.disabled = false; btn.textContent = 'Create Account';
+    // If gotrue isn't available, fall back to opening the widget
+    if (!netlifyIdentity.gotrue) {
+      netlifyIdentity.open('signup');
+    } else {
+      showErr('signup-error', err.message || 'Could not create account. Try again.');
+      btn.disabled = false; btn.textContent = 'Create Account';
+    }
   }
 }
 
@@ -886,13 +892,12 @@ async function doForgot() {
   btn.disabled = true; btn.textContent = 'Sending...';
 
   try {
-    await netlifyIdentity.requestPasswordRecovery(email);
-    document.getElementById('forgot-success').textContent =
-      '✅ Reset link sent! Check your email.';
+    await netlifyIdentity.gotrue.requestPasswordRecovery(email);
+    document.getElementById('forgot-success').textContent = '✅ Reset link sent! Check your email.';
     document.getElementById('forgot-success').style.display = 'block';
     btn.textContent = 'Sent!';
   } catch (err) {
-    showErr('forgot-error', 'Could not send reset email. Try again.');
+    showErr('forgot-error', 'Could not send reset email. Please try again.');
     btn.disabled = false; btn.textContent = 'Send Reset Link';
   }
 }
@@ -904,9 +909,9 @@ function doLogout() {
 // Enter key support
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
-  if (document.getElementById('login-card').style.display !== 'none')   doLogin();
-  if (document.getElementById('signup-card').style.display !== 'none')  doSignup();
-  if (document.getElementById('forgot-card').style.display !== 'none')  doForgot();
+  if (document.getElementById('login-card').style.display  !== 'none') doLogin();
+  if (document.getElementById('signup-card').style.display !== 'none') doSignup();
+  if (document.getElementById('forgot-card').style.display !== 'none') doForgot();
 });
 
 /* ══════════════════════════════════════════
