@@ -17,27 +17,61 @@
     *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
     body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
-    /* LOGIN */
-    #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(135deg,#f6eef1,#fde8ee);padding:20px;}
-    .login-card{background:white;border-radius:24px;padding:48px 44px;width:100%;max-width:400px;
-      box-shadow:0 20px 60px rgba(110,74,58,.18);text-align:center;}
-    .login-logo{font-size:48px;margin-bottom:12px;}
-    .login-card h1{font-family:'Playfair Display',serif;font-size:24px;color:var(--rose);margin-bottom:6px;}
-    .login-card p{color:var(--text-soft);font-size:14px;margin-bottom:32px;}
-    .field{margin-bottom:16px;text-align:left;}
-    .field label{display:block;font-size:13px;font-weight:600;color:var(--text-soft);margin-bottom:6px;
-      letter-spacing:.04em;text-transform:uppercase;}
-    .field input{width:100%;padding:12px 16px;border:2px solid var(--border);border-radius:10px;
-      font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:var(--bg);
-      transition:border-color .2s;outline:none;}
-    .field input:focus{border-color:var(--rose);}
+    /* LOGIN — SPLIT SCREEN */
+    #login-screen{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;}
+
+    /* Left form side */
+    .login-form-side{display:flex;flex-direction:column;justify-content:center;
+      padding:60px 56px;background:white;overflow-y:auto;}
+    .login-brand{display:flex;align-items:center;gap:10px;margin-bottom:48px;}
+    .login-brand-icon{font-size:32px;}
+    .login-brand-name{font-family:'Playfair Display',serif;font-size:18px;color:var(--rose);font-weight:700;}
+    .login-card{width:100%;max-width:400px;}
+    .login-card h1{font-family:'Playfair Display',serif;font-size:32px;color:var(--text);
+      margin-bottom:8px;line-height:1.2;}
+    .login-card .login-sub{color:var(--text-soft);font-size:15px;margin-bottom:36px;line-height:1.5;}
+
+    /* Right brand side */
+    .login-brand-side{background:var(--chocolate);display:flex;flex-direction:column;
+      justify-content:center;align-items:flex-start;padding:60px 64px;
+      position:relative;overflow:hidden;}
+    .login-brand-side::before{content:'';position:absolute;inset:0;
+      background-image:url('strawberry.png');background-size:40px;
+      background-repeat:repeat;opacity:.06;animation:bgfall 30s linear infinite;}
+    .login-brand-inner{position:relative;z-index:1;}
+    .login-brand-side .big-icon{font-size:72px;margin-bottom:28px;display:block;}
+    .login-brand-side h2{font-family:'Playfair Display',serif;
+      font-size:clamp(28px,3vw,48px);color:white;line-height:1.2;margin-bottom:16px;}
+    .login-brand-side h2 em{font-style:italic;opacity:.8;}
+    .login-brand-side p{color:rgba(255,255,255,.7);font-size:15px;
+      line-height:1.7;max-width:360px;margin-bottom:32px;}
+    .admin-features{display:flex;flex-direction:column;gap:14px;}
+    .admin-feature{display:flex;align-items:center;gap:12px;color:white;font-size:14px;font-weight:500;}
+    .admin-feature-icon{width:34px;height:34px;background:rgba(255,255,255,.15);
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      font-size:15px;flex-shrink:0;}
+
+    .field{margin-bottom:16px;}
+    .field label{display:block;font-size:12px;font-weight:700;color:var(--text-soft);margin-bottom:7px;
+      letter-spacing:.06em;text-transform:uppercase;}
+    .field input{width:100%;padding:13px 16px;border:2px solid var(--border);border-radius:10px;
+      font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:#faf8f8;
+      transition:border-color .2s,box-shadow .2s;outline:none;}
+    .field input:focus{border-color:var(--rose);box-shadow:0 0 0 3px rgba(212,87,111,.1);}
     .login-btn{width:100%;padding:14px;background:var(--rose);color:white;border:none;border-radius:10px;
       font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;cursor:pointer;margin-top:8px;
-      transition:background .2s,transform .15s;}
-    .login-btn:hover{background:var(--rose-dark);transform:translateY(-1px);}
+      transition:background .2s,transform .15s;box-shadow:0 4px 16px rgba(212,87,111,.3);}
+    .login-btn:hover{background:var(--rose-dark);transform:translateY(-1px);
+      box-shadow:0 8px 24px rgba(212,87,111,.4);}
     .login-error{background:var(--red-bg);color:var(--red);border-radius:8px;padding:10px 14px;
       font-size:14px;margin-top:14px;display:none;}
+
+    @media(max-width:768px){
+      #login-screen{grid-template-columns:1fr;}
+      .login-brand-side{display:none;}
+      .login-form-side{padding:48px 28px;align-items:center;}
+      .login-card{max-width:100%;}
+    }
 
     /* ADMIN SHELL */
     #admin-panel{display:none;}
@@ -207,21 +241,58 @@
 
 <!-- LOGIN -->
 <div id="login-screen">
-  <div class="login-card">
-    <div class="login-logo">🍓</div>
-    <h1>Admin Login</h1>
-    <p>Dipped Sweetz by Camila</p>
-    <div class="field">
-      <label>Username</label>
-      <input type="text" id="username" placeholder="Enter username" autocomplete="username">
+
+  <!-- LEFT: FORM -->
+  <div class="login-form-side">
+    <div class="login-brand">
+      <span class="login-brand-icon">🍓</span>
+      <span class="login-brand-name">Dipped Sweetz</span>
     </div>
-    <div class="field">
-      <label>Password</label>
-      <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+
+    <div class="login-card">
+      <h1>Admin login</h1>
+      <p class="login-sub">Sign in to manage your gallery, send invoices, and run your site.</p>
+
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Enter username" autocomplete="username">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="Enter password" autocomplete="current-password">
+      </div>
+      <button class="login-btn" onclick="doLogin()">Sign In</button>
+      <div class="login-error" id="login-error">Incorrect username or password.</div>
     </div>
-    <button class="login-btn" onclick="doLogin()">Sign In</button>
-    <div class="login-error" id="login-error">Incorrect username or password.</div>
   </div>
+
+  <!-- RIGHT: BRAND -->
+  <div class="login-brand-side">
+    <div class="login-brand-inner">
+      <span class="big-icon">🍓</span>
+      <h2>Your bakery,<br><em>beautifully managed.</em></h2>
+      <p>The admin panel for Dipped Sweetz — upload photos, send Stripe invoices, and keep everything running smoothly.</p>
+      <div class="admin-features">
+        <div class="admin-feature">
+          <div class="admin-feature-icon">🖼️</div>
+          Manage your photo gallery
+        </div>
+        <div class="admin-feature">
+          <div class="admin-feature-icon">🧾</div>
+          Send & track Stripe invoices
+        </div>
+        <div class="admin-feature">
+          <div class="admin-feature-icon">☁️</div>
+          Google Drive photo sync
+        </div>
+        <div class="admin-feature">
+          <div class="admin-feature-icon">⚙️</div>
+          Edit site content instantly
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ADMIN PANEL -->

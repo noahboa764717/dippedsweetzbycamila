@@ -9,57 +9,173 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    /* ── AUTH SCREENS ── */
+    /* ── SPLIT SCREEN AUTH ── */
     .auth-wrap {
       min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    /* LEFT — form side */
+    .auth-form-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 56px;
+      background: white;
+      overflow-y: auto;
+    }
+
+    .auth-back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-soft, #7a5a52);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 48px;
+      transition: color .2s;
+    }
+    .auth-back-link:hover { color: var(--rose, #d4576f); }
+
+    .auth-brand {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-      background: linear-gradient(135deg, #f6eef1, #fde8ee);
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+    .auth-brand-icon { font-size: 32px; }
+    .auth-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--rose, #d4576f);
+      font-weight: 700;
     }
 
     .auth-card {
-      background: white;
-      border-radius: 24px;
-      padding: 48px 44px;
       width: 100%;
-      max-width: 420px;
-      box-shadow: 0 20px 60px rgba(110,74,58,.18);
+      max-width: 400px;
     }
 
     .auth-logo {
-      text-align: center;
-      font-size: 48px;
-      margin-bottom: 8px;
+      font-size: 36px;
+      margin-bottom: 10px;
     }
 
     .auth-card h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 26px;
-      color: var(--rose);
-      text-align: center;
-      margin-bottom: 6px;
+      font-size: 32px;
+      color: var(--text, #2d1a14);
+      margin-bottom: 8px;
+      line-height: 1.2;
     }
 
     .auth-card .auth-sub {
-      text-align: center;
-      color: var(--text-soft);
-      font-size: 14px;
-      margin-bottom: 32px;
+      color: var(--text-soft, #7a5a52);
+      font-size: 15px;
+      margin-bottom: 36px;
+      line-height: 1.5;
+    }
+
+    /* RIGHT — brand side */
+    .auth-brand-side {
+      background: var(--rose, #d4576f);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 60px 64px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-brand-side::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('strawberry.png');
+      background-size: 40px;
+      background-repeat: repeat;
+      opacity: .08;
+      animation: bgfall 30s linear infinite;
+    }
+
+    @keyframes bgfall {
+      from { background-position: 0 0; }
+      to   { background-position: 0 800px; }
+    }
+
+    .auth-brand-side-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .auth-brand-side .big-icon {
+      font-size: 72px;
+      margin-bottom: 28px;
+      display: block;
+    }
+
+    .auth-brand-side h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 3.5vw, 52px);
+      color: white;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .auth-brand-side h2 em {
+      font-style: italic;
+      opacity: .85;
+    }
+
+    .auth-brand-side p {
+      color: rgba(255,255,255,.8);
+      font-size: 16px;
+      line-height: 1.7;
+      max-width: 380px;
+      margin-bottom: 36px;
+    }
+
+    .auth-brand-features {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .auth-feature {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: white;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .auth-feature-icon {
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
     }
 
     .auth-field {
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
 
     .auth-field label {
       display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-soft);
-      margin-bottom: 6px;
-      letter-spacing: .04em;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-soft, #7a5a52);
+      margin-bottom: 7px;
+      letter-spacing: .06em;
       text-transform: uppercase;
     }
 
@@ -70,18 +186,21 @@
       border-radius: 10px;
       font-family: 'DM Sans', sans-serif;
       font-size: 15px;
-      color: var(--text);
-      background: var(--bg, #faf6f8);
+      color: var(--text, #2d1a14);
+      background: #faf8f8;
       outline: none;
-      transition: border-color .2s;
+      transition: border-color .2s, box-shadow .2s;
     }
 
-    .auth-field input:focus { border-color: var(--rose); }
+    .auth-field input:focus {
+      border-color: var(--rose, #d4576f);
+      box-shadow: 0 0 0 3px rgba(212,87,111,.1);
+    }
 
     .auth-btn {
       width: 100%;
       padding: 14px;
-      background: var(--rose);
+      background: var(--rose, #d4576f);
       color: white;
       border: none;
       border-radius: 10px;
@@ -90,21 +209,27 @@
       font-weight: 600;
       cursor: pointer;
       margin-top: 8px;
-      transition: background .2s, transform .15s;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 16px rgba(212,87,111,.3);
     }
 
-    .auth-btn:hover { background: var(--rose-dark, #b8405b); transform: translateY(-1px); }
-    .auth-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .auth-btn:hover {
+      background: var(--rose-dark, #b8405b);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(212,87,111,.4);
+    }
+
+    .auth-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
 
     .auth-switch {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 22px;
       font-size: 14px;
-      color: var(--text-soft);
+      color: var(--text-soft, #7a5a52);
     }
 
     .auth-switch a {
-      color: var(--rose);
+      color: var(--rose, #d4576f);
       font-weight: 600;
       text-decoration: none;
       cursor: pointer;
@@ -116,34 +241,44 @@
       background: #fdecea;
       color: #c0392b;
       border-radius: 8px;
-      padding: 10px 14px;
+      padding: 11px 14px;
       font-size: 14px;
       margin-top: 14px;
       display: none;
+      line-height: 1.5;
     }
 
     .auth-success {
       background: #eaf5ee;
       color: #2e7d52;
       border-radius: 8px;
-      padding: 10px 14px;
+      padding: 11px 14px;
       font-size: 14px;
       margin-top: 14px;
       display: none;
+      line-height: 1.5;
     }
 
     .forgot-link {
       display: block;
       text-align: right;
       font-size: 13px;
-      color: var(--rose);
+      color: var(--rose, #d4576f);
       text-decoration: none;
-      margin-top: -10px;
-      margin-bottom: 16px;
+      margin-top: -8px;
+      margin-bottom: 18px;
       cursor: pointer;
     }
 
     .forgot-link:hover { text-decoration: underline; }
+
+    /* Mobile: stack vertically */
+    @media (max-width: 768px) {
+      .auth-wrap { grid-template-columns: 1fr; }
+      .auth-brand-side { display: none; }
+      .auth-form-side { padding: 48px 28px; align-items: center; }
+      .auth-card { max-width: 100%; }
+    }
 
     /* ── DASHBOARD ── */
     #dashboard { display: none; }
@@ -444,78 +579,111 @@
 ═══════════════════════════════════════ -->
 <div id="auth-screens" class="auth-wrap">
 
-  <!-- LOADING -->
-  <div id="auth-loading" style="text-align:center;">
-    <div style="font-size:48px;margin-bottom:12px;">🍓</div>
-    <p style="color:var(--text-soft,#7a5a52);font-size:15px;">Loading...</p>
+  <!-- LEFT: FORM SIDE -->
+  <div class="auth-form-side">
+    <a href="index.html" class="auth-back-link">← Back to site</a>
+
+    <div class="auth-brand">
+      <span class="auth-brand-icon">🍓</span>
+      <span class="auth-brand-name">Dipped Sweetz by Camila</span>
+    </div>
+
+    <!-- LOADING -->
+    <div id="auth-loading">
+      <p style="color:var(--text-soft,#7a5a52);font-size:15px;">Loading...</p>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login-card" class="auth-card" style="display:none;">
+      <h1>Welcome back</h1>
+      <p class="auth-sub">Sign in to view your invoices and pay securely.</p>
+
+      <div class="auth-field">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password">
+      </div>
+      <span class="forgot-link" onclick="showForgot()">Forgot password?</span>
+      <button class="auth-btn" id="login-btn" onclick="doLogin()">Sign In</button>
+      <div class="auth-error" id="login-error"></div>
+
+      <div class="auth-switch">
+        Don't have an account? <a onclick="showSignup()">Create one</a>
+      </div>
+    </div>
+
+    <!-- SIGN UP -->
+    <div id="signup-card" class="auth-card" style="display:none;">
+      <h1>Create account</h1>
+      <p class="auth-sub">Track your orders and pay invoices easily.</p>
+
+      <div class="auth-field">
+        <label>Full Name</label>
+        <input type="text" id="signup-name" placeholder="Your full name" autocomplete="name">
+      </div>
+      <div class="auth-field">
+        <label>Email</label>
+        <input type="email" id="signup-email" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input type="password" id="signup-password" placeholder="Min. 8 characters" autocomplete="new-password">
+      </div>
+      <button class="auth-btn" id="signup-btn" onclick="doSignup()">Create Account</button>
+      <div class="auth-error" id="signup-error"></div>
+      <div class="auth-success" id="signup-success"></div>
+
+      <div class="auth-switch">
+        Already have an account? <a onclick="showLogin()">Sign in</a>
+      </div>
+    </div>
+
+    <!-- FORGOT PASSWORD -->
+    <div id="forgot-card" class="auth-card" style="display:none;">
+      <h1>Reset password</h1>
+      <p class="auth-sub">Enter your email and we'll send you a reset link.</p>
+
+      <div class="auth-field">
+        <label>Email</label>
+        <input type="email" id="forgot-email" placeholder="your@email.com">
+      </div>
+      <button class="auth-btn" id="forgot-btn" onclick="doForgot()">Send Reset Link</button>
+      <div class="auth-error" id="forgot-error"></div>
+      <div class="auth-success" id="forgot-success"></div>
+
+      <div class="auth-switch">
+        <a onclick="showLogin()">← Back to Sign In</a>
+      </div>
+    </div>
   </div>
 
-  <!-- LOGIN -->
-  <div id="login-card" class="auth-card" style="display:none;">
-    <div class="auth-logo">🍓</div>
-    <h1>Welcome Back</h1>
-    <p class="auth-sub">Sign in to view your orders & invoices</p>
-
-    <div class="auth-field">
-      <label>Email</label>
-      <input type="email" id="login-email" placeholder="your@email.com" autocomplete="email">
-    </div>
-    <div class="auth-field">
-      <label>Password</label>
-      <input type="password" id="login-password" placeholder="Your password" autocomplete="current-password">
-    </div>
-    <span class="forgot-link" onclick="showForgot()">Forgot password?</span>
-    <button class="auth-btn" id="login-btn" onclick="doLogin()">Sign In</button>
-    <div class="auth-error" id="login-error"></div>
-
-    <div class="auth-switch">
-      Don't have an account? <a onclick="showSignup()">Create one</a>
-    </div>
-  </div>
-
-  <!-- SIGN UP -->
-  <div id="signup-card" class="auth-card" style="display:none;">
-    <div class="auth-logo">🍓</div>
-    <h1>Create Account</h1>
-    <p class="auth-sub">Track your orders and pay invoices easily</p>
-
-    <div class="auth-field">
-      <label>Full Name</label>
-      <input type="text" id="signup-name" placeholder="Your full name" autocomplete="name">
-    </div>
-    <div class="auth-field">
-      <label>Email</label>
-      <input type="email" id="signup-email" placeholder="your@email.com" autocomplete="email">
-    </div>
-    <div class="auth-field">
-      <label>Password</label>
-      <input type="password" id="signup-password" placeholder="Choose a password (min 8 chars)" autocomplete="new-password">
-    </div>
-    <button class="auth-btn" id="signup-btn" onclick="doSignup()">Create Account</button>
-    <div class="auth-error" id="signup-error"></div>
-    <div class="auth-success" id="signup-success"></div>
-
-    <div class="auth-switch">
-      Already have an account? <a onclick="showLogin()">Sign in</a>
-    </div>
-  </div>
-
-  <!-- FORGOT PASSWORD -->
-  <div id="forgot-card" class="auth-card" style="display:none;">
-    <div class="auth-logo">🔑</div>
-    <h1>Reset Password</h1>
-    <p class="auth-sub">We'll send you a reset link</p>
-
-    <div class="auth-field">
-      <label>Email</label>
-      <input type="email" id="forgot-email" placeholder="your@email.com">
-    </div>
-    <button class="auth-btn" id="forgot-btn" onclick="doForgot()">Send Reset Link</button>
-    <div class="auth-error" id="forgot-error"></div>
-    <div class="auth-success" id="forgot-success"></div>
-
-    <div class="auth-switch">
-      <a onclick="showLogin()">← Back to Sign In</a>
+  <!-- RIGHT: BRAND SIDE -->
+  <div class="auth-brand-side">
+    <div class="auth-brand-side-inner">
+      <span class="big-icon">🍓</span>
+      <h2>Sweet treats,<br><em>made just for you.</em></h2>
+      <p>Create your account to view invoices, track your orders, and pay securely — all in one place.</p>
+      <div class="auth-brand-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🧾</div>
+          View all your invoices
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">💳</div>
+          Pay securely online
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📄</div>
+          Download PDF receipts
+        </div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🎉</div>
+          Order custom treats
+        </div>
+      </div>
     </div>
   </div>
 
