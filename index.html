@@ -170,5 +170,19 @@
 </a>
 
 <script src="script.js"></script>
+<script>
+// Intercept Netlify Identity tokens that land on the homepage
+// and forward them to account.html where they get handled
+(function() {
+  const hash = window.location.hash.substring(1);
+  if (
+    hash.includes('confirmation_token=') ||
+    hash.includes('recovery_token=') ||
+    hash.includes('invite_token=')
+  ) {
+    window.location.replace('/account.html#' + hash);
+  }
+})();
+</script>
 </body>
 </html>

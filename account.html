@@ -924,12 +924,18 @@ async function doLogin() {
   btn.disabled = true; btn.textContent = 'Signing in...';
 
   try {
-    // Use the GoTrue client directly under the hood
     const user = await netlifyIdentity.gotrue.login(email, password, true);
+    // Manually fire login event since we bypassed the widget
+    currentUser = user;
     netlifyIdentity.store.user = user;
     netlifyIdentity.emit('login', user);
   } catch (err) {
-    showErr('login-error', 'Incorrect email or password. Please try again.');
+    const msg = err.message || '';
+    if (msg.toLowerCase().includes('email not confirmed')) {
+      showErr('login-error', 'Please confirm your email first — check your inbox for a confirmation link.');
+    } else {
+      showErr('login-error', 'Incorrect email or password. Please try again.');
+    }
     btn.disabled = false; btn.textContent = 'Sign In';
   }
 }
