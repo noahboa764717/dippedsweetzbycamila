@@ -957,6 +957,14 @@ function clearSession() {
 
 // Auto-login if session valid
 window.addEventListener('load', () => {
+  // Clear any 2FA secret set up with the old broken algorithm
+  // (identified by presence of ds_2fa_legacy_cleared flag)
+  if (!localStorage.getItem('ds_2fa_legacy_cleared')) {
+    localStorage.removeItem('ds_2fa_secret');
+    localStorage.removeItem('ds_2fa_pending');
+    localStorage.setItem('ds_2fa_legacy_cleared', '1');
+  }
+
   if (checkSession()) {
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('admin-panel').style.display  = 'block';
@@ -1011,13 +1019,12 @@ function show2FA() {
   document.getElementById('totp-code').focus();
 }
 
-function verify2FA() {
+async function verify2FA() {
   const code   = document.getElementById('totp-code').value.trim();
   const secret = localStorage.getItem('ds_2fa_secret');
   if (!secret) { completeLogin(); return; }
 
-  // Verify TOTP code
-  if (verifyTOTP(secret, code)) {
+  if (await verifyTOTP(secret, code)) {
     completeLogin();
   } else {
     document.getElementById('twofa-error').style.display = 'block';
@@ -1031,46 +1038,55 @@ document.addEventListener('keydown', e => {
 });
 
 /* ── TOTP Implementation ── */
-function verifyTOTP(secret, token) {
-  const time    = Math.floor(Date.now() / 1000 / 30);
+async function verifyTOTP(secret, token) {
+  const time = Math.floor(Date.now() / 1000 / 30);
   // Check current window and ±1 for clock drift
   for (let i = -1; i <= 1; i++) {
-    if (generateTOTP(secret, time + i) === token) return true;
+    const code = await generateTOTP(secret, time + i);
+    if (code === token) return true;
   }
   return false;
 }
 
-function generateTOTP(secret, time) {
-  // Base32 decode
-  const key  = base32Decode(secret);
-  const msg  = new ArrayBuffer(8);
-  const view = new DataView(msg);
-  view.setUint32(4, time, false);
+async function generateTOTP(secret, counter) {
+  const key     = base32Decode(secret);
+  const msgBuf  = new ArrayBuffer(8);
+  const msgView = new DataView(msgBuf);
+  // Write counter as 8-byte big-endian
+  msgView.setUint32(0, Math.floor(counter / 0x100000000), false);
+  msgView.setUint32(4, counter >>> 0, false);
 
-  // HMAC-SHA1 (simplified via SubtleCrypto — we use sync version)
-  // For simplicity we use a pure JS TOTP
-  return computeHOTP(key, time);
+  // HMAC-SHA1 via WebCrypto
+  const cryptoKey = await crypto.subtle.importKey(
+    'raw', key,
+    { name: 'HMAC', hash: 'SHA-1' },
+    false, ['sign']
+  );
+  const sigBuf  = await crypto.subtle.sign('HMAC', cryptoKey, msgBuf);
+  const sig     = new Uint8Array(sigBuf);
+
+  // Dynamic truncation
+  const offset  = sig[19] & 0x0f;
+  const code    = ((sig[offset]     & 0x7f) << 24 |
+                   (sig[offset + 1] & 0xff) << 16 |
+                   (sig[offset + 2] & 0xff) << 8  |
+                   (sig[offset + 3] & 0xff)) % 1000000;
+
+  return String(code).padStart(6, '0');
 }
 
 function base32Decode(str) {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
-  str = str.toUpperCase().replace(/=+$/, '');
+  str = str.toUpperCase().replace(/=+$/, '').replace(/\s/g, '');
   let bits = 0, val = 0, out = [];
   for (let i = 0; i < str.length; i++) {
-    val = (val << 5) | chars.indexOf(str[i]);
+    const idx = chars.indexOf(str[i]);
+    if (idx === -1) continue;
+    val = (val << 5) | idx;
     bits += 5;
     if (bits >= 8) { out.push((val >>> (bits - 8)) & 0xff); bits -= 8; }
   }
   return new Uint8Array(out);
-}
-
-function computeHOTP(key, counter) {
-  // We use the stored secret + current time to compute a 6-digit code
-  // This uses the browser's SubtleCrypto API asynchronously,
-  // but for admin login we use a stored validated token approach
-  // Simple implementation using a seed-based approach
-  const seed = Array.from(key).reduce((a, b) => a * 31 + b, counter);
-  return String(Math.abs(seed * 1234567 + counter * 999983) % 1000000).padStart(6, '0');
 }
 
 /* ── 2FA SETUP in Settings ── */
@@ -1098,12 +1114,12 @@ function generateSecret() {
   return secret;
 }
 
-function confirm2FA() {
+async function confirm2FA() {
   const code    = document.getElementById('twofa-confirm-code').value.trim();
   const pending = localStorage.getItem('ds_2fa_pending');
   if (!pending) return toast('Generate a QR code first.', true);
 
-  if (verifyTOTP(pending, code)) {
+  if (await verifyTOTP(pending, code)) {
     localStorage.setItem('ds_2fa_secret', pending);
     localStorage.removeItem('ds_2fa_pending');
     document.getElementById('twofa-setup-section').style.display = 'none';
