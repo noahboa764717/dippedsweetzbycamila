@@ -106,8 +106,44 @@ body.theme-summer {
   --footer-bg: #d35400;
 }
 
-/* Spring */
-body.theme-spring {
+/* Cinco de Mayo */
+body.theme-cincodemayo {
+  --rose:      #27ae60;
+  --rose-dark: #1e8449;
+  --blush:     #fffde7;
+  --nav-bg:    #c0392b;
+  --footer-bg: #27ae60;
+  --chocolate: #c0392b;
+}
+
+/* Memorial Day */
+body.theme-memorialday {
+  --rose:      #1a3a6b;
+  --rose-dark: #122a50;
+  --blush:     #f0f4ff;
+  --nav-bg:    #1a3a6b;
+  --footer-bg: #b22222;
+  --chocolate: #b22222;
+}
+
+/* Independence Day */
+body.theme-independenceday {
+  --rose:      #b22222;
+  --rose-dark: #8b0000;
+  --blush:     #fff5f5;
+  --nav-bg:    #b22222;
+  --footer-bg: #002868;
+  --chocolate: #002868;
+}
+
+/* Graduation */
+body.theme-graduation {
+  --rose:      #2c3e50;
+  --rose-dark: #1a252f;
+  --blush:     #f5f5f5;
+  --nav-bg:    #2c3e50;
+  --footer-bg: #1a252f;
+}
   --rose:      #e91e8c;
   --rose-dark: #c21577;
   --blush:     #f0fff4;
