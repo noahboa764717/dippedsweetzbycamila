@@ -124,3 +124,114 @@ const observer = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
+/* ---------- DARK MODE ---------- */
+(function initDarkMode() {
+  const saved = localStorage.getItem('ds_dark_mode');
+  if (saved === 'true') document.body.classList.add('dark-mode');
+
+  // Inject toggle button on every page
+  const btn = document.createElement('button');
+  btn.className = 'dark-mode-toggle';
+  btn.setAttribute('aria-label', 'Toggle dark mode');
+  btn.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+  btn.addEventListener('click', () => {
+    const isDark = document.body.classList.toggle('dark-mode');
+    localStorage.setItem('ds_dark_mode', isDark);
+    btn.textContent = isDark ? '☀️' : '🌙';
+  });
+  document.body.appendChild(btn);
+})();
+
+/* ---------- SEASONAL THEME + BANNER ---------- */
+(function initSeasonal() {
+  try {
+    const config = JSON.parse(localStorage.getItem('ds_seasonal') || 'null');
+    if (!config || !config.active) return;
+
+    // Apply theme class
+    if (config.theme) {
+      document.body.classList.add('theme-' + config.theme);
+    }
+
+    // Apply custom colors if set
+    if (config.primaryColor) {
+      document.documentElement.style.setProperty('--rose', config.primaryColor);
+    }
+    if (config.navColor) {
+      document.documentElement.style.setProperty('--nav-bg', config.navColor);
+    }
+    if (config.bgColor) {
+      document.documentElement.style.setProperty('--blush', config.bgColor);
+    }
+
+    // Show banner if set
+    if (config.bannerText && !sessionStorage.getItem('ds_banner_closed')) {
+      const banner = document.createElement('div');
+      banner.className = 'seasonal-banner';
+      if (config.bannerColor) banner.style.background = config.bannerColor;
+      if (config.bannerTextColor) banner.style.color = config.bannerTextColor;
+      banner.innerHTML = `
+        <span>${config.bannerEmoji || '🎉'} ${config.bannerText}</span>
+        ${config.bannerLink ? `<a href="${config.bannerLink}">${config.bannerLinkText || 'Shop Now'}</a>` : ''}
+        <button class="seasonal-banner-close" onclick="this.parentElement.remove();sessionStorage.setItem('ds_banner_closed','1')">✕</button>
+      `;
+      document.body.insertBefore(banner, document.body.firstChild);
+    }
+  } catch {}
+})();
+
+/* ---------- RETURNING VISITOR GREETING ---------- */
+(function initGreeting() {
+  const page = location.pathname.split('/').pop() || 'index.html';
+  if (page !== 'index.html' && page !== '') return;
+
+  const visits = parseInt(localStorage.getItem('ds_visits') || '0') + 1;
+  localStorage.setItem('ds_visits', visits);
+  localStorage.setItem('ds_last_visit', new Date().toISOString());
+
+  if (visits > 1 && !sessionStorage.getItem('ds_greeted')) {
+    sessionStorage.setItem('ds_greeted', '1');
+    const greet = document.createElement('div');
+    greet.className = 'return-greeting show';
+    const messages = [
+      'Welcome back! 🍓 So glad to see you again!',
+      'Hey, you\'re back! 🍓 Check out what\'s new.',
+      'Welcome back! 🍓 Ready for something sweet?',
+      'Great to see you again! 🍓',
+    ];
+    greet.innerHTML = `
+      ${messages[Math.floor(Math.random() * messages.length)]}
+      <button class="return-greeting-close" onclick="this.parentElement.remove()">✕</button>
+    `;
+    // Insert after nav
+    const nav = document.querySelector('nav');
+    if (nav) nav.insertAdjacentElement('afterend', greet);
+  }
+})();
+
+/* ---------- FAQ ACCORDION ---------- */
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    // Open this one if it wasn't open
+    if (!isOpen) item.classList.add('open');
+  });
+});
+
+/* ---------- GALLERY SHARE BUTTON ---------- */
+function shareGallery() {
+  const url  = window.location.href;
+  const text = 'Check out Dipped Sweetz by Camila! 🍓';
+  if (navigator.share) {
+    navigator.share({ title: 'Dipped Sweetz Gallery', text, url });
+  } else {
+    navigator.clipboard?.writeText(url).then(() => {
+      const btn = document.getElementById('share-gallery-btn');
+      if (btn) { btn.textContent = '✅ Link Copied!'; setTimeout(() => btn.textContent = '🔗 Share Gallery', 2000); }
+    });
+  }
+}
+
