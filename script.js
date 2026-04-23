@@ -156,6 +156,14 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
     // Apply custom colors if set
     if (config.primaryColor) {
       document.documentElement.style.setProperty('--rose', config.primaryColor);
+      // Derive tint variables from the primary color
+      const hex = config.primaryColor.replace('#','');
+      const r = parseInt(hex.substring(0,2),16);
+      const g = parseInt(hex.substring(2,4),16);
+      const b = parseInt(hex.substring(4,6),16);
+      document.documentElement.style.setProperty('--tint-light', `rgba(${r},${g},${b},.08)`);
+      document.documentElement.style.setProperty('--tint-mid',   `rgba(${r},${g},${b},.18)`);
+      document.documentElement.style.setProperty('--tint-grad',  `linear-gradient(135deg,rgba(${r},${g},${b},.1),rgba(${r},${g},${b},.2))`);
     }
     if (config.navColor) {
       document.documentElement.style.setProperty('--nav-bg', config.navColor);

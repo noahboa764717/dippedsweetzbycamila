@@ -1198,7 +1198,7 @@ nav a.active {
 .divider {
   width: 50px;
   height: 3px;
-  background: linear-gradient(90deg, var(--rose), #f0a0b0);
+  background: linear-gradient(90deg, var(--rose), var(--rose-dark));
   border-radius: 4px;
   margin: 16px auto 0;
 }
