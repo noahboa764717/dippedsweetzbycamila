@@ -20,6 +20,10 @@
   --page-bg:   #f6eef1;
   --seasonal-banner-bg: #d4576f;
   --seasonal-banner-text: #ffffff;
+  /* Accent tints — derived from rose, update automatically with themes */
+  --tint-light: rgba(212,87,111,.08);
+  --tint-mid:   rgba(212,87,111,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(212,87,111,.12), rgba(212,87,111,.22));
 }
 
 /* ---------- DARK MODE ---------- */
@@ -59,6 +63,9 @@ body.theme-valentines {
   --blush:     #fdf0f0;
   --nav-bg:    #c0392b;
   --footer-bg: #7b241c;
+  --tint-light: rgba(192,57,43,.08);
+  --tint-mid:   rgba(192,57,43,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(192,57,43,.1), rgba(192,57,43,.2));
 }
 
 /* Easter */
@@ -68,6 +75,48 @@ body.theme-easter {
   --blush:     #f5f0ff;
   --nav-bg:    #9b59b6;
   --footer-bg: #6c3483;
+  --tint-light: rgba(155,89,182,.08);
+  --tint-mid:   rgba(155,89,182,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(155,89,182,.1), rgba(155,89,182,.2));
+}
+
+/* Cinco de Mayo */
+body.theme-cincodemayo {
+  --rose:      #27ae60;
+  --rose-dark: #1e8449;
+  --blush:     #fffde7;
+  --nav-bg:    #c0392b;
+  --footer-bg: #27ae60;
+  --chocolate: #c0392b;
+  --tint-light: rgba(39,174,96,.08);
+  --tint-mid:   rgba(39,174,96,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(39,174,96,.1), rgba(192,57,43,.12));
+}
+
+/* Memorial Day */
+body.theme-memorialday {
+  --rose:      #1a3a6b;
+  --rose-dark: #122a50;
+  --blush:     #f0f4ff;
+  --nav-bg:    #1a3a6b;
+  --footer-bg: #b22222;
+  --chocolate: #b22222;
+  --tint-light: rgba(26,58,107,.08);
+  --tint-mid:   rgba(26,58,107,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(26,58,107,.08), rgba(178,34,34,.1));
+}
+
+/* Independence Day */
+body.theme-independenceday {
+  --rose:      #b22222;
+  --rose-dark: #8b0000;
+  --blush:     #f0f4ff;
+  --nav-bg:    #002868;
+  --footer-bg: #002868;
+  --chocolate: #002868;
+  --tint-light: rgba(178,34,34,.08);
+  --tint-mid:   rgba(178,34,34,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(0,40,104,.08), rgba(178,34,34,.14));
 }
 
 /* Halloween */
@@ -82,6 +131,9 @@ body.theme-halloween {
   --footer-bg: #1a0a00;
   --white:     #2a1500;
   --card-bg:   #2a1500;
+  --tint-light: rgba(230,126,34,.12);
+  --tint-mid:   rgba(230,126,34,.25);
+  --tint-grad:  linear-gradient(135deg, rgba(230,126,34,.15), rgba(230,126,34,.28));
 }
 body.theme-halloween { background: #1a0a00; color: #f0d0a0; }
 body.theme-halloween .card,
@@ -95,6 +147,9 @@ body.theme-christmas {
   --nav-bg:    #c0392b;
   --footer-bg: #1a5c1a;
   --chocolate: #1a5c1a;
+  --tint-light: rgba(192,57,43,.08);
+  --tint-mid:   rgba(192,57,43,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(26,92,26,.1), rgba(192,57,43,.14));
 }
 
 /* Summer */
@@ -104,6 +159,9 @@ body.theme-summer {
   --blush:     #fff8e0;
   --nav-bg:    #f39c12;
   --footer-bg: #d35400;
+  --tint-light: rgba(231,76,60,.08);
+  --tint-mid:   rgba(231,76,60,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(243,156,18,.1), rgba(231,76,60,.15));
 }
 
 /* Cinco de Mayo */
@@ -134,6 +192,9 @@ body.theme-independenceday {
   --nav-bg:    #002868;
   --footer-bg: #002868;
   --chocolate: #002868;
+  --tint-light: rgba(178,34,34,.08);
+  --tint-mid:   rgba(178,34,34,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(0,40,104,.08), rgba(178,34,34,.14));
 }
 
 /* Graduation */
@@ -143,12 +204,21 @@ body.theme-graduation {
   --blush:     #f5f5f5;
   --nav-bg:    #2c3e50;
   --footer-bg: #1a252f;
+  --tint-light: rgba(44,62,80,.08);
+  --tint-mid:   rgba(44,62,80,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(44,62,80,.08), rgba(44,62,80,.16));
 }
+
+/* Spring / Mother's Day */
+body.theme-spring {
   --rose:      #e91e8c;
   --rose-dark: #c21577;
   --blush:     #f0fff4;
   --nav-bg:    #e91e8c;
   --footer-bg: #27ae60;
+  --tint-light: rgba(233,30,140,.08);
+  --tint-mid:   rgba(233,30,140,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(233,30,140,.1), rgba(39,174,96,.1));
 }
 
 /* ---------- DARK MODE TOGGLE BUTTON ---------- */
@@ -731,7 +801,7 @@ nav a.active {
   align-items: center;
   justify-content: center;
   font-size: 52px;
-  background: linear-gradient(135deg, #fde8ee, #f9d5e5);
+  background: var(--tint-grad);
 }
 
 .card-body {
@@ -786,7 +856,7 @@ nav a.active {
 
 /* ---------- BOUQUET SPOTLIGHT ---------- */
 .bouquet-spotlight {
-  background: linear-gradient(135deg, #fff0f3, #fde8ee);
+  background: linear-gradient(135deg, var(--blush), var(--tint-light));
   border-radius: 28px;
   overflow: hidden;
   display: grid;
@@ -847,7 +917,7 @@ nav a.active {
   align-items: center;
   justify-content: center;
   font-size: 80px;
-  background: linear-gradient(135deg, #fdd5e0, #f9b8cc);
+  background: var(--tint-grad);
 }
 
 /* ---------- GALLERY ---------- */
@@ -1090,7 +1160,7 @@ nav a.active {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #fde8ee, #f9c8d5);
+  background: var(--tint-grad);
   color: var(--rose);
   font-weight: 700;
   font-size: 12px;
@@ -1135,12 +1205,12 @@ nav a.active {
 
 /* ---------- BAKESY ORDER CTA ---------- */
 .bakesy-cta {
-  background: linear-gradient(135deg, #fff0f3, #fde8ee);
+  background: linear-gradient(135deg, var(--blush), var(--tint-light));
   border-radius: 28px;
   padding: 60px 40px;
   text-align: center;
   box-shadow: var(--shadow);
-  border: 1px solid rgba(212,87,111,.12);
+  border: 1px solid var(--tint-mid);
 }
 
 .bakesy-btn {
