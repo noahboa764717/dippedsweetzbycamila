@@ -56,7 +56,64 @@ body.dark-mode .field input { background: #2a1e22; color: var(--text); border-co
 
 /* ---------- SEASONAL THEMES ---------- */
 
-/* Valentine's Day */
+/* New Year's */
+body.theme-newyears {
+  --rose:      #c9a227;
+  --rose-dark: #a07c1a;
+  --blush:     #0d0d1a;
+  --page-bg:   #0d0d1a;
+  --text:      #f0e8c0;
+  --text-soft: #c0b080;
+  --nav-bg:    #1a1a2e;
+  --footer-bg: #1a1a2e;
+  --white:     #1a1a2e;
+  --card-bg:   #1a1a2e;
+  --tint-light: rgba(201,162,39,.12);
+  --tint-mid:   rgba(201,162,39,.25);
+  --tint-grad:  linear-gradient(135deg, rgba(201,162,39,.15), rgba(201,162,39,.28));
+}
+body.theme-newyears { background: #0d0d1a; color: #f0e8c0; }
+body.theme-newyears .card,
+body.theme-newyears .simple-card { background: #1a1a2e; }
+
+/* MLK Day */
+body.theme-mlkday {
+  --rose:      #1a3a6b;
+  --rose-dark: #122a50;
+  --blush:     #f5f0ff;
+  --nav-bg:    #1a3a6b;
+  --footer-bg: #1a3a6b;
+  --chocolate: #c9a227;
+  --tint-light: rgba(26,58,107,.08);
+  --tint-mid:   rgba(26,58,107,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(26,58,107,.1), rgba(201,162,39,.12));
+}
+
+/* Labor Day */
+body.theme-laborday {
+  --rose:      #c0392b;
+  --rose-dark: #96281b;
+  --blush:     #f5f5f5;
+  --nav-bg:    #2c3e50;
+  --footer-bg: #2c3e50;
+  --chocolate: #2c3e50;
+  --tint-light: rgba(192,57,43,.08);
+  --tint-mid:   rgba(192,57,43,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(44,62,80,.1), rgba(192,57,43,.14));
+}
+
+/* Veterans Day */
+body.theme-veteransday {
+  --rose:      #8b0000;
+  --rose-dark: #5c0000;
+  --blush:     #f0f4ff;
+  --nav-bg:    #1a3a6b;
+  --footer-bg: #1a3a6b;
+  --chocolate: #1a3a6b;
+  --tint-light: rgba(139,0,0,.08);
+  --tint-mid:   rgba(139,0,0,.18);
+  --tint-grad:  linear-gradient(135deg, rgba(26,58,107,.08), rgba(139,0,0,.14));
+}
 body.theme-valentines {
   --rose:      #c0392b;
   --rose-dark: #96281b;

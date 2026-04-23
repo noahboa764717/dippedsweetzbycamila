@@ -2040,17 +2040,21 @@ async function updateOrderStatus(orderId, status) {
    SEASONAL THEME BUILDER
 ══════════════════════════════════════════ */
 const THEME_PRESETS = [
-  { name: "Valentine's Day", theme: 'valentines',     emoji: '💝', primary: '#c0392b', nav: '#c0392b', bg: '#fdf0f0', bannerText: "💝 Happy Valentine's Day! Shop our love-themed treats →",         bannerColor: '#c0392b' },
-  { name: 'Easter',          theme: 'easter',          emoji: '🐣', primary: '#9b59b6', nav: '#9b59b6', bg: '#f5f0ff', bannerText: '🐣 Happy Easter! Spring treats are here →',                      bannerColor: '#9b59b6' },
-  { name: 'Cinco de Mayo',   theme: 'cincodemayo',     emoji: '🌮', primary: '#27ae60', nav: '#c0392b', bg: '#fffde7', bannerText: '🌮 ¡Feliz Cinco de Mayo! Celebrate with sweet treats →',          bannerColor: '#27ae60' },
-  { name: 'Memorial Day',    theme: 'memorialday',     emoji: '🇺🇸', primary: '#1a3a6b', nav: '#1a3a6b', bg: '#f0f4ff', bannerText: '🇺🇸 Happy Memorial Day! Thank you to all who served →',          bannerColor: '#1a3a6b' },
-  { name: 'Independence Day',theme: 'independenceday', emoji: '🎆', primary: '#b22222', nav: '#002868', bg: '#f0f4ff', bannerText: '🎆 Happy 4th of July! Celebrate with red, white & sweet treats →', bannerColor: '#002868' },
-  { name: 'Halloween',       theme: 'halloween',       emoji: '🎃', primary: '#e67e22', nav: '#e67e22', bg: '#1a0a00', bannerText: '🎃 Spooky Sweetz are here! Shop Halloween treats →',               bannerColor: '#e67e22' },
-  { name: 'Christmas',       theme: 'christmas',       emoji: '🎄', primary: '#c0392b', nav: '#c0392b', bg: '#f0fff0', bannerText: '🎄 Merry Christmas! Holiday treats available →',                   bannerColor: '#c0392b' },
-  { name: 'Summer',          theme: 'summer',          emoji: '☀️', primary: '#e74c3c', nav: '#f39c12', bg: '#fff8e0', bannerText: '☀️ Summer Sweetz are here! Order now →',                           bannerColor: '#f39c12' },
+  { name: "New Year's",      theme: 'newyears',       emoji: '🎆', primary: '#c9a227', nav: '#1a1a2e', bg: '#0d0d1a', bannerText: "🎆 Happy New Year! Start the year with something sweet →",          bannerColor: '#1a1a2e' },
+  { name: "Valentine's Day", theme: 'valentines',     emoji: '💝', primary: '#c0392b', nav: '#c0392b', bg: '#fdf0f0', bannerText: "💝 Happy Valentine's Day! Shop our love-themed treats →",          bannerColor: '#c0392b' },
+  { name: 'MLK Day',         theme: 'mlkday',          emoji: '✊', primary: '#1a3a6b', nav: '#1a3a6b', bg: '#f5f0ff', bannerText: '✊ Honoring Dr. King — celebrating equality & community →',        bannerColor: '#1a3a6b' },
+  { name: 'Easter',          theme: 'easter',          emoji: '🐣', primary: '#9b59b6', nav: '#9b59b6', bg: '#f5f0ff', bannerText: '🐣 Happy Easter! Spring treats are here →',                        bannerColor: '#9b59b6' },
+  { name: 'Cinco de Mayo',   theme: 'cincodemayo',     emoji: '🌮', primary: '#27ae60', nav: '#c0392b', bg: '#fffde7', bannerText: '🌮 ¡Feliz Cinco de Mayo! Celebrate with sweet treats →',            bannerColor: '#27ae60' },
   { name: "Mother's Day",    theme: 'spring',          emoji: '🌸', primary: '#e91e8c', nav: '#e91e8c', bg: '#f0fff4', bannerText: "🌸 Happy Mother's Day! Treat the special moms →",                  bannerColor: '#e91e8c' },
-  { name: 'Graduation',      theme: 'graduation',      emoji: '🎓', primary: '#2c3e50', nav: '#2c3e50', bg: '#f5f5f5', bannerText: '🎓 Congrats grads! Celebrate with sweet treats →',                 bannerColor: '#2c3e50' },
-  { name: 'Default',         theme: '',                emoji: '🍓', primary: '#d4576f', nav: '#d4576f', bg: '#f6eef1', bannerText: '',                                                                  bannerColor: '#d4576f' },
+  { name: 'Memorial Day',    theme: 'memorialday',     emoji: '🇺🇸', primary: '#1a3a6b', nav: '#1a3a6b', bg: '#f0f4ff', bannerText: '🇺🇸 Happy Memorial Day! Thank you to all who served →',            bannerColor: '#1a3a6b' },
+  { name: 'Independence Day',theme: 'independenceday', emoji: '🎆', primary: '#b22222', nav: '#002868', bg: '#f0f4ff', bannerText: '🎆 Happy 4th of July! Celebrate with red, white & sweet treats →',  bannerColor: '#002868' },
+  { name: 'Labor Day',       theme: 'laborday',        emoji: '⚒️', primary: '#c0392b', nav: '#2c3e50', bg: '#f5f5f5', bannerText: '⚒️ Happy Labor Day! Celebrate the long weekend with sweet treats →', bannerColor: '#2c3e50' },
+  { name: 'Halloween',       theme: 'halloween',       emoji: '🎃', primary: '#e67e22', nav: '#e67e22', bg: '#1a0a00', bannerText: '🎃 Spooky Sweetz are here! Shop Halloween treats →',                 bannerColor: '#e67e22' },
+  { name: 'Veterans Day',    theme: 'veteransday',     emoji: '🎖️', primary: '#8b0000', nav: '#1a3a6b', bg: '#f0f4ff', bannerText: '🎖️ Happy Veterans Day! Thank you for your service →',               bannerColor: '#1a3a6b' },
+  { name: 'Christmas',       theme: 'christmas',       emoji: '🎄', primary: '#c0392b', nav: '#c0392b', bg: '#f0fff0', bannerText: '🎄 Merry Christmas! Holiday treats available →',                     bannerColor: '#c0392b' },
+  { name: 'Summer',          theme: 'summer',          emoji: '☀️', primary: '#e74c3c', nav: '#f39c12', bg: '#fff8e0', bannerText: '☀️ Summer Sweetz are here! Order now →',                             bannerColor: '#f39c12' },
+  { name: 'Graduation',      theme: 'graduation',      emoji: '🎓', primary: '#2c3e50', nav: '#2c3e50', bg: '#f5f5f5', bannerText: '🎓 Congrats grads! Celebrate with sweet treats →',                   bannerColor: '#2c3e50' },
+  { name: 'Default',         theme: '',                emoji: '🍓', primary: '#d4576f', nav: '#d4576f', bg: '#f6eef1', bannerText: '',                                                                    bannerColor: '#d4576f' },
 ];
 
 function renderThemePresets() {
