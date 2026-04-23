@@ -130,8 +130,8 @@ body.theme-memorialday {
 body.theme-independenceday {
   --rose:      #b22222;
   --rose-dark: #8b0000;
-  --blush:     #fff5f5;
-  --nav-bg:    #b22222;
+  --blush:     #f0f4ff;
+  --nav-bg:    #002868;
   --footer-bg: #002868;
   --chocolate: #002868;
 }
