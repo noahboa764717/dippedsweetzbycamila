@@ -170,9 +170,17 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
       banner.className = 'seasonal-banner';
       if (config.bannerColor) banner.style.background = config.bannerColor;
       if (config.bannerTextColor) banner.style.color = config.bannerTextColor;
+
+      // Default link to Bakesy order page if none set
+      const link     = config.bannerLink || 'https://bakesy.shop/b/dipped-sweetz-by-camila';
+      const linkText = config.bannerLinkText || 'Order Now →';
+
+      // Strip trailing → from bannerText since the link handles it
+      const cleanText = (config.bannerText || '').replace(/\s*→\s*$/, '').trim();
+
       banner.innerHTML = `
-        <span>${config.bannerEmoji || '🎉'} ${config.bannerText}</span>
-        ${config.bannerLink ? `<a href="${config.bannerLink}">${config.bannerLinkText || 'Shop Now'}</a>` : ''}
+        <span>${config.bannerEmoji || '🎉'} ${cleanText}</span>
+        <a href="${link}" target="_blank" style="color:inherit;font-weight:700;margin-left:10px;text-decoration:underline;">${linkText}</a>
         <button class="seasonal-banner-close" onclick="this.parentElement.remove();sessionStorage.setItem('ds_banner_closed','1')">✕</button>
       `;
       document.body.insertBefore(banner, document.body.firstChild);
