@@ -144,46 +144,32 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
 /* ---------- SEASONAL THEME + BANNER ---------- */
 (function initSeasonal() {
-  try {
-    const config = JSON.parse(localStorage.getItem('ds_seasonal') || 'null');
+  function applyThemeConfig(config) {
     if (!config || !config.active) return;
 
-    // Apply theme class
-    if (config.theme) {
-      document.body.classList.add('theme-' + config.theme);
-    }
+    if (config.theme) document.body.classList.add('theme-' + config.theme);
 
-    // Apply custom colors if set
     if (config.primaryColor) {
-      document.documentElement.style.setProperty('--rose', config.primaryColor);
-      // Derive tint variables from the primary color
       const hex = config.primaryColor.replace('#','');
       const r = parseInt(hex.substring(0,2),16);
       const g = parseInt(hex.substring(2,4),16);
       const b = parseInt(hex.substring(4,6),16);
+      document.documentElement.style.setProperty('--rose', config.primaryColor);
       document.documentElement.style.setProperty('--tint-light', `rgba(${r},${g},${b},.08)`);
       document.documentElement.style.setProperty('--tint-mid',   `rgba(${r},${g},${b},.18)`);
       document.documentElement.style.setProperty('--tint-grad',  `linear-gradient(135deg,rgba(${r},${g},${b},.1),rgba(${r},${g},${b},.2))`);
     }
-    if (config.navColor) {
-      document.documentElement.style.setProperty('--nav-bg', config.navColor);
-    }
-    if (config.bgColor) {
-      document.documentElement.style.setProperty('--blush', config.bgColor);
-    }
+    if (config.navColor) document.documentElement.style.setProperty('--nav-bg', config.navColor);
+    if (config.bgColor)  document.documentElement.style.setProperty('--blush',  config.bgColor);
 
-    // Show banner if set
     if (config.bannerText && !sessionStorage.getItem('ds_banner_closed')) {
-      const banner = document.createElement('div');
+      const banner    = document.createElement('div');
       banner.className = 'seasonal-banner';
-      if (config.bannerColor) banner.style.background = config.bannerColor;
-      if (config.bannerTextColor) banner.style.color = config.bannerTextColor;
+      if (config.bannerColor)     banner.style.background = config.bannerColor;
+      if (config.bannerTextColor) banner.style.color      = config.bannerTextColor;
 
-      // Default link to Bakesy order page if none set
-      const link     = config.bannerLink || 'https://bakesy.shop/b/dipped-sweetz-by-camila';
-      const linkText = config.bannerLinkText || 'Order Now →';
-
-      // Strip trailing → from bannerText since the link handles it
+      const link      = config.bannerLink     || 'https://bakesy.shop/b/dipped-sweetz-by-camila';
+      const linkText  = config.bannerLinkText || 'Order Now →';
       const cleanText = (config.bannerText || '').replace(/\s*→\s*$/, '').trim();
 
       banner.innerHTML = `
@@ -193,7 +179,31 @@ document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
       `;
       document.body.insertBefore(banner, document.body.firstChild);
     }
+  }
+
+  // Apply cached theme instantly to avoid flash
+  try {
+    const cached = localStorage.getItem('ds_seasonal_cache');
+    if (cached) applyThemeConfig(JSON.parse(cached));
   } catch {}
+
+  // Fetch fresh theme from server (global — affects all visitors)
+  fetch('/.netlify/functions/get-theme')
+    .then(r => r.json())
+    .then(config => {
+      if (!config || !config.active) {
+        localStorage.removeItem('ds_seasonal_cache');
+        // Remove any applied theme classes if theme was cleared
+        document.body.className = document.body.className
+          .split(' ')
+          .filter(c => !c.startsWith('theme-'))
+          .join(' ');
+        return;
+      }
+      localStorage.setItem('ds_seasonal_cache', JSON.stringify(config));
+      applyThemeConfig(config);
+    })
+    .catch(() => {}); // cached version already applied, no problem
 })();
 
 /* ---------- RETURNING VISITOR GREETING ---------- */

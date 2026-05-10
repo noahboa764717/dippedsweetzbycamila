@@ -2096,38 +2096,65 @@ function syncColor(colorId, textId) {
   }
 }
 
-function saveTheme(themeClass) {
+async function saveTheme(themeClass) {
   const config = {
-    active:          document.getElementById('theme-active').checked,
-    theme:           themeClass || '',
-    bannerText:      document.getElementById('theme-banner-text').value.trim(),
-    bannerEmoji:     document.getElementById('theme-banner-emoji').value.trim(),
-    bannerLink:      document.getElementById('theme-banner-link').value.trim(),
-    bannerLinkText:  document.getElementById('theme-banner-link-text').value.trim(),
-    primaryColor:    document.getElementById('theme-primary').value,
-    navColor:        document.getElementById('theme-nav').value,
-    bgColor:         document.getElementById('theme-bg').value,
-    bannerColor:     document.getElementById('theme-banner-color').value,
+    active:         document.getElementById('theme-active').checked,
+    theme:          themeClass || '',
+    bannerText:     document.getElementById('theme-banner-text').value.trim(),
+    bannerEmoji:    document.getElementById('theme-banner-emoji').value.trim(),
+    bannerLink:     document.getElementById('theme-banner-link').value.trim(),
+    bannerLinkText: document.getElementById('theme-banner-link-text').value.trim(),
+    primaryColor:   document.getElementById('theme-primary').value,
+    navColor:       document.getElementById('theme-nav').value,
+    bgColor:        document.getElementById('theme-bg').value,
+    bannerColor:    document.getElementById('theme-banner-color').value,
   };
-  localStorage.setItem('ds_seasonal', JSON.stringify(config));
+
   const msg = document.getElementById('theme-saved-msg');
   msg.style.display = 'block';
-  setTimeout(() => msg.style.display = 'none', 3000);
-  toast('Theme saved! ✅');
+  msg.textContent = '⏳ Saving to server...';
+
+  try {
+    const res = await fetch('/.netlify/functions/save-theme', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(config),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error);
+
+    msg.textContent = '✅ Theme saved! It will appear on your live site for all visitors within ~60 seconds.';
+    setTimeout(() => msg.style.display = 'none', 5000);
+    toast('Theme saved globally! ✅');
+  } catch (err) {
+    msg.style.background = 'var(--red-bg)'; msg.style.color = 'var(--red)';
+    msg.textContent = `❌ Save failed: ${err.message}`;
+    toast('Save failed — check Netlify env vars.', true);
+  }
 }
 
-function clearTheme() {
-  localStorage.removeItem('ds_seasonal');
-  toast('Theme cleared — site restored to default.');
+async function clearTheme() {
+  if (!confirm('Clear the theme and restore the default site look for all visitors?')) return;
+  try {
+    await fetch('/.netlify/functions/save-theme', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ active: false }),
+    });
+    toast('Theme cleared — site restored to default for all visitors. ✅');
+  } catch (err) {
+    toast('Clear failed: ' + err.message, true);
+  }
 }
 
 function previewTheme() {
   window.open('index.html', '_blank');
 }
 
-function loadThemeEditor() {
+async function loadThemeEditor() {
   try {
-    const saved = JSON.parse(localStorage.getItem('ds_seasonal') || 'null');
+    const res  = await fetch('/.netlify/functions/get-theme');
+    const saved = await res.json();
     if (!saved) return;
     document.getElementById('theme-active').checked          = saved.active || false;
     document.getElementById('theme-banner-text').value       = saved.bannerText || '';
