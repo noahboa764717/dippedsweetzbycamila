@@ -1434,3 +1434,156 @@ footer a:hover { color: white; }
   .card-grid, .menu-grid { grid-template-columns: 1fr; }
   .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
 }
+/* ---------- QR COOKIE MOBILE MENU ---------- */
+.mobile-menu-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(212,87,111,.18), transparent 36%),
+    radial-gradient(circle at bottom right, rgba(110,74,58,.14), transparent 34%),
+    var(--page-bg);
+}
+
+.qr-menu-shell {
+  width: min(100%, 430px);
+  margin: 0 auto;
+  padding: 22px 16px 34px;
+}
+
+.qr-hero,
+.qr-note-card,
+.qr-form-section,
+.cookie-menu-card {
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(255,255,255,.78);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.qr-hero {
+  overflow: hidden;
+  padding: 34px 24px;
+  position: relative;
+  text-align: center;
+}
+
+.qr-hero::before {
+  content: "";
+  position: absolute;
+  inset: -70px -60px auto auto;
+  width: 165px;
+  height: 165px;
+  background: rgba(212,87,111,.2);
+  border-radius: 999px;
+}
+
+.qr-kicker,
+.cookie-tag {
+  color: var(--rose);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+}
+
+.qr-hero h1 {
+  color: var(--chocolate);
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 13vw, 58px);
+  line-height: .9;
+  margin-bottom: 18px;
+}
+
+.qr-hero h1 em { color: var(--rose); }
+
+.qr-hero p,
+.qr-note-card p,
+.qr-form-section p,
+.cookie-menu-card p {
+  color: var(--text-soft);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.qr-hero-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 22px;
+  min-height: 48px;
+  padding: 0 22px;
+  background: var(--rose);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 10px 24px rgba(212,87,111,.28);
+}
+
+.cookie-menu-list {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.cookie-menu-card {
+  display: grid;
+  grid-template-columns: 58px 1fr;
+  gap: 14px;
+  padding: 18px;
+}
+
+.cookie-emoji {
+  align-items: center;
+  background: var(--tint-grad);
+  border-radius: 20px;
+  display: flex;
+  font-size: 28px;
+  height: 58px;
+  justify-content: center;
+  width: 58px;
+}
+
+.cookie-menu-card h2,
+.qr-note-card h2,
+.qr-form-section h2 {
+  color: var(--chocolate);
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+
+.cookie-menu-card.red-velvet { border-left: 6px solid #c0392b; }
+.cookie-menu-card.cookie-monster { border-left: 6px solid #2f80ed; }
+.cookie-menu-card.strawberry-shortcake { border-left: 6px solid #e86f88; }
+
+.qr-note-card,
+.qr-form-section {
+  padding: 22px;
+  text-align: center;
+}
+
+.qr-note-card .button { margin-top: 16px; }
+
+.qr-form-section { margin-top: 18px; }
+
+.qr-form-frame-wrap {
+  height: 680px;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 22px;
+  border: 1px solid rgba(110,74,58,.12);
+  background: #fff;
+}
+
+.qr-form-frame-wrap iframe {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 560px) {
+  .qr-menu-shell { padding-top: 34px; }
+}
