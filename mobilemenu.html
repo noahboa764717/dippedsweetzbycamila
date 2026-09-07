@@ -2,9 +2,9 @@
 <html lang="en">
 <head>  
   <meta charset="UTF-8">
-  <title>Cookie Menu | Dipped Sweetz by Camila</title>
+  <title>Fall Menu | Dipped Sweetz by Camila</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A mobile-friendly cookie menu for Dipped Sweetz by Camila with red velvet, cookie monster, and strawberry shortcake cookies.">
+  <meta name="description" content="Dipped Sweetz by Camila's cozy fall menu, filled with pumpkin treats and Halloween sweets.">
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -12,44 +12,68 @@
 <body class="mobile-menu-page">
   <main class="qr-menu-shell">
     <section class="qr-hero" aria-labelledby="cookie-menu-title">
-      <p class="qr-kicker">Cookie Menu!</p>
-      <h1 id="cookie-menu-title">Dipped Sweetz<br><em>Cookie Menu</em></h1>
-      <p>Pick your favorite cookie flavor, then use the order form below to tell us what you need and note any dietary restrictions and payment.</p>
-      <a class="qr-hero-button" href="#order-form">Order Form</a>
+      <div class="hero-moon" aria-hidden="true">☾</div>
+      <p class="qr-kicker">Autumn treats are here</p>
+      <h1 id="cookie-menu-title">Dipped Sweetz<br><em>Fall Menu</em></h1>
+      <p>Warm spices, pumpkin everything, and just the right amount of Halloween magic. Pick your favorite sweet and let’s make fall delicious.</p>
+      <a class="qr-hero-button" href="#order-form">Order fall treats <span aria-hidden="true">→</span></a>
     </section>
 
-    <section class="cookie-menu-list" aria-label="Cookie flavors">
-      <article class="cookie-menu-card red-velvet">
-        <div class="cookie-emoji" aria-hidden="true">❤️</div>
+    <section class="menu-intro" aria-label="Fall menu introduction">
+      <span aria-hidden="true">✦</span> Made for crisp nights &amp; cozy bites <span aria-hidden="true">✦</span>
+    </section>
+
+    <section class="cookie-menu-list" aria-label="Fall desserts">
+      <article class="cookie-menu-card pumpkin-muffin">
+        <div class="cookie-emoji" aria-hidden="true">🧁</div>
         <div>
-          <p class="cookie-tag">Rich + Sweet</p>
-          <h2>Red Velvet Cookies</h2>
-          <p>Soft red velvet cookies with a bakery-style bite and a sweet finish.</p>
+          <p class="cookie-tag">Cozy classic</p>
+          <h2>Pumpkin Cream Cheese Muffins</h2>
+          <p>Spiced pumpkin muffins with a dreamy cream cheese center — soft, warm, and bakery-perfect.</p>
         </div>
       </article>
 
-      <article class="cookie-menu-card cookie-monster">
-        <div class="cookie-emoji" aria-hidden="true">💙</div>
+      <article class="cookie-menu-card pumpkin-cookie">
+        <div class="cookie-emoji" aria-hidden="true">🎃</div>
         <div>
-          <p class="cookie-tag">Fun Favorite</p>
-          <h2>Cookie Monster Cookies</h2>
-          <p>Bright, playful cookies packed with cookie crumbles and sweet cookie-shop flavor.</p>
+          <p class="cookie-tag">Fall favorite</p>
+          <h2>Pumpkin Spice Cookies</h2>
+          <p>Chewy, cinnamon-spiced cookies with all the comforting pumpkin flavor you wait for all year.</p>
         </div>
       </article>
 
-      <article class="cookie-menu-card strawberry-shortcake">
-        <div class="cookie-emoji" aria-hidden="true">🍓</div>
+      <article class="cookie-menu-card halloween-brownie">
+        <div class="cookie-emoji" aria-hidden="true">🍫</div>
         <div>
-          <p class="cookie-tag">Berry Cute</p>
-          <h2>Strawberry Shortcake Cookies</h2>
-          <p>Strawberry-inspired cookies with creamy shortcake vibes in every bite.</p>
+          <p class="cookie-tag">Spooky + stacked</p>
+          <h2>Stacked Halloween Brownies</h2>
+          <p>Rich, fudgy brownies layered up with Halloween flair for the ultimate chocolatey treat.</p>
+        </div>
+      </article>
+
+      <article class="cookie-menu-card ghost-cookie">
+        <div class="cookie-emoji" aria-hidden="true">👻</div>
+        <div>
+          <p class="cookie-tag">Sweet &amp; spooky</p>
+          <h2>Melted Marshmallow Ghost Cookies</h2>
+          <p>Soft cookies topped with gooey melted marshmallow ghosts — adorable, spooky, and so much fun.</p>
+        </div>
+      </article>
+
+      <article class="cookie-menu-card cinnamon-roll">
+        <div class="cookie-emoji" aria-hidden="true">🌀</div>
+        <div>
+          <p class="cookie-tag">Fresh from the oven</p>
+          <h2>Pumpkin-Shaped Cinnamon Rolls</h2>
+          <p>Fluffy cinnamon rolls shaped like little pumpkins and made for a slow, cozy fall morning.</p>
         </div>
       </article>
     </section>
 
-    <section class="qr-note-card">
-      <h2>Ready to order?</h2>
-      <p>Use this same form for cookie orders, dietary restriction notes, and payment method.</p>
+    <section class="qr-note-card" id="order-form">
+      <p class="qr-kicker">Let’s make it sweet</p>
+      <h2>Ready for a fall box?</h2>
+      <p>Use the order form to share your favorites, event details, dietary notes, and payment preference.</p>
       <a class="button" href="https://forms.gle/EWN4m7WbpXtruz849" target="_blank" rel="noopener">Open Google Form</a>
     </section>
   </main>
