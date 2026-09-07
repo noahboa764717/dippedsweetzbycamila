@@ -1,60 +1,54 @@
+const { getStore } = require('@netlify/blobs');
+
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'Content-Type',
   'Access-Control-Allow-Methods': 'POST, OPTIONS',
 };
 
+const THEME_STORE = 'site-settings';
+const THEME_KEY = 'seasonal-theme';
+
+function badRequest(message) {
+  return {
+    statusCode: 400,
+    headers,
+    body: JSON.stringify({ error: message }),
+  };
+}
+
 exports.handler = async (event) => {
   if (event.httpMethod === 'OPTIONS') return { statusCode: 200, headers, body: '' };
-  if (event.httpMethod !== 'POST') return { statusCode: 405, headers, body: 'Method not allowed' };
-
-  const siteId = process.env.NETLIFY_SITE_ID;
-  const token  = process.env.NETLIFY_ACCESS_TOKEN;
-
-  if (!siteId || !token) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: 'Missing NETLIFY_SITE_ID or NETLIFY_ACCESS_TOKEN' }) };
+  if (event.httpMethod !== 'POST') {
+    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
   }
 
   try {
-    const body = event.body; // raw JSON string of the theme config
+    if (!event.body) return badRequest('A theme configuration is required.');
 
-    // Try update first, then create if it doesn't exist
-    let res = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/env/SITE_THEME`, {
-      method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        key: 'SITE_THEME',
-        values: [{ context: 'all', value: body }],
-      }),
-    });
-
-    if (res.status === 404) {
-      // Env var doesn't exist yet — create it
-      res = await fetch(`https://api.netlify.com/api/v1/sites/${siteId}/env`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify([{
-          key: 'SITE_THEME',
-          values: [{ context: 'all', value: body }],
-        }]),
-      });
+    let config;
+    try {
+      config = JSON.parse(event.body);
+    } catch {
+      return badRequest('The theme configuration must be valid JSON.');
     }
 
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(`Netlify API error: ${err}`);
+    if (!config || typeof config !== 'object' || Array.isArray(config)) {
+      return badRequest('The theme configuration must be an object.');
     }
+
+    // Blobs is writable from a function without a personal access token or a rebuild.
+    // Unlike environment variables, a saved theme is therefore available immediately.
+    await getStore(THEME_STORE).setJSON(THEME_KEY, config);
 
     return { statusCode: 200, headers, body: JSON.stringify({ success: true }) };
 
   } catch (err) {
     console.error(err);
-    return { statusCode: 500, headers, body: JSON.stringify({ error: err.message }) };
+    return {
+      statusCode: 500,
+      headers,
+      body: JSON.stringify({ error: 'Unable to save the theme. Please try again.' }),
+    };
   }
 };
